@@ -1,0 +1,54 @@
+{
+  "nodes": [
+    {
+      "node_id": "bp-day1-morning",
+      "parva_id": 6,
+      "war_day": 1,
+      "phase_name": "BEGINNING",
+      "title": "Vishada Yoga",
+      "historical_context": "Arjuna orders his chariot driven between the two armies. Seeing his beloved kin, he is overcome with grief and refuses to fight.",
+      "initial_scene_type": "VN",
+      "map_id": "map_kurukshetra_center"
+    },
+    {
+      "node_id": "bp-day2-formations",
+      "parva_id": 6,
+      "war_day": 2,
+      "phase_name": "MIDDLE",
+      "title": "The Vyuha Wars",
+      "historical_context": "Both armies deploy elaborate military formations — Krauncha Vyuha, Garuda Vyuha, Makara Vyuha. Bhishma and Drona coordinate devastating counter-formations against the Pandava advance. Arjuna and Bhima anchor the Pandava response but the Kauravas hold the field.",
+      "initial_scene_type": "TACTICAL",
+      "map_id": "map_kurukshetra_formations"
+    },
+    {
+      "node_id": "bp-day5-rampage",
+      "parva_id": 6,
+      "war_day": 5,
+      "phase_name": "MIDDLE",
+      "title": "Arjuna's Rampage",
+      "historical_context": "Arjuna, guided by Krishna, cuts a devastating swath through the Kaurava forces. His arrows darken the sky. The Trigarta army attempts to draw him away from the main battle, but he annihilates them before returning to the center.",
+      "initial_scene_type": "TACTICAL",
+      "map_id": "map_kurukshetra_open_field"
+    },
+    {
+      "node_id": "bp-day9-krishna-rage",
+      "parva_id": 6,
+      "war_day": 9,
+      "phase_name": "END",
+      "title": "Krishna's Near-Breach",
+      "historical_context": "Frustrated by Bhishma's devastation of the Pandava army, Krishna leaps from the chariot and seizes his Sudarshana Chakra, advancing on Bhishma. He nearly breaks his vow of non-combat. Arjuna desperately restrains him. Bhishma, seeing Krishna's divine form, welcomes death at the Lord's hands.",
+      "initial_scene_type": "VN",
+      "map_id": "map_kurukshetra_center"
+    },
+    {
+      "node_id": "bp-day10-sunset",
+      "parva_id": 6,
+      "war_day": 10,
+      "phase_name": "END",
+      "title": "The Fall of the Patriarch",
+      "historical_context": "On the 10th day, the Pandavas place Shikhandi at the forefront. Bhishma lowers his weapons, allowing Arjuna to pierce him with arrows.",
+      "initial_scene_type": "TACTICAL",
+      "map_id": "map_kurukshetra_crater"
+    }
+  ]
+}

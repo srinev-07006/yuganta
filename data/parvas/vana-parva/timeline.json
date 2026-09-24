@@ -1,0 +1,24 @@
+{
+  "nodes": [
+    {
+      "node_id": "vp-arjuna-penance",
+      "parva_id": 3,
+      "war_day": 0,
+      "phase_name": "BEGINNING",
+      "title": "Arjuna's Penance",
+      "historical_context": "Arjuna performs severe penance. Shiva tests him in the guise of a hunter (Kirata).",
+      "initial_scene_type": "TACTICAL",
+      "map_id": "map_forest_penance"
+    },
+    {
+      "node_id": "vp-yaksha-prashna",
+      "parva_id": 3,
+      "war_day": 0,
+      "phase_name": "END",
+      "title": "Yaksha Prashna",
+      "historical_context": "Yudhishthira finds his brothers dead near a toxic lake guarded by a Yaksha.",
+      "initial_scene_type": "VN",
+      "map_id": "map_poison_lake"
+    }
+  ]
+}

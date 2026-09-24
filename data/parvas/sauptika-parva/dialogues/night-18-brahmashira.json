@@ -1,0 +1,57 @@
+{
+  "sequence_id": "seq_night18_brahmashira",
+  "node_id": "spp-night18-brahmashira",
+  "trigger_event": "NODE_START",
+  "background_asset_key": "bg_cosmic_clash",
+  "bgm_asset_key": "bgm_divine_wrath",
+  "nodes": [
+    {
+      "dialogue_id": "sp_ashwatthama_cornered",
+      "speaker_id": "ashwatthama",
+      "dialogue_text": "You killed my father by deceit! Now I have killed your sons! If you want my life, you will have to pay with everything! Into this blade of grass, I invoke the Brahmashira! For the destruction of the Pandavas!",
+      "speaker_emotion": "ANGRY",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "next_dialogue_id": "sp_krishna_warning"
+    },
+    {
+      "dialogue_id": "sp_krishna_warning",
+      "speaker_id": "krishna",
+      "dialogue_text": "Partha! He has unleashed the ultimate fire. If it strikes, all creation burns. You must counter it with your own Brahmashira!",
+      "speaker_emotion": "ANGRY",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "choices": [
+        {
+          "choice_id": "sp_c1",
+          "choice_text": "[Invoke the Brahmashira to counter his.]",
+          "dharma_impact": 10,
+          "next_dialogue_id": "sp_vyasa_intervenes",
+          "tactical_override_event": "NONE"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "sp_vyasa_intervenes",
+      "speaker_id": "vyasa",
+      "dialogue_text": "Stop! Fools! If two Brahmashiras collide, the region will suffer drought for twelve years! Withdraw your weapons immediately!",
+      "speaker_emotion": "ENLIGHTENED",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "next_dialogue_id": "sp_arjuna_withdraws"
+    },
+    {
+      "dialogue_id": "sp_arjuna_withdraws",
+      "speaker_id": "arjuna",
+      "dialogue_text": "I withdraw my weapon, O Sage, for the sake of the world.",
+      "speaker_emotion": "NEUTRAL",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "next_dialogue_id": "sp_ashwatthama_fails"
+    },
+    {
+      "dialogue_id": "sp_ashwatthama_fails",
+      "speaker_id": "ashwatthama",
+      "dialogue_text": "I... I cannot. I was never taught how to recall it once enraged. What have I done?",
+      "speaker_emotion": "GRIEF",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "is_endpoint": true
+    }
+  ]
+}

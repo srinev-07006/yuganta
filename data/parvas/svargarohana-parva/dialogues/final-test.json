@@ -1,0 +1,37 @@
+{
+  "sequence_id": "seq_final_test",
+  "node_id": "svp-heavenly-illusion",
+  "trigger_event": "NODE_START",
+  "background_asset_key": "bg_naraka_flames",
+  "bgm_asset_key": "bgm_final_test",
+  "nodes": [
+    {
+      "dialogue_id": "svp_indra_offers",
+      "speaker_id": "indra",
+      "dialogue_text": "Come away, O King. The stench here is unbearable. Your brothers are suffering for their sins, but a place of eternal joy awaits you above.",
+      "speaker_emotion": "NEUTRAL",
+      "choices": [
+        {
+          "choice_id": "svp_c1",
+          "choice_text": "[Go to heaven.]",
+          "dharma_impact": -50,
+          "next_dialogue_id": "dev-chooses-heaven"
+        },
+        {
+          "choice_id": "svp_c2",
+          "choice_text": "Return to your heaven, Indra. The company of my brothers in this foul pit is sweeter to me than any heaven shared with Duryodhana.",
+          "dharma_impact": 50,
+          "moksha_impact": 100,
+          "next_dialogue_id": "svp_illusion_breaks"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "svp_illusion_breaks",
+      "speaker_id": "indra",
+      "dialogue_text": "Well done, Yudhishthira! You have passed the final test. Kings must see hell if even for a moment. Plunge into the heavenly Ganga and cast off this mortal frame forever.",
+      "speaker_emotion": "ENLIGHTENED",
+      "is_endpoint": true
+    }
+  ]
+}

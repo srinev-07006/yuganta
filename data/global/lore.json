@@ -1,0 +1,498 @@
+{
+  "traits": [
+    {
+      "trait_id": "iccha-mrityu",
+      "trait_name": "Boon of Self-Willed Death",
+      "invulnerable_to_standard_damage": true,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "CheckShikhandiPresence()"
+    },
+    {
+      "trait_id": "ganga-putra",
+      "trait_name": "Son of Ganga",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": true,
+      "custom_script_handler": "IgnoreRiverTerrain()"
+    },
+    {
+      "trait_id": "vijaya-wielder",
+      "trait_name": "Wielder of Vijaya Bow",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "BonusRangedDamage(1.5)"
+    },
+    {
+      "trait_id": "sabyasachi",
+      "trait_name": "Ambidextrous Archer",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "DualAttackChance(0.3)"
+    },
+    {
+      "trait_id": "sarathi",
+      "trait_name": "Divine Charioteer",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "BoostChariotMovement(2)"
+    },
+    {
+      "trait_id": "sudarshana-wielder",
+      "trait_name": "Bearer of Sudarshana Chakra",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "DisableAttackCommand()"
+    },
+    {
+      "trait_id": "dharma-putra",
+      "trait_name": "Son of Dharma",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "TruthAura(3)"
+    },
+    {
+      "trait_id": "vayu-putra",
+      "trait_name": "Son of Vayu",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "BonusMeleeDamage(2.0)"
+    },
+    {
+      "trait_id": "mace-master",
+      "trait_name": "Master of the Mace",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "MaceStunChance(0.25)"
+    },
+    {
+      "trait_id": "surya-putra",
+      "trait_name": "Son of Surya",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "SolarRadiance()"
+    },
+    {
+      "trait_id": "daanveer",
+      "trait_name": "Supreme Philanthropist",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "CannotRefuseCharity()"
+    },
+    {
+      "trait_id": "vajra-thighs",
+      "trait_name": "Thighs Hardened by Gandhari's Gaze",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "LowerBodyInvulnerable()"
+    },
+    {
+      "trait_id": "acharya",
+      "trait_name": "Revered Teacher",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "DiscipleHesitation()"
+    },
+    {
+      "trait_id": "brahmin-warrior",
+      "trait_name": "Brahmin Who Bears Arms",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "AstraExpertise(1.5)"
+    },
+    {
+      "trait_id": "dice-master",
+      "trait_name": "Master of Loaded Dice",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "ManipulateRNG()"
+    },
+    {
+      "trait_id": "maya-expert",
+      "trait_name": "Master of Illusion",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "DeceptionAura()"
+    },
+    {
+      "trait_id": "bhishma-bane",
+      "trait_name": "Destined Nemesis of Bhishma",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "BhishmaRefusesToAttack()"
+    },
+    {
+      "trait_id": "chakravyuha-enterer",
+      "trait_name": "Knows Entry Into Chakravyuha",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "CanEnterChakravyuha()"
+    },
+    {
+      "trait_id": "gate-blocker",
+      "trait_name": "Shiva's Boon to Block Pandavas",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "BlockAllPandavasExceptArjuna()"
+    },
+    {
+      "trait_id": "rakshasa-prince",
+      "trait_name": "Half-Rakshasa Warrior",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": true,
+      "custom_script_handler": "FlyOverTerrain()"
+    },
+    {
+      "trait_id": "night-fighter",
+      "trait_name": "Rakshasa Night Powers",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "NightCombatBonus(3.0)"
+    },
+    {
+      "trait_id": "chiranjivi",
+      "trait_name": "Immortal (Chiranjivi)",
+      "invulnerable_to_standard_damage": true,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "CannotBeKilled()"
+    },
+    {
+      "trait_id": "mani-bearer",
+      "trait_name": "Forehead Gem",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "ManiRegeneration()"
+    },
+    {
+      "trait_id": "rudra-possession",
+      "trait_name": "Possessed by the Wrath of Rudra (Shiva)",
+      "invulnerable_to_standard_damage": true,
+      "ignores_terrain_cost": true,
+      "custom_script_handler": "RudraAuraDamage(50)"
+    },
+    {
+      "trait_id": "charioteer-master",
+      "trait_name": "Supreme Charioteer-King",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "DebuffAllyMorale()"
+    },
+    {
+      "trait_id": "blind-king",
+      "trait_name": "Blind King of Hastinapura",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "NonCombatant()"
+    },
+    {
+      "trait_id": "divya-drishti",
+      "trait_name": "Vyasa's Gift of Divine Sight",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "NarratorVision()"
+    },
+    {
+      "trait_id": "dharma-incarnate",
+      "trait_name": "Incarnation of Dharma (Vidura)",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "WisdomCounsel()"
+    },
+    {
+      "trait_id": "agni-kanya",
+      "trait_name": "Born of the Sacred Fire",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "FireImmunity()"
+    },
+    {
+      "trait_id": "blindfolded-queen",
+      "trait_name": "Self-Imposed Blindfold",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "NonCombatant()"
+    },
+    {
+      "trait_id": "pativrata-power",
+      "trait_name": "Power of Devotion",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "CurseAbility()"
+    },
+    {
+      "trait_id": "omniscient-narrator",
+      "trait_name": "Author of the Mahābhārata",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "NonCombatant()"
+    },
+    {
+      "trait_id": "ashvini-putra",
+      "trait_name": "Son of the Ashvini Kumaras",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "HealingAura()"
+    },
+    {
+      "trait_id": "sword-master",
+      "trait_name": "Master Swordsman",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "SwordCounterAttack()"
+    },
+    {
+      "trait_id": "astrologer",
+      "trait_name": "Master Astrologer",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "ForesightAbility()"
+    },
+    {
+      "trait_id": "vrishni-warrior",
+      "trait_name": "Vrishni Clan Champion",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "LoyaltyBonusToKrishna()"
+    },
+    {
+      "trait_id": "agni-putra",
+      "trait_name": "Born of Fire for Drona's Destruction",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "DestinedToSlayDrona()"
+    },
+    {
+      "trait_id": "drona-killer",
+      "trait_name": "Fated Slayer of Drona",
+      "invulnerable_to_standard_damage": false,
+      "ignores_terrain_cost": false,
+      "custom_script_handler": "BonusDamageVsDrona(5.0)"
+    }
+  ],
+  "astras": [
+    {
+      "astra_id": "brahmastra",
+      "name": "Brahmastra",
+      "dharma_cost": 50,
+      "restrictions": "Cannot be used against non-Maharathis without extreme Dharma penalty. Can be recalled.",
+      "damage_multiplier": 5.0
+    },
+    {
+      "astra_id": "brahmashira",
+      "name": "Brahmashira Astra",
+      "dharma_cost": 80,
+      "restrictions": "More powerful than Brahmastra. Two Brahmashiras colliding could destroy the world. Must be recalled if opponent withdraws theirs.",
+      "damage_multiplier": 8.0
+    },
+    {
+      "astra_id": "pashupatastra",
+      "name": "Pashupatastra",
+      "dharma_cost": 100,
+      "restrictions": "Given by Shiva to Arjuna. Can destroy creation. Usable only in specific canonical nodes. Cannot be used against lesser warriors.",
+      "damage_multiplier": 99.9
+    },
+    {
+      "astra_id": "narayanastra",
+      "name": "Narayanastra",
+      "dharma_cost": 90,
+      "restrictions": "Can only be used once. Grows stronger against resistance. Countered only by complete submission. Wielded by Ashwatthama.",
+      "damage_multiplier": 15.0
+    },
+    {
+      "astra_id": "agneyastra",
+      "name": "Agneyastra",
+      "dharma_cost": 20,
+      "restrictions": "Fire-based. Countered by Varunastra. Widespread area damage.",
+      "damage_multiplier": 3.0
+    },
+    {
+      "astra_id": "varunastra",
+      "name": "Varunastra",
+      "dharma_cost": 20,
+      "restrictions": "Water-based. Counters Agneyastra. Floods terrain tiles.",
+      "damage_multiplier": 3.0
+    },
+    {
+      "astra_id": "shakti-astra",
+      "name": "Shakti Astra (Indra's Dart)",
+      "dharma_cost": 60,
+      "restrictions": "Single-use weapon given by Indra to Karna in exchange for his Kavacha-Kundala. Infallible kill on one target. Karna saves it for Arjuna but is forced to use it on Ghatotkacha.",
+      "damage_multiplier": 99.9
+    },
+    {
+      "astra_id": "bhargavastra",
+      "name": "Bhargavastra",
+      "dharma_cost": 40,
+      "restrictions": "Taught by Parashurama to Karna. Multi-target devastation.",
+      "damage_multiplier": 6.0
+    },
+    {
+      "astra_id": "sudarshana-chakra",
+      "name": "Sudarshana Chakra",
+      "dharma_cost": 0,
+      "restrictions": "Krishna's personal weapon. Vowed not to use it in the war. If used, triggers massive Dharma Imbalance.",
+      "damage_multiplier": 99.9
+    },
+    {
+      "astra_id": "vaishnavastra",
+      "name": "Vaishnavastra",
+      "dharma_cost": 70,
+      "restrictions": "Infallible weapon of Vishnu. Countered only by devotion.",
+      "damage_multiplier": 10.0
+    },
+    {
+      "astra_id": "sammohanastra",
+      "name": "Sammohana Astra",
+      "dharma_cost": 15,
+      "restrictions": "Causes unconsciousness. Non-lethal. Arjuna uses it against the Kaurava army at Virata.",
+      "damage_multiplier": 0.0
+    }
+  ],
+  "vows_boons": [
+    {
+      "id": "lifelong-celibacy",
+      "name": "Bhishma's Terrible Vow (Pratigya)",
+      "type": "VOW",
+      "description": "Devavrata swore lifelong celibacy and renounced the throne so his father Shantanu could marry Satyavati. For this sacrifice he was named Bhishma.",
+      "fulfillment_condition": "Maintained until death on the bed of arrows."
+    },
+    {
+      "id": "kuru-throne-protection",
+      "name": "Protector of the Kuru Throne",
+      "type": "VOW",
+      "description": "Bhishma vowed to protect whoever sits on the Kuru throne, binding him to fight for Duryodhana despite knowing his cause is unjust.",
+      "fulfillment_condition": "Active until Bhishma falls."
+    },
+    {
+      "id": "amba-revenge",
+      "name": "Amba's Vengeance",
+      "type": "CURSE",
+      "description": "Princess Amba, humiliated by Bhishma's refusal to marry her, immolated herself and was reborn as Shikhandi to cause his death.",
+      "fulfillment_condition": "Shikhandi stands before Bhishma in battle. Bhishma lowers his arms."
+    },
+    {
+      "id": "never-refuse-dice",
+      "name": "A Kshatriya Cannot Refuse a Challenge",
+      "type": "VOW",
+      "description": "Yudhishthira, bound by Kshatriya dharma, cannot refuse a direct challenge to a game of dice.",
+      "fulfillment_condition": "Triggered whenever Sabha is replayed."
+    },
+    {
+      "id": "truth-bound",
+      "name": "Yudhishthira's Commitment to Truth",
+      "type": "VOW",
+      "description": "Yudhishthira has never spoken a lie. Breaking this (even once) has world-altering consequences — his chariot, which hovers above the ground, will touch the earth.",
+      "fulfillment_condition": "Broken during Drona Parva when he says 'Ashwatthama is dead — the elephant.'"
+    },
+    {
+      "id": "drink-duhshasana-blood",
+      "name": "Bhima's Oath Against Duhshasana",
+      "type": "VOW",
+      "description": "After Duhshasana dragged Draupadi by her hair and attempted to disrobe her, Bhima swore to tear open his chest and drink his blood.",
+      "fulfillment_condition": "Bhima slays Duhshasana in Shalya Parva."
+    },
+    {
+      "id": "break-duryodhana-thigh",
+      "name": "Bhima's Oath Against Duryodhana",
+      "type": "VOW",
+      "description": "When Duryodhana bared his thigh to Draupadi, Bhima swore to break it with his mace.",
+      "fulfillment_condition": "Fulfilled in the mace duel during Shalya Parva."
+    },
+    {
+      "id": "untied-hair",
+      "name": "Draupadi's Untied Hair",
+      "type": "VOW",
+      "description": "Draupadi swore never to tie her hair until it was washed with Duhshasana's blood.",
+      "fulfillment_condition": "Fulfilled when Bhima brings her his blood in Shalya Parva."
+    },
+    {
+      "id": "slay-jayadratha-sunset",
+      "name": "Arjuna's Vow to Slay Jayadratha",
+      "type": "VOW",
+      "description": "After Abhimanyu's death, Arjuna swore to kill Jayadratha before sunset the next day, or immolate himself.",
+      "fulfillment_condition": "Arjuna slays Jayadratha before sunset on Day 14. Krishna creates an artificial eclipse to lure Jayadratha out."
+    },
+    {
+      "id": "never-refuse-charity",
+      "name": "Karna's Perpetual Generosity",
+      "type": "VOW",
+      "description": "Karna vowed never to refuse anyone who asks during his morning prayers. Indra exploits this to take his Kavacha-Kundala.",
+      "fulfillment_condition": "Exploited pre-war. Indra takes the armor; gives Shakti Astra in return."
+    },
+    {
+      "id": "surpass-arjuna",
+      "name": "Karna's Lifelong Rivalry",
+      "type": "VOW",
+      "description": "Karna swore to prove himself the greatest archer, surpassing Arjuna.",
+      "fulfillment_condition": "Resolved in their final duel during Karna Parva."
+    },
+    {
+      "id": "no-weapons-war",
+      "name": "Krishna's Vow of Non-Combat",
+      "type": "VOW",
+      "description": "Krishna promised not to wield weapons during the war. He serves only as Arjuna's charioteer. Nearly breaks this vow on Day 9.",
+      "fulfillment_condition": "Maintained throughout the war (with one near-breach)."
+    },
+    {
+      "id": "guru-dharma",
+      "name": "Duty of the Teacher",
+      "type": "VOW",
+      "description": "Drona and Kripa are bound by guru-dharma to fight for the side that feeds them, even against their own students.",
+      "fulfillment_condition": "Active until their respective deaths."
+    },
+    {
+      "id": "destroy-kuru-line",
+      "name": "Shakuni's Secret Oath",
+      "type": "VOW",
+      "description": "Shakuni swore to destroy the Kuru dynasty from within to avenge his family's humiliation by Dhritarashtra.",
+      "fulfillment_condition": "Fulfilled by the annihilation of both sides at Kurukshetra."
+    },
+    {
+      "id": "secret-of-karna",
+      "name": "Kunti's Hidden Truth",
+      "type": "VOW",
+      "description": "Kunti kept secret that Karna is her firstborn son, abandoned at birth. She reveals this to Karna before the war.",
+      "fulfillment_condition": "Revealed in Udyoga Parva. Karna refuses to switch sides but promises to spare all Pandavas except Arjuna."
+    },
+    {
+      "id": "eternal-blindfold",
+      "name": "Gandhari's Self-Imposed Blindfold",
+      "type": "VOW",
+      "description": "When Gandhari learned her husband was blind, she blindfolded herself permanently out of devotion. This accumulated immense pativrata shakti.",
+      "fulfillment_condition": "Culminates in her curse upon Krishna after the war."
+    },
+    {
+      "id": "truth-to-king",
+      "name": "Sanjaya's Duty to Report",
+      "type": "VOW",
+      "description": "Sanjaya is tasked with reporting the war truthfully to the blind Dhritarashtra, using divya-drishti granted by Vyasa.",
+      "fulfillment_condition": "Active for the duration of the 18-day war."
+    },
+    {
+      "id": "slay-drona",
+      "name": "Dhrishtadyumna's Destiny",
+      "type": "VOW",
+      "description": "Dhrishtadyumna was born from the sacrificial fire specifically to kill Drona.",
+      "fulfillment_condition": "Fulfilled when he beheads Drona in Drona Parva."
+    },
+    {
+      "id": "kavacha-kundala",
+      "name": "Karna's Natural Armor",
+      "type": "BOON",
+      "description": "Karna was born with divine golden armor (Kavacha) and earrings (Kundala) that made him virtually invincible. Indra tricked him into donating them.",
+      "fulfillment_condition": "Removed before the war. Without them, Karna is mortal."
+    },
+    {
+      "id": "parashurama-curse",
+      "name": "Parashurama's Curse on Karna",
+      "type": "CURSE",
+      "description": "Parashurama cursed Karna: he would forget how to invoke the Brahmastra at the moment he needs it most.",
+      "fulfillment_condition": "Activated during Karna's final duel with Arjuna."
+    },
+    {
+      "id": "earth-curse",
+      "name": "Brahmin's Curse on Karna",
+      "type": "CURSE",
+      "description": "A brahmin cursed Karna that the earth would swallow his chariot wheel at his moment of greatest need.",
+      "fulfillment_condition": "Activated during the final duel — his chariot wheel sinks into the ground."
+    }
+  ]
+}

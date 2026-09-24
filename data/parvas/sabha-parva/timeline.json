@@ -1,0 +1,24 @@
+{
+  "nodes": [
+    {
+      "node_id": "sp-dice-game",
+      "parva_id": 2,
+      "war_day": 0,
+      "phase_name": "BEGINNING",
+      "title": "The Game of Dice",
+      "historical_context": "Yudhishthira accepts Dhritarashtra's invitation to a game of dice in Hastinapura. Shakuni plays on Duryodhana's behalf with loaded dice.",
+      "initial_scene_type": "VN",
+      "map_id": "map_sabha_hall"
+    },
+    {
+      "node_id": "sp-disrobing",
+      "parva_id": 2,
+      "war_day": 0,
+      "phase_name": "MIDDLE",
+      "title": "The Humiliation of Draupadi",
+      "historical_context": "Having lost Draupadi in the final wager, Duhshasana drags her into the royal assembly. She challenges the Kuru elders on jurisprudence and dharma.",
+      "initial_scene_type": "VN",
+      "map_id": "map_sabha_hall"
+    }
+  ]
+}

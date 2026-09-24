@@ -1,0 +1,14 @@
+{
+  "nodes": [
+    {
+      "node_id": "sau-night-slaughter",
+      "parva_id": 10,
+      "war_day": 18,
+      "phase_name": "END",
+      "title": "The Night Slaughter",
+      "historical_context": "Ashwatthama, Kripa, and Kritavarma attack the victorious Pandava camp while they sleep.",
+      "initial_scene_type": "VN",
+      "map_id": "map_pandava_camp_night"
+    }
+  ]
+}

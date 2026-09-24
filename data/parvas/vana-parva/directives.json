@@ -1,0 +1,11 @@
+{
+  "directives": [
+    {
+      "directive_id": "survive-kirata",
+      "directive_type": "SURVIVE_TURNS",
+      "target_turns": 5,
+      "fail_on_deviation": false
+    }
+  ],
+  "triggers": []
+}

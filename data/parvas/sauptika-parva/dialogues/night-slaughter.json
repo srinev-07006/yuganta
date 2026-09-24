@@ -1,0 +1,29 @@
+{
+  "sequence_id": "seq_slaughter",
+  "node_id": "sau-night-slaughter",
+  "trigger_event": "NODE_START",
+  "background_asset_key": "bg_camp_fire_blood",
+  "bgm_asset_key": "bgm_horror",
+  "nodes": [
+    {
+      "dialogue_id": "sau_a1",
+      "speaker_id": "ashwatthama",
+      "dialogue_text": "Wake up, Dhrishtadyumna! Wake up, coward! You killed my unarmed father by his hair. I will not afford you the dignity of a warrior's death.",
+      "speaker_emotion": "ANGRY",
+      "choices": [
+        {
+          "choice_id": "sau_c1",
+          "choice_text": "[Ashwatthama strangles him and kicks him to death.]",
+          "next_dialogue_id": "sau_d1"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "sau_d1",
+      "speaker_id": "dhrishtadyumna",
+      "dialogue_text": "Give me... a weapon... let me die... by the sword...",
+      "speaker_emotion": "GRIEF",
+      "is_endpoint": true
+    }
+  ]
+}

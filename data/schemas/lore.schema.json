@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Lore & Character Schema",
+  "description": "Schema for character rosters, divine astras, vows (Pratijnas), and boons.",
+  "type": "object",
+  "definitions": {
+    "astra": {
+      "type": "object",
+      "properties": {
+        "astra_id": { "type": "string" },
+        "name": { "type": "string" },
+        "dharma_cost": { "type": "integer" },
+        "restrictions": { "type": "string" },
+        "damage_multiplier": { "type": "number" }
+      },
+      "required": ["astra_id", "name", "dharma_cost"]
+    },
+    "vow_boon": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": ["VOW", "BOON", "CURSE"]
+        },
+        "description": { "type": "string" },
+        "fulfillment_condition": { "type": "string" }
+      },
+      "required": ["id", "name", "type"]
+    },
+    "maharathi_trait": {
+      "type": "object",
+      "properties": {
+        "trait_id": { "type": "string" },
+        "trait_name": { "type": "string" },
+        "invulnerable_to_standard_damage": { "type": "boolean", "default": false },
+        "ignores_terrain_cost": { "type": "boolean", "default": false },
+        "custom_script_handler": { "type": "string" }
+      },
+      "required": ["trait_id", "trait_name"]
+    },
+    "character": {
+      "type": "object",
+      "properties": {
+        "character_id": { "type": "string" },
+        "canonical_name": { "type": "string" },
+        "default_faction": {
+          "type": "string",
+          "enum": ["PANDAVA", "KAURAVA", "NEUTRAL"]
+        },
+        "base_sprite_key": { "type": "string" },
+        "portrait_atlas_key": { "type": "string" },
+        "traits": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "astras": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "vows": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["character_id", "canonical_name", "default_faction"]
+    }
+  },
+  "properties": {
+    "characters": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/character" }
+    },
+    "astras": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/astra" }
+    },
+    "vows_boons": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/vow_boon" }
+    },
+    "traits": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/maharathi_trait" }
+    }
+  }
+}

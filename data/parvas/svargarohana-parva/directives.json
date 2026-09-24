@@ -1,0 +1,11 @@
+{
+  "directives": [
+    {
+      "directive_id": "choose-hell",
+      "directive_type": "SACRIFICE",
+      "fail_on_deviation": true,
+      "deviation_dialogue_id": "dev-chooses-heaven"
+    }
+  ],
+  "triggers": []
+}

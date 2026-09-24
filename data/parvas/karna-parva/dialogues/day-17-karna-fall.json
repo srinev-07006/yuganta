@@ -1,0 +1,41 @@
+{
+  "sequence_id": "seq_day17_karna_fall",
+  "node_id": "kp-day17-final-duel",
+  "trigger_event": "MID_BATTLE",
+  "background_asset_key": "bg_karna_wheel",
+  "bgm_asset_key": "bgm_tragic_end",
+  "nodes": [
+    {
+      "dialogue_id": "d17_karna_stuck",
+      "speaker_id": "karna",
+      "dialogue_text": "Hold, Arjuna! The earth has swallowed my chariot wheel. A true Kshatriya does not strike an unarmed man attempting to lift his wheel. Wait!",
+      "speaker_emotion": "ANGRY",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "next_dialogue_id": "d17_krishna_retorts"
+    },
+    {
+      "dialogue_id": "d17_krishna_retorts",
+      "speaker_id": "krishna",
+      "dialogue_text": "Dharma? You invoke Dharma now, Radheya? Where was this Dharma when they dragged Draupadi by her hair? Where was it when seven of you butchered young Abhimanyu? Strike, Arjuna! Cut him down!",
+      "speaker_emotion": "ANGRY",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "choices": [
+        {
+          "choice_id": "d17_c1",
+          "choice_text": "[Strike Karna while he lifts his wheel.]",
+          "dharma_impact": -10,
+          "next_dialogue_id": "d17_arjuna_strikes",
+          "tactical_override_event": "NONE"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "d17_arjuna_strikes",
+      "speaker_id": "sanjaya",
+      "dialogue_text": "With a heavy heart, Arjuna released the Anjalika weapon. It struck the noble Karna, severing his head. A bright light emerged from his body and merged with the Sun.",
+      "speaker_emotion": "NEUTRAL",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "is_endpoint": true
+    }
+  ]
+}

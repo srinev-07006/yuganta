@@ -1,0 +1,22 @@
+{
+  "directives": [
+    {
+      "directive_id": "defeat-karna",
+      "directive_type": "DEFEAT_UNIT",
+      "target_unit_id": "karna",
+      "fail_on_deviation": true,
+      "deviation_dialogue_id": "dev-karna-survives"
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "trigger-wheel-stuck",
+      "condition_type": "UNIT_HP_BELOW_PERCENT",
+      "condition_value": 30,
+      "target_unit_id": "karna",
+      "linked_sequence_id": "seq_wheel_stuck",
+      "pauses_tactical_scene": true,
+      "is_repeatable": false
+    }
+  ]
+}

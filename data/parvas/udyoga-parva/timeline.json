@@ -1,0 +1,34 @@
+{
+  "nodes": [
+    {
+      "node_id": "udp-peace-envoy",
+      "parva_id": 5,
+      "war_day": 0,
+      "phase_name": "BEGINNING",
+      "title": "The Peace Envoy",
+      "historical_context": "Krishna arrives at the Kuru court with a final offer of peace: just five villages for the Pandavas.",
+      "initial_scene_type": "VN",
+      "map_id": "map_kuru_court"
+    },
+    {
+      "node_id": "udp-vishvarupa",
+      "parva_id": 5,
+      "war_day": 0,
+      "phase_name": "MIDDLE",
+      "title": "Vishvarupa Darshana",
+      "historical_context": "Duryodhana attempts to arrest Krishna, prompting him to reveal his cosmic form.",
+      "initial_scene_type": "VN",
+      "map_id": "map_kuru_court"
+    },
+    {
+      "node_id": "udp-karna-origins",
+      "parva_id": 5,
+      "war_day": 0,
+      "phase_name": "END",
+      "title": "Karna's Origins",
+      "historical_context": "Kunti meets Karna secretly by the river to reveal that he is her foremost son.",
+      "initial_scene_type": "VN",
+      "map_id": "map_riverbank"
+    }
+  ]
+}

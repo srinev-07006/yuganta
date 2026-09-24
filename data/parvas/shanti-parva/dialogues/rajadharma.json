@@ -1,0 +1,29 @@
+{
+  "sequence_id": "seq_rajadharma",
+  "node_id": "shp-rajadharma",
+  "trigger_event": "NODE_START",
+  "background_asset_key": "bg_bed_of_arrows",
+  "bgm_asset_key": "bgm_bhishma_discourse",
+  "nodes": [
+    {
+      "dialogue_id": "shp_y1",
+      "speaker_id": "yudhishthira",
+      "dialogue_text": "Grandsire, how can I rule a kingdom built on the remains of my own family? The crown is heavy with their blood.",
+      "speaker_emotion": "GRIEF",
+      "choices": [
+        {
+          "choice_id": "shp_c1",
+          "choice_text": "[Await Bhishma's counsel.]",
+          "next_dialogue_id": "shp_b1"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "shp_b1",
+      "speaker_id": "bhishma",
+      "dialogue_text": "A king has no family, Yudhishthira. He has only subjects. The rod of chastisement (Danda) must be wielded without attachment or aversion. Do not shrink from the throne; it is your Dharma.",
+      "speaker_emotion": "ENLIGHTENED",
+      "is_endpoint": true
+    }
+  ]
+}

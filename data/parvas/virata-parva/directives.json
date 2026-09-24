@@ -1,0 +1,11 @@
+{
+  "directives": [
+    {
+      "directive_id": "defeat-kauravas",
+      "directive_type": "DEFEAT_UNIT",
+      "fail_on_deviation": true,
+      "deviation_dialogue_id": "dev-premature-reveal"
+    }
+  ],
+  "triggers": []
+}

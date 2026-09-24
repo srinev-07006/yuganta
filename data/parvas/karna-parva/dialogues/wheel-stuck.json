@@ -1,0 +1,50 @@
+{
+  "sequence_id": "seq_wheel_stuck",
+  "node_id": "kp-final-duel",
+  "trigger_event": "MID_BATTLE",
+  "background_asset_key": "bg_chariot_stuck",
+  "bgm_asset_key": "bgm_tragic_duel",
+  "nodes": [
+    {
+      "dialogue_id": "kp_k1",
+      "speaker_id": "karna",
+      "dialogue_text": "Arjuna! The earth has swallowed my wheel, as cursed. Wait a moment while I free it. It is against Dharma to strike a warrior who is disarmed and on the ground!",
+      "speaker_emotion": "ANGRY",
+      "choices": [
+        {
+          "choice_id": "kp_c1",
+          "choice_text": "[Lower your bow.]",
+          "dharma_impact": 10,
+          "next_dialogue_id": "kp_krishna_rejects"
+        },
+        {
+          "choice_id": "kp_c2",
+          "choice_text": "[Strike him while he struggles.]",
+          "dharma_impact": -20,
+          "next_dialogue_id": "kp_strike"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "kp_krishna_rejects",
+      "speaker_id": "krishna",
+      "dialogue_text": "Dharma? You invoke Dharma now, Radheya? Where was your Dharma when Draupadi was dragged into the assembly? Where was it when seven Mahārathis surrounded the boy Abhimanyu and slaughtered him? Strike, Arjuna! Divest him of his head!",
+      "speaker_emotion": "ANGRY",
+      "choices": [
+        {
+          "choice_id": "kp_c3",
+          "choice_text": "[Fire the Anjalika weapon.]",
+          "dharma_impact": 0,
+          "next_dialogue_id": "kp_strike"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "kp_strike",
+      "speaker_id": "karna",
+      "dialogue_text": "[The shaft pierces Karna's neck, severing his head like a lotus from its stalk. A brilliant light emerges from his body and enters the Sun.]",
+      "speaker_emotion": "NEUTRAL",
+      "is_endpoint": true
+    }
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "sequence_id": "seq_day15_drona_lie",
+  "node_id": "dp-day15-drona-meditation",
+  "trigger_event": "MID_BATTLE",
+  "background_asset_key": "bg_drona_rampage",
+  "bgm_asset_key": "bgm_dharma_crisis",
+  "nodes": [
+    {
+      "dialogue_id": "d15_krishna_proposal",
+      "speaker_id": "krishna",
+      "dialogue_text": "Yudhishthira, look! Armed with the Brahmashira and blazing like the sun, Drona is consuming your army like dry grass! He cannot be defeated in battle, not even by Indra. But he possesses one weakness—his love for his son. If he believes Ashwatthama is dead, he will cast down his weapons.",
+      "speaker_emotion": "ENLIGHTENED",
+      "next_dialogue_id": "d15_yudhishthira_hesitation"
+    },
+    {
+      "dialogue_id": "d15_yudhishthira_hesitation",
+      "speaker_id": "yudhishthira",
+      "dialogue_text": "Madhava... you ask me to speak an untruth? My vow of truth is the anchor of my soul. Even for the sovereignty of the three worlds, I cannot lie to my guru.",
+      "speaker_emotion": "GRIEF",
+      "next_dialogue_id": "d15_bhima_intervention"
+    },
+    {
+      "dialogue_id": "d15_bhima_intervention",
+      "speaker_id": "bhima",
+      "dialogue_text": "Brother, I have just taken my mace and smashed the skull of Indravarman's elephant—a beast named Ashwatthama! The fact is true. You need only speak the name!",
+      "speaker_emotion": "ANGRY",
+      "next_dialogue_id": "d15_drona_approaches"
+    },
+    {
+      "dialogue_id": "d15_drona_approaches",
+      "speaker_id": "drona",
+      "dialogue_text": "(Drona’s chariot pulls near amid the slaughter) Yudhishthira! Your brother claims my son has fallen! My heart trembles, yet I do not trust Bhima. You, Dharmaraja, have never spoken a falsehood, not even in jest. Tell me... is my Ashwatthama truly dead?",
+      "speaker_emotion": "GRIEF",
+      "choices": [
+        {
+          "choice_id": "c_truth_pure",
+          "choice_text": "[Cling to absolute truth: 'Your son lives, O Acharya. An elephant has died.']",
+          "dharma_impact": 50,
+          "artha_impact": -50,
+          "kama_impact": 0,
+          "moksha_impact": 10,
+          "tactical_override_event": "DRONA_RAMPAGE_CONTINUES",
+          "next_dialogue_id": "d15_drona_relieved"
+        },
+        {
+          "choice_id": "c_half_truth",
+          "choice_text": "[The Canonical Middle Path: 'Ashwatthama is dead...' and whisper '...the elephant']",
+          "dharma_impact": -30,
+          "artha_impact": 30,
+          "kama_impact": -10,
+          "moksha_impact": -10,
+          "next_dialogue_id": "d15_chariot_falls"
+        },
+        {
+          "choice_id": "c_pure_lie",
+          "choice_text": "[Embrace Machiavellian Artha: 'Yes, Acharya. Your son is dead.']",
+          "dharma_impact": -50,
+          "artha_impact": 40,
+          "kama_impact": 10,
+          "moksha_impact": -30,
+          "next_dialogue_id": "d15_chariot_falls"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "d15_drona_relieved",
+      "speaker_id": "drona",
+      "dialogue_text": "Bless you, son of Dharma! My heart is restored! Now, let these Panchalas face the wrath of Bharadwaja's son!",
+      "speaker_emotion": "ANGRY",
+      "is_endpoint": true
+    },
+    {
+      "dialogue_id": "d15_chariot_falls",
+      "speaker_id": "sanjaya",
+      "dialogue_text": "The moment the word leaves Yudhishthira's lips, a cosmic law shatters. For his entire life, Yudhishthira's chariot floated four fingers above the earth due to his flawless adherence to truth. Now, with a heavy thud, the wheels strike the bloody mud of Kurukshetra. The King of Dharma has fallen.",
+      "speaker_emotion": "GRIEF",
+      "next_dialogue_id": "d15_drona_surrenders"
+    },
+    {
+      "dialogue_id": "d15_drona_surrenders",
+      "speaker_id": "drona",
+      "dialogue_text": "Ashwatthama... my beloved son. If he is gone, for whom do I bear these weapons? For whom do I fight this hollow war? O sages in the sky, I am weary. I lay down my bow.",
+      "speaker_emotion": "ENLIGHTENED",
+      "next_dialogue_id": "d15_dhrishtadyumna_strikes"
+    },
+    {
+      "dialogue_id": "d15_dhrishtadyumna_strikes",
+      "speaker_id": "dhrishtadyumna",
+      "dialogue_text": "He sits unarmed in meditation on his chariot! This is the moment I was born from the fire for! My vow is at hand!",
+      "speaker_emotion": "ANGRY",
+      "choices": [
+        {
+          "choice_id": "c_let_him_strike",
+          "choice_text": "[Stand silently and let Dhrishtadyumna behead the meditating guru]",
+          "dharma_impact": -15,
+          "artha_impact": 20,
+          "kama_impact": 5,
+          "moksha_impact": 0,
+          "next_dialogue_id": "d15_arjuna_horrified"
+        },
+        {
+          "choice_id": "c_arjuna_shouts",
+          "choice_text": "[Arjuna protests the violation of Kshatriya Dharma]",
+          "dharma_impact": 10,
+          "artha_impact": 0,
+          "kama_impact": 10,
+          "moksha_impact": -5,
+          "next_dialogue_id": "d15_arjuna_horrified"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "d15_arjuna_horrified",
+      "speaker_id": "arjuna",
+      "dialogue_text": "Stop! Do not slay an unarmed teacher! Bring him to us alive! Oh, heinous sin... he has severed our Acharya's head like a butcher sorting meat!",
+      "speaker_emotion": "GRIEF",
+      "is_endpoint": true
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "sequence_id": "seq_yadava_slaughter",
+  "node_id": "mp-curse-fulfilled",
+  "trigger_event": "NODE_START",
+  "background_asset_key": "bg_prabhasa_shore_blood",
+  "bgm_asset_key": "bgm_chaos",
+  "nodes": [
+    {
+      "dialogue_id": "mp_s1",
+      "speaker_id": "satyaki",
+      "dialogue_text": "You killed Bhurishravas when he was meditating! You have no honor!",
+      "speaker_emotion": "ANGRY",
+      "choices": [
+        {
+          "choice_id": "mp_c1",
+          "choice_text": "[Watch the slaughter begin.]",
+          "next_dialogue_id": "mp_k1"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "mp_k1",
+      "speaker_id": "krishna",
+      "dialogue_text": "Gandhari's words bear fruit. They strike each other with eraka grass, and the grass becomes iron. It is time.",
+      "speaker_emotion": "ENLIGHTENED",
+      "is_endpoint": true
+    }
+  ]
+}

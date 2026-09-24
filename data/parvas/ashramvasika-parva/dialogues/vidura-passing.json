@@ -1,0 +1,30 @@
+{
+  "sequence_id": "seq_vidura_death",
+  "node_id": "asp-vidura-death",
+  "trigger_event": "NODE_START",
+  "background_asset_key": "bg_ascetic_forest",
+  "bgm_asset_key": "bgm_mystic_chant",
+  "nodes": [
+    {
+      "dialogue_id": "asp_y1",
+      "speaker_id": "yudhishthira",
+      "dialogue_text": "Uncle Vidura stands leaning against a tree, his body emaciated, staring at me without blinking. I sense his life force reaching out.",
+      "speaker_emotion": "GRIEF",
+      "choices": [
+        {
+          "choice_id": "asp_c1",
+          "choice_text": "[Embrace him.]",
+          "dharma_impact": 10,
+          "next_dialogue_id": "asp_y2"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "asp_y2",
+      "speaker_id": "yudhishthira",
+      "dialogue_text": "As I hold him, a brilliant light leaves his eyes and enters mine. Our souls are one. He was Dharma, and so am I.",
+      "speaker_emotion": "ENLIGHTENED",
+      "is_endpoint": true
+    }
+  ]
+}

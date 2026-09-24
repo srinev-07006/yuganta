@@ -1,0 +1,70 @@
+{
+  "art_direction": [
+    {
+      "faction": "PANDAVA",
+      "visual_motif": "Earthy, Ascetic, Pragmatic. They spent 13 years in exile; their garments should reflect faded royalty mixed with forest pragmatism.",
+      "color_palette_hex": ["#D35400", "#7D6608", "#145A32", "#E5E7E9"],
+      "armor_reference_era": "Historical Kushan / Early Gupta era (leather lamellar, simple bronze breastplates, NOT shining full-plate medieval armor).",
+      "do_not_use_tropes": [
+        "No over-the-top glowing golden aura unless a divine weapon (Astra) is actively drawn.",
+        "No clean, perfectly pressed silk during the war Parvas."
+      ]
+    },
+    {
+      "faction": "KAURAVA",
+      "visual_motif": "Opulent, Rigid, Imperial. They hold the wealth of Hastinapura. Regimental and imposing.",
+      "color_palette_hex": ["#4A235A", "#900C3F", "#FFC300", "#1C2833"],
+      "armor_reference_era": "Late Mauryan / Heavy infantry scale mail. Chariots heavily gilded.",
+      "do_not_use_tropes": [
+        "Do not make them look like generic 'evil demons'. They are noble Kshatriyas pursuing a flawed Dharma.",
+        "Avoid pure black/red 'villain' coding. Use rich purples and golds to signify entrenched wealth."
+      ]
+    },
+    {
+      "faction": "NEUTRAL_SAGES",
+      "visual_motif": "Ethereal, detached. Vyasa, Sanjaya, Bhishma (when teaching in Shanti Parva).",
+      "color_palette_hex": ["#FDFEFE", "#BDC3C7", "#78281F"],
+      "armor_reference_era": "Vedic ascetic (Valkala, Rudraksha, unkempt jata/hair).",
+      "do_not_use_tropes": [
+        "No floating lotus physical pedestals. Ground them in the dirt."
+      ]
+    }
+  ],
+  "audio_shlokas": [
+    {
+      "track_id": "bgm_gita_visada",
+      "source_text": "Bhagavad Gita Chapter 1, Verse 28-29",
+      "trigger_context": "DHARMA_CRISIS",
+      "instrumentation": "Solo Rudra Veena, no percussion, sparse.",
+      "sanskrit_lyrics": "kṛpayā parayāviṣṭo viṣīdann idam abravīt... sīdanti mama gātrāṇi mukhaṃ ca pariśuṣyati (Overwhelmed by deep pity, in sorrow he spoke: My limbs fail and my mouth is parched.)"
+    },
+    {
+      "track_id": "bgm_karmanye",
+      "source_text": "Bhagavad Gita Chapter 2, Verse 47",
+      "trigger_context": "BATTLE_START",
+      "instrumentation": "Heavy Pakhawaj drumming building to a crescendo with a male choir.",
+      "sanskrit_lyrics": "karmaṇy-evādhikāras te mā phaleṣhu kadāchana (You have a right to perform your prescribed duty, but you are not entitled to the fruits of action.)"
+    },
+    {
+      "track_id": "bgm_karna_fall",
+      "source_text": "Karna Parva Theme / Surya Stotram",
+      "trigger_context": "TRAGIC_DEATH",
+      "instrumentation": "Melancholy Bansuri (Bamboo Flute) fading into silence.",
+      "sanskrit_lyrics": "Instrumental only, symbolizing the sun setting on the greatest tragic hero."
+    },
+    {
+      "track_id": "bgm_moksha_illusion",
+      "source_text": "Isha Upanishad",
+      "trigger_context": "MOKSHA_MOMENT",
+      "instrumentation": "Singing bowls, ambient drone.",
+      "sanskrit_lyrics": "hiraṇmayena pātreṇa satyasyāpihitaṃ mukham (The face of Truth is hidden by a golden disk...)"
+    },
+    {
+      "track_id": "bgm_ominous_court",
+      "source_text": "Sabha Parva - Vidura's Niti",
+      "trigger_context": "DHARMA_CRISIS",
+      "instrumentation": "Low, dissonant strings playing at a slow tempo.",
+      "sanskrit_lyrics": "yatra dharmo hy adharmeṇa satyaṃ yatrānṛtena ca (Where Dharma is slain by Adharma, and Truth by Falsehood...)"
+    }
+  ]
+}
