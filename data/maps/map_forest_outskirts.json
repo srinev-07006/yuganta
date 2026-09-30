@@ -1,0 +1,16 @@
+{
+  "map_id": "map_forest_outskirts",
+  "grid_width": null,
+  "grid_height": null,
+  "tile_size": null,
+  "orientation": "VN_ONLY",
+  "tileset_asset_key": "tileset_forest_outskirts",
+  "description": "The edge of the forest where Dhritarashtra, Gandhari, and Kunti retire. They leave the palace to live as ascetics. Ashramvasika Parva — The Retirement. Peace, simplicity, the shedding of worldly power.",
+  "scene_type": "VN_ONLY",
+  "vn_backdrop_notes": {
+    "lighting": "Dappled forest light. Gentle.",
+    "mood": "Quiet, contemplative, aging.",
+    "interactive_elements": ["Simple hermitage", "Elderly figures in ascetic robes"],
+    "no_tactical_grid": true
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "map_id": "map_chakravyuha_carnage",
+  "grid_width": 20,
+  "grid_height": 20,
+  "tile_size": 64,
+  "orientation": "ORTHOGONAL",
+  "tileset_asset_key": "tileset_kurukshetra",
+  "description": "The Chakravyuha after Abhimanyu has penetrated to the core. The formation has collapsed inward. Abhimanyu fights alone, surrounded, with no escape. This is the death scene.",
+  "tiles": [
+    {
+      "region": "INNER_CARNAGE",
+      "x_min": 0, "x_max": 19, "y_min": 0, "y_max": 19,
+      "terrain_type": "PLAIN",
+      "movement_cost": 1,
+      "defense_multiplier": 1.0,
+      "is_impassable": false,
+      "special_flag": "NONE"
+    }
+  ],
+  "tile_overrides": [
+    { "x": 10, "y": 10, "terrain_type": "PLAIN", "movement_cost": 1, "defense_multiplier": 1.0, "is_impassable": false, "special_flag": "ABHIMANYU_LAST_STAND", "note": "The exact spot Abhimanyu falls." }
+  ],
+  "spawn_zones": {
+    "PANDAVA": { "x_min": 10, "x_max": 10, "y_min": 10, "y_max": 10, "hero": "abhimanyu", "note": "Abhimanyu spawns alone, surrounded." },
+    "KAURAVA": { "x_min": 0, "x_max": 19, "y_min": 0, "y_max": 19, "note": "All six Maharathis plus supporting units encircle Abhimanyu." }
+  },
+  "directive_notes": {
+    "primary_directive": "abhimanyu-survive (SURVIVE_TURNS, target: 15 turns)",
+    "fail_on_deviation": false,
+    "note": "Abhimanyu's death is canonical. The player's goal is to fight valiantly, not to survive."
+  },
+  "special_mechanics": {
+    "surrounded": "Abhimanyu is outnumbered 6:1 at Maharathi level plus dozens of supporting units. This is designed to be unwinnable.",
+    "trigger_death": "When Abhimanyu HP = 0, trigger-abhimanyu-death fires seq_abhimanyu_death VNScene."
+  }
+}

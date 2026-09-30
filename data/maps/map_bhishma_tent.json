@@ -1,0 +1,18 @@
+{
+  "map_id": "map_bhishma_tent",
+  "grid_width": null,
+  "grid_height": null,
+  "tile_size": null,
+  "orientation": "VN_ONLY",
+  "tileset_asset_key": "tileset_bhishma_tent",
+  "description": "Bhishma's deathbed — a bed of arrows on the battlefield. He lies pierced by hundreds of shafts, waiting for the auspicious Uttarayana (sun's northward journey) to die. He teaches Yudhishthira Rajadharma and Mokshadharma. Shanti and Anushasana Parvas. The epic's philosophical core.",
+  "scene_type": "VN_ONLY",
+  "vn_backdrop_notes": {
+    "lighting": "Soft morning light. Serene despite the violence of the bed.",
+    "mood": "Wisdom, acceptance, transition.",
+    "color_palette": ["#FDFEFE", "#BDC3C7", "#78281F"],
+    "interactive_elements": ["Bhishma on the arrow bed", "Yudhishthira sitting at his feet", "Vyasa and Krishna observing"],
+    "no_tactical_grid": true,
+    "note": "This map is reused 5 times across Shanti and Anushasana Parvas. The longest unbroken VN sequence in the game."
+  }
+}

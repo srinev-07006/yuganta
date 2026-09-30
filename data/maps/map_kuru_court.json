@@ -1,0 +1,17 @@
+{
+  "map_id": "map_kuru_court",
+  "grid_width": null,
+  "grid_height": null,
+  "tile_size": null,
+  "orientation": "VN_ONLY",
+  "tileset_asset_key": "tileset_kuru_court",
+  "description": "The throne room of Hastinapura. Dhritarashtra sits blindfolded on the throne. Used for: (1) The Peace Envoy scene where Krishna attempts diplomacy, (2) Vishvarupa Darshana where Krishna reveals his cosmic form. Grand, imperial, oppressive.",
+  "scene_type": "VN_ONLY",
+  "vn_backdrop_notes": {
+    "lighting": "Dim torch-lit interior. Heavy shadows.",
+    "color_palette": ["#4A235A", "#900C3F", "#FFC300", "#1C2833"],
+    "interactive_elements": ["Dhritarashtra's throne", "Krishna standing at center"],
+    "no_tactical_grid": true,
+    "note": "Vishvarupa scene requires special visual effects — cosmic transformation overlay."
+  }
+}

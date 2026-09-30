@@ -1,0 +1,17 @@
+{
+  "map_id": "map_deep_forest",
+  "grid_width": null,
+  "grid_height": null,
+  "tile_size": null,
+  "orientation": "VN_ONLY",
+  "tileset_asset_key": "tileset_deep_forest",
+  "description": "Deeper in the forest. Vidura's final days. His dharma-incarnate essence merges with Yudhishthira through yogic union. Ashramvasika Parva — Vidura's Passing. Mystical, liminal.",
+  "scene_type": "VN_ONLY",
+  "vn_backdrop_notes": {
+    "lighting": "Dim, filtered green light through dense canopy.",
+    "mood": "Spiritual, otherworldly.",
+    "interactive_elements": ["Vidura sitting in meditation", "His form dissolving into light"],
+    "no_tactical_grid": true,
+    "note": "Vidura's dharma-incarnate trait resolves here — his essence returns to the cosmic order."
+  }
+}

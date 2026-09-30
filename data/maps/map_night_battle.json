@@ -1,0 +1,35 @@
+{
+  "map_id": "map_night_battle",
+  "grid_width": 20,
+  "grid_height": 16,
+  "tile_size": 64,
+  "orientation": "ORTHOGONAL",
+  "tileset_asset_key": "tileset_kurukshetra_night",
+  "description": "Night battle during the Karna Parva. Ghatotkacha (rakshasa-prince, night-fighter) fights for the Pandavas. Karna must use his single Shakti weapon to stop him.",
+  "tiles": [
+    {
+      "region": "NIGHT_FIELD",
+      "x_min": 0, "x_max": 19, "y_min": 0, "y_max": 15,
+      "terrain_type": "PLAIN",
+      "movement_cost": 1,
+      "defense_multiplier": 1.0,
+      "is_impassable": false,
+      "special_flag": "NONE"
+    }
+  ],
+  "tile_overrides": [],
+  "spawn_zones": {
+    "PANDAVA": { "x_min": 0, "x_max": 7, "y_min": 0, "y_max": 15, "hero": "ghatotkacha", "note": "Ghatotkacha has night-fighter trait (+3.0× damage at night) and can FlyOverTerrain." },
+    "KAURAVA": { "x_min": 12, "x_max": 19, "y_min": 0, "y_max": 15, "hero": "karna" }
+  },
+  "fog_of_war": {
+    "enabled": true,
+    "visibility_radius": 2,
+    "note": "Night battle. Limited vision."
+  },
+  "special_mechanics": {
+    "night_fighter_bonus": "Ghatotkacha's night-fighter trait gives him NightCombatBonus(3.0) — triple damage. He is nearly unstoppable.",
+    "shakti_weapon": "Karna has a one-use Shakti astra that kills any target instantly. Using it on Ghatotkacha is tactically necessary but means Karna cannot use it on Arjuna later (Krishna's plan).",
+    "dharma_note": "This is a Pandava loss (Ghatotkacha dies) that is strategically a win (Karna wastes his ultimate weapon)."
+  }
+}

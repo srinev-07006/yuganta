@@ -1,0 +1,34 @@
+{
+  "map_id": "map_virata_plains",
+  "grid_width": 18,
+  "grid_height": 14,
+  "tile_size": 64,
+  "orientation": "ORTHOGONAL",
+  "tileset_asset_key": "tileset_plains",
+  "description": "Open grassland near the Virata kingdom. The Kauravas raid King Virata's cattle. The Pandavas (still in disguise) must defend without revealing their identities prematurely.",
+  "tiles": [
+    {
+      "region": "OPEN_PLAINS",
+      "x_min": 0, "x_max": 17, "y_min": 0, "y_max": 13,
+      "terrain_type": "PLAIN",
+      "movement_cost": 1,
+      "defense_multiplier": 1.0,
+      "is_impassable": false,
+      "special_flag": "NONE"
+    }
+  ],
+  "tile_overrides": [
+    { "x": 2, "y": 6, "terrain_type": "ELEVATED", "movement_cost": 2, "defense_multiplier": 1.5, "is_impassable": false, "special_flag": "HILL" },
+    { "x": 15, "y": 7, "terrain_type": "ELEVATED", "movement_cost": 2, "defense_multiplier": 1.5, "is_impassable": false, "special_flag": "HILL" }
+  ],
+  "spawn_zones": {
+    "PANDAVA": { "x_min": 0, "x_max": 5, "y_min": 0, "y_max": 13, "note": "Arjuna (as Brihannala) and allies spawn on the west side." },
+    "KAURAVA": { "x_min": 12, "x_max": 17, "y_min": 0, "y_max": 13, "note": "Kaurava raiding party." }
+  },
+  "directive_notes": {
+    "primary_directive": "defeat-kauravas (DEFEAT_UNIT)",
+    "fail_on_deviation": true,
+    "deviation_dialogue_id": "dev-premature-reveal",
+    "note": "If the Pandavas reveal their true identities too early (before defeating the Kauravas), 13 years of exile restart. Dharma imbalance."
+  }
+}

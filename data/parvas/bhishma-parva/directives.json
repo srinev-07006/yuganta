@@ -3,6 +3,7 @@
     {
       "directive_id": "escort-shikhandi",
       "directive_type": "ESCORT",
+      "target_turns": 12,
       "target_unit_id": "shikhandi",
       "fail_on_deviation": true,
       "deviation_dialogue_id": "dev-bhishma-survives"

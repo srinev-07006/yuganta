@@ -1,0 +1,35 @@
+{
+  "map_id": "map_himalayan_path",
+  "grid_width": 20,
+  "grid_height": 10,
+  "tile_size": 64,
+  "orientation": "ORTHOGONAL",
+  "tileset_asset_key": "tileset_himalayas",
+  "description": "The beginning of the Great Journey (Mahaprasthanika). The five Pandavas and Draupadi walk the Himalayan path toward heaven. A narrow ascending trail. This is the start — no combat, only the journey.",
+  "tiles": [
+    {
+      "region": "MOUNTAIN_PATH",
+      "x_min": 0, "x_max": 19, "y_min": 0, "y_max": 9,
+      "terrain_type": "ELEVATED",
+      "movement_cost": 2,
+      "defense_multiplier": 1.0,
+      "is_impassable": false,
+      "special_flag": "MOUNTAIN_PATH"
+    }
+  ],
+  "tile_overrides": [
+    { "x": 0, "y": 5, "terrain_type": "PLAIN", "movement_cost": 1, "defense_multiplier": 1.0, "is_impassable": false, "special_flag": "JOURNEY_START", "note": "The Pandavas begin here." },
+    { "x": 19, "y": 5, "terrain_type": "ELEVATED", "movement_cost": 2, "defense_multiplier": 1.0, "is_impassable": false, "special_flag": "PATH_EXIT", "note": "Transition to map_snowy_ascent." }
+  ],
+  "spawn_zones": {
+    "PANDAVA": { "x_min": 0, "x_max": 0, "y_min": 5, "y_max": 5, "note": "All five Pandavas + Draupadi spawn together as a group. No enemies." }
+  },
+  "directive_notes": {
+    "primary_directive": "accept-the-fall (SACRIFICE)",
+    "fail_on_deviation": true,
+    "note": "This is a walking simulator with narrative triggers, not combat. The journey itself is the test."
+  },
+  "special_mechanics": {
+    "no_combat": "This map has no enemies. It's purely a movement/narrative map. Reaching the exit tile triggers transition to the next map."
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "map_id": "map_kurukshetra_open_field",
+  "grid_width": 25,
+  "grid_height": 15,
+  "tile_size": 64,
+  "orientation": "ORTHOGONAL",
+  "tileset_asset_key": "tileset_kurukshetra",
+  "description": "Wide open battlefield. Arjuna's rampage — no formations, just raw carnage. Day 9 of Bhishma Parva after Krishna nearly breaches his vow.",
+  "tiles": [
+    {
+      "region": "OPEN_CARNAGE",
+      "x_min": 0, "x_max": 24, "y_min": 0, "y_max": 14,
+      "terrain_type": "PLAIN",
+      "movement_cost": 1,
+      "defense_multiplier": 1.0,
+      "is_impassable": false,
+      "special_flag": "NONE"
+    }
+  ],
+  "tile_overrides": [],
+  "spawn_zones": {
+    "PANDAVA": { "x_min": 0, "x_max": 6, "y_min": 0, "y_max": 14, "hero": "arjuna", "note": "Arjuna with Krishna as charioteer." },
+    "KAURAVA": { "x_min": 12, "x_max": 24, "y_min": 0, "y_max": 14, "note": "Scattered Kaurava forces. High unit count." }
+  },
+  "special_mechanics": {
+    "arjuna_fury": "Arjuna gets +50% attack power this map. Krishna's rage has transferred to him. This is the map where a single Maharathi truly solos dozens."
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "map_id": "map_pandava_camp_night",
+  "grid_width": 20,
+  "grid_height": 20,
+  "tile_size": 64,
+  "orientation": "ORTHOGONAL",
+  "tileset_asset_key": "tileset_camp_night",
+  "description": "The sleeping Pandava camp after the war's end. Tents form narrow corridors. Darkness creates fog-of-war. Ashwatthama (KAURAVA) enters from the north. The player controls evacuation forces — surviving is secondary to the canonical total wipe.",
+  "tiles": [
+    {
+      "region": "OPEN_GROUND",
+      "x_min": 0, "x_max": 19, "y_min": 0, "y_max": 19,
+      "terrain_type": "PLAIN",
+      "movement_cost": 1,
+      "defense_multiplier": 1.0,
+      "is_impassable": false,
+      "special_flag": "NONE"
+    }
+  ],
+  "tile_overrides": [
+    { "x": 2, "y": 2, "terrain_type": "FORTIFIED", "movement_cost": 1, "defense_multiplier": 2.0, "is_impassable": false, "special_flag": "TENT", "note": "Sleeping soldiers inside. Low alert." },
+    { "x": 5, "y": 2, "terrain_type": "FORTIFIED", "movement_cost": 1, "defense_multiplier": 2.0, "is_impassable": false, "special_flag": "TENT" },
+    { "x": 8, "y": 2, "terrain_type": "FORTIFIED", "movement_cost": 1, "defense_multiplier": 2.0, "is_impassable": false, "special_flag": "TENT" },
+    { "x": 12, "y": 2, "terrain_type": "FORTIFIED", "movement_cost": 1, "defense_multiplier": 2.0, "is_impassable": false, "special_flag": "TENT" },
+    { "x": 15, "y": 2, "terrain_type": "FORTIFIED", "movement_cost": 1, "defense_multiplier": 2.0, "is_impassable": false, "special_flag": "TENT" },
+    { "x": 2, "y": 8, "terrain_type": "FORTIFIED", "movement_cost": 1, "defense_multiplier": 2.0, "is_impassable": false, "special_flag": "TENT" },
+    { "x": 5, "y": 8, "terrain_type": "FORTIFIED", "movement_cost": 1, "defense_multiplier": 2.0, "is_impassable": false, "special_flag": "TENT_DHRISHTADYUMNA", "note": "Dhrishtadyumna sleeps here. When Ashwatthama enters, trigger-dhrishtadyumna-death fires seq_night_slaughter." },
+    { "x": 10, "y": 10, "terrain_type": "PLAIN", "movement_cost": 1, "defense_multiplier": 1.0, "is_impassable": false, "special_flag": "CAMP_FIRE", "note": "The central campfire — dim visibility radius 2 tiles." },
+    { "x": 8, "y": 8, "terrain_type": "FORTIFIED", "movement_cost": 1, "defense_multiplier": 2.0, "is_impassable": false, "special_flag": "TENT" },
+    { "x": 14, "y": 8, "terrain_type": "FORTIFIED", "movement_cost": 1, "defense_multiplier": 2.0, "is_impassable": false, "special_flag": "TENT" },
+    { "x": 2, "y": 15, "terrain_type": "FORTIFIED", "movement_cost": 1, "defense_multiplier": 2.0, "is_impassable": false, "special_flag": "TENT" },
+    { "x": 7, "y": 15, "terrain_type": "FORTIFIED", "movement_cost": 1, "defense_multiplier": 2.0, "is_impassable": false, "special_flag": "TENT" },
+    { "x": 14, "y": 14, "terrain_type": "FORTIFIED", "movement_cost": 1, "defense_multiplier": 2.0, "is_impassable": false, "special_flag": "TENT" }
+  ],
+  "spawn_zones": {
+    "PANDAVA": { "x_min": 0, "x_max": 19, "y_min": 10, "y_max": 19, "note": "Scattered sleeping forces. Player controls surviving Pandava camp guards." },
+    "KAURAVA": { "x_min": 8, "x_max": 12, "y_min": 0, "y_max": 1, "note": "Ashwatthama enters alone from the north. He is unkillable (chiranjivi + rudra-possession traits)." }
+  },
+  "fog_of_war": {
+    "enabled": true,
+    "visibility_radius": 2,
+    "note": "Night fight. Units can only see 2 tiles. Ashwatthama's position is hidden until he enters visibility range."
+  },
+  "special_mechanics": {
+    "ashwatthama_immortality": "chiranjivi + rudra-possession make Ashwatthama invulnerable. RudraAuraDamage(50) applies to all adjacent units each turn. Healing fully each turn (trigger-ashwatthama-mani-heal, EVERY_TURN, SYSTEM_HEAL_FULL).",
+    "evacuation_goal": "Player goal is to get as many Pandava units to the south edge (y=19) as possible before turn 15.",
+    "canonical_outcome": "Total camp wipe is canonical (fail_on_deviation: false). Surviving is a moral small victory, not a plot change."
+  },
+  "directive_notes": {
+    "primary_directive": "survive-night-raid (SURVIVE_TURNS, target: 15 turns)",
+    "fail_on_deviation": false,
+    "final_trigger": "trigger-brahmashira-standoff fires at turn 15 → seq_brahmashira_standoff VNScene end state."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "map_id": "map_meru_peak",
+  "grid_width": null,
+  "grid_height": null,
+  "tile_size": null,
+  "orientation": "VN_ONLY",
+  "tileset_asset_key": "tileset_meru_peak",
+  "description": "The summit of Mount Meru, the axis of the cosmos. Yudhishthira and the dog arrive. Indra's chariot descends. The gods invite Yudhishthira to heaven, but refuse the dog. The final test. Mahaprasthanika Parva — The Dog.",
+  "scene_type": "VN_ONLY",
+  "vn_backdrop_notes": {
+    "lighting": "Ethereal, heavenly light breaking through clouds.",
+    "mood": "Cosmic, liminal, the boundary between mortal and divine.",
+    "interactive_elements": ["Indra's golden chariot", "The dog (Dharma in disguise)", "Yudhishthira standing firm"],
+    "no_tactical_grid": true,
+    "note": "Yudhishthira refuses heaven without the dog. The test is loyalty over reward."
+  }
+}

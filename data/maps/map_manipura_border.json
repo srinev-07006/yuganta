@@ -1,0 +1,36 @@
+{
+  "map_id": "map_manipura_border",
+  "grid_width": 18,
+  "grid_height": 14,
+  "tile_size": 64,
+  "orientation": "ORTHOGONAL",
+  "tileset_asset_key": "tileset_manipura",
+  "description": "The border of Manipura kingdom. Arjuna faces his son Babruvahana in combat. A test orchestrated by fate and Ulupi. Arjuna will fall and be revived.",
+  "tiles": [
+    {
+      "region": "BORDER_PLAINS",
+      "x_min": 0, "x_max": 17, "y_min": 0, "y_max": 13,
+      "terrain_type": "PLAIN",
+      "movement_cost": 1,
+      "defense_multiplier": 1.0,
+      "is_impassable": false,
+      "special_flag": "NONE"
+    }
+  ],
+  "tile_overrides": [
+    { "x": 5, "y": 7, "terrain_type": "ELEVATED", "movement_cost": 2, "defense_multiplier": 1.5, "is_impassable": false, "special_flag": "HILL" },
+    { "x": 12, "y": 7, "terrain_type": "ELEVATED", "movement_cost": 2, "defense_multiplier": 1.5, "is_impassable": false, "special_flag": "HILL" }
+  ],
+  "spawn_zones": {
+    "PANDAVA": { "x_min": 0, "x_max": 5, "y_min": 0, "y_max": 13, "hero": "arjuna", "note": "Arjuna on the Ashvamedha horse quest." },
+    "NEUTRAL": { "x_min": 12, "x_max": 17, "y_min": 0, "y_max": 13, "hero": "babruvahana", "note": "Babruvahana, Arjuna's son by Chitrangada." }
+  },
+  "directive_notes": {
+    "primary_directive": "survive-babruvahana (SURVIVE_TURNS, target: 10 turns)",
+    "fail_on_deviation": false,
+    "note": "Arjuna's death is canonical here. He will be revived by Ulupi's Nagamani. Dying is not failure."
+  },
+  "special_mechanics": {
+    "trigger_arjuna_falls": "When arjuna HP = 0, trigger-arjuna-falls fires seq_arjuna_falls VNScene. Ulupi appears with the Nagamani and revives Arjuna."
+  }
+}

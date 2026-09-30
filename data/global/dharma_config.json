@@ -1,0 +1,13 @@
+{
+  "dharma_meter": {
+    "starting_value": 0,
+    "max_value": 100,
+    "min_value": -100,
+    "imbalance_threshold": -60,
+    "enlightenment_threshold": 80
+  },
+  "consequences": {
+    "imbalance_triggered": "Timeline resets to last compliant node. Vyasa appears with a warning.",
+    "enlightenment_triggered": "Unlocks hidden dialogue branches and alternate Moksha endings."
+  }
+}

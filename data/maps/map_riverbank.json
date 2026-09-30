@@ -1,0 +1,17 @@
+{
+  "map_id": "map_riverbank",
+  "grid_width": null,
+  "grid_height": null,
+  "tile_size": null,
+  "orientation": "VN_ONLY",
+  "tileset_asset_key": "tileset_riverbank",
+  "description": "A quiet riverbank. The secret meeting place where Kunti reveals to Karna that he is her firstborn son, making him the eldest Pandava. She begs him to join his brothers. Udyoga Parva — the moment that breaks Karna.",
+  "scene_type": "VN_ONLY",
+  "vn_backdrop_notes": {
+    "lighting": "Dawn. Golden light on water.",
+    "mood": "Intimate, tragic, bittersweet.",
+    "interactive_elements": ["Kunti standing by the water", "Karna kneeling", "Rising sun (Surya, his father)"],
+    "no_tactical_grid": true,
+    "note": "One of the epic's most emotionally devastating scenes."
+  }
+}

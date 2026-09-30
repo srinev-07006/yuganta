@@ -1,0 +1,31 @@
+{
+  "map_id": "map_drona_lie",
+  "grid_width": 14,
+  "grid_height": 14,
+  "tile_size": 64,
+  "orientation": "ORTHOGONAL",
+  "tileset_asset_key": "tileset_kurukshetra",
+  "description": "Day 15. The moment Yudhishthira tells the half-lie: 'Ashwatthama is dead... the elephant.' Drona's grief causes him to lower his weapons. The climax of the Drona Parva.",
+  "tiles": [
+    {
+      "region": "DRONA_POSITION",
+      "x_min": 0, "x_max": 13, "y_min": 0, "y_max": 13,
+      "terrain_type": "PLAIN",
+      "movement_cost": 1,
+      "defense_multiplier": 1.0,
+      "is_impassable": false,
+      "special_flag": "NONE"
+    }
+  ],
+  "tile_overrides": [
+    { "x": 7, "y": 7, "terrain_type": "SANCTUARY", "movement_cost": 1, "defense_multiplier": 1.0, "is_impassable": false, "special_flag": "DRONA_GRIEF", "note": "Drona stands here when the lie is spoken. He lays down his weapons." }
+  ],
+  "spawn_zones": {
+    "PANDAVA": { "x_min": 0, "x_max": 5, "y_min": 0, "y_max": 13, "hero": "yudhishthira", "note": "Yudhishthira must deliver the line." },
+    "KAURAVA": { "x_min": 8, "x_max": 13, "y_min": 0, "y_max": 13, "hero": "drona" }
+  },
+  "special_mechanics": {
+    "dharma_crisis": "If the player chooses NOT to tell the lie, Drona remains invincible (acharya trait causes DiscipleHesitation for Pandavas). fail_on_deviation: uncertain. The lie is adharmic but necessary.",
+    "drona_disarms": "After the lie, Drona's defense drops to 0 for 1 turn. Dhrishtadyumna (agni-putra + drona-killer traits) must strike the killing blow."
+  }
+}
