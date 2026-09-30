@@ -1,0 +1,30 @@
+{
+  "sequence_id": "seq_bhishma_departure",
+  "node_id": "ap-departure",
+  "trigger_event": "NODE_START",
+  "background_asset_key": "bg_bed_of_arrows_sunlight",
+  "bgm_asset_key": "bgm_spiritual_ascent",
+  "nodes": [
+    {
+      "dialogue_id": "ap_b1",
+      "speaker_id": "bhishma",
+      "dialogue_text": "The sun is now moving northward. I have lingered in this body for fifty-eight nights on these arrows. My time has come. May you always rule with Dharma.",
+      "speaker_emotion": "ENLIGHTENED",
+      "choices": [
+        {
+          "choice_id": "ap_c1",
+          "choice_text": "[Offer final salutations.]",
+          "dharma_impact": 10,
+          "next_dialogue_id": "ap_y1"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "ap_y1",
+      "speaker_id": "yudhishthira",
+      "dialogue_text": "Farewell, Pitāmaha. The light of the Kuru dynasty departs with you.",
+      "speaker_emotion": "GRIEF",
+      "is_endpoint": true
+    }
+  ]
+}

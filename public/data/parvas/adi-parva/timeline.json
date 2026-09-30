@@ -1,0 +1,24 @@
+{
+  "nodes": [
+    {
+      "node_id": "ap-house-of-wax",
+      "parva_id": 1,
+      "war_day": 0,
+      "phase_name": "BEGINNING",
+      "title": "The House of Wax",
+      "historical_context": "Duryodhana plots to burn the Pandavas alive in a palace made of lac.",
+      "initial_scene_type": "VN",
+      "map_id": "map_lakshagriha"
+    },
+    {
+      "node_id": "ap-swayamvara",
+      "parva_id": 1,
+      "war_day": 0,
+      "phase_name": "MIDDLE",
+      "title": "Draupadi's Swayamvara",
+      "historical_context": "Disguised as Brahmins, the Pandavas attend the Swayamvara of Princess Draupadi.",
+      "initial_scene_type": "VN",
+      "map_id": "map_panchala_court"
+    }
+  ]
+}

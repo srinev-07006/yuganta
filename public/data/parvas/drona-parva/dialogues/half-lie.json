@@ -1,0 +1,30 @@
+{
+  "sequence_id": "seq_drona_lie",
+  "node_id": "dp-fall-of-drona",
+  "trigger_event": "NODE_START",
+  "background_asset_key": "bg_battlefield",
+  "bgm_asset_key": "bgm_tension",
+  "nodes": [
+    {
+      "dialogue_id": "dp_d1",
+      "speaker_id": "drona",
+      "dialogue_text": "Yudhishthira! You have never spoken an untruth in your life. Tell me, is it true? Is my son Ashwatthama dead?",
+      "speaker_emotion": "GRIEF",
+      "choices": [
+        {
+          "choice_id": "dp_c1",
+          "choice_text": "Ashwatthama is dead... the elephant.",
+          "dharma_impact": -50,
+          "next_dialogue_id": "dp_y1"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "dp_y1",
+      "speaker_id": "yudhishthira",
+      "dialogue_text": "[Mutters 'the elephant' so softly that Drona, amid the blare of Krishna's conch, does not hear it. Yudhishthira's chariot, which always floated above the ground, instantly drops to the earth.]",
+      "speaker_emotion": "GRIEF",
+      "is_endpoint": true
+    }
+  ]
+}

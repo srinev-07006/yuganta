@@ -1,0 +1,38 @@
+{
+  "sequence_id": "seq_kunti_karna",
+  "node_id": "up-kunti-karna",
+  "trigger_event": "NODE_START",
+  "background_asset_key": "bg_ganges_sunset",
+  "bgm_asset_key": "bgm_sorrowful_river",
+  "nodes": [
+    {
+      "dialogue_id": "kk_kunti_plea",
+      "speaker_id": "kunti",
+      "dialogue_text": "You are not Radha's son, nor are you a Suta. You are my firstborn, sired by Surya the Sun God. You are the eldest Pandava. Join your brothers, Karna.",
+      "speaker_emotion": "GRIEF",
+      "next_dialogue_id": "kk_karna_shock"
+    },
+    {
+      "dialogue_id": "kk_karna_shock",
+      "speaker_id": "karna",
+      "dialogue_text": "Mother...? You abandoned me to the river when I was born. It was a charioteer who raised me. And it was Duryodhana who gave me honor when the world spat on my caste.",
+      "speaker_emotion": "ANGRY",
+      "choices": [
+        {
+          "choice_id": "kk_c1",
+          "choice_text": "[Embrace her, but refuse to switch sides.]",
+          "dharma_impact": 15,
+          "kama_impact": 10,
+          "next_dialogue_id": "kk_karna_promise"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "kk_karna_promise",
+      "speaker_id": "karna",
+      "dialogue_text": "I cannot abandon Duryodhana now; that would be the ultimate betrayal. But I make you this promise, Mother: I will not kill Yudhishthira, Bhima, Nakula, or Sahadeva. I will only fight Arjuna. Whatever happens, you will still have five sons.",
+      "speaker_emotion": "ENLIGHTENED",
+      "is_endpoint": true
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "nodes": [
+    {
+      "node_id": "avp-yagna-start",
+      "parva_id": 14,
+      "war_day": 0,
+      "phase_name": "BEGINNING",
+      "title": "The Ashvamedha Begins",
+      "historical_context": "Yudhishthira initiates the horse sacrifice. Arjuna is tasked with following the horse.",
+      "initial_scene_type": "VN",
+      "map_id": "map_hastinapura_palace"
+    },
+    {
+      "node_id": "avp-babruvahana-fight",
+      "parva_id": 14,
+      "war_day": 0,
+      "phase_name": "MIDDLE",
+      "title": "Arjuna vs Babruvahana",
+      "historical_context": "The horse enters Manipura. Babruvahana captures it not knowing Arjuna is his father, leading to combat.",
+      "initial_scene_type": "TACTICAL",
+      "map_id": "map_manipura_border"
+    }
+  ]
+}

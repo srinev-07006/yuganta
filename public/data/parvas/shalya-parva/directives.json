@@ -1,0 +1,22 @@
+{
+  "directives": [
+    {
+      "directive_id": "defeat-duryodhana",
+      "directive_type": "DEFEAT_UNIT",
+      "target_unit_id": "duryodhana",
+      "fail_on_deviation": true,
+      "deviation_dialogue_id": "dev-duryodhana-wins"
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "trigger-thigh-strike",
+      "condition_type": "UNIT_HP_BELOW_PERCENT",
+      "condition_value": 30,
+      "target_unit_id": "duryodhana",
+      "linked_sequence_id": "seq_thigh_strike",
+      "pauses_tactical_scene": true,
+      "is_repeatable": false
+    }
+  ]
+}

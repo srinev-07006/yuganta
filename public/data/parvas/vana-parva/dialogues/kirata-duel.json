@@ -1,0 +1,45 @@
+{
+  "sequence_id": "seq_kirata_reveal",
+  "node_id": "vp-kirata",
+  "trigger_event": "MID_BATTLE",
+  "background_asset_key": "bg_himalayas",
+  "bgm_asset_key": "bgm_shiva_tandava",
+  "nodes": [
+    {
+      "dialogue_id": "ki_arjuna_exhausted",
+      "speaker_id": "arjuna",
+      "dialogue_text": "My arrows shatter against him like twigs. My Gandiva is useless. Even in wrestling, he throws me easily. Who is this forest hunter?!",
+      "speaker_emotion": "CONFUSED",
+      "choices": [
+        {
+          "choice_id": "ki_c1",
+          "choice_text": "[Meditate. Offer flowers to the clay lingam of Shiva to gather strength.]",
+          "dharma_impact": 15,
+          "moksha_impact": 10,
+          "next_dialogue_id": "ki_flower_transfer"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "ki_flower_transfer",
+      "speaker_id": "arjuna",
+      "dialogue_text": "Wait—the flowers I just placed on the lingam... they rest upon the crown of the hunter!",
+      "speaker_emotion": "ENLIGHTENED",
+      "next_dialogue_id": "ki_shiva_reveals"
+    },
+    {
+      "dialogue_id": "ki_shiva_reveals",
+      "speaker_id": "vyasa",
+      "dialogue_text": "The hunter's form dissolved into the terrifying, beautiful visage of Mahadeva.",
+      "speaker_emotion": "NEUTRAL",
+      "next_dialogue_id": "ki_shiva_speaks"
+    },
+    {
+      "dialogue_id": "ki_shiva_speaks",
+      "speaker_id": "vyasa",
+      "dialogue_text": "(Shiva speaks) 'I am pleased with your valor, O Partha. No mortal could withstand my blows as you have. Take this — the Pashupatastra. But beware: it cannot be used against lesser men, for it can destroy the universe.'",
+      "speaker_emotion": "NEUTRAL",
+      "is_endpoint": true
+    }
+  ]
+}

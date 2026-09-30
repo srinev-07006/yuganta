@@ -1,0 +1,30 @@
+{
+  "sequence_id": "seq_gandhari_curse",
+  "node_id": "sp-gandhari-curse",
+  "trigger_event": "NODE_START",
+  "background_asset_key": "bg_corpse_field_dusk",
+  "bgm_asset_key": "bgm_lament_of_kuru_women",
+  "nodes": [
+    {
+      "dialogue_id": "sp_g1",
+      "speaker_id": "gandhari",
+      "dialogue_text": "Vasudeva! You had the power to stop this slaughter. You could have forged peace. By your indifference, my hundred sons are gone. By the power of my devotion to my husband, I curse you!",
+      "speaker_emotion": "ANGRY",
+      "choices": [
+        {
+          "choice_id": "sp_c1",
+          "choice_text": "[Accept the curse in silence.]",
+          "dharma_impact": 20,
+          "next_dialogue_id": "sp_krishna_accepts"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "sp_krishna_accepts",
+      "speaker_id": "krishna",
+      "dialogue_text": "Mother, you curse that which is already ordained. Thirty-six years from now, the Yadavas will strike each other down in madness, just as the Kurus did. I accept your words.",
+      "speaker_emotion": "ENLIGHTENED",
+      "is_endpoint": true
+    }
+  ]
+}

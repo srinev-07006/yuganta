@@ -1,0 +1,29 @@
+{
+  "sequence_id": "seq_gandiva_reveal",
+  "node_id": "vip-virata-war",
+  "trigger_event": "NODE_START",
+  "background_asset_key": "bg_sami_tree",
+  "bgm_asset_key": "bgm_hero_reveal",
+  "nodes": [
+    {
+      "dialogue_id": "vip_u1",
+      "speaker_id": "uttara",
+      "dialogue_text": "I cannot fight them! Look at that army—Bhishma, Drona, Karna! I am turning back!",
+      "speaker_emotion": "GRIEF",
+      "choices": [
+        {
+          "choice_id": "vip_c1",
+          "choice_text": "[Stop the chariot, retrieve the Gandiva.]",
+          "next_dialogue_id": "vip_a1"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "vip_a1",
+      "speaker_id": "arjuna",
+      "dialogue_text": "Do not fear, prince. You shall drive the chariot, and I shall fight. I am Arjuna, son of Pandu, and this is the divine bow Gandiva.",
+      "speaker_emotion": "NEUTRAL",
+      "is_endpoint": true
+    }
+  ]
+}

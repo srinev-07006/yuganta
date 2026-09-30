@@ -1,0 +1,45 @@
+{
+  "sequence_id": "seq_cattle_raid",
+  "node_id": "vip-cattle-raid",
+  "trigger_event": "MID_BATTLE",
+  "background_asset_key": "bg_virata_plains",
+  "bgm_asset_key": "bgm_hero_reveal",
+  "nodes": [
+    {
+      "dialogue_id": "cr_uttara_scared",
+      "speaker_id": "uttara",
+      "dialogue_text": "Brihannala! Turn the chariot back! That is Bhishma, that is Drona, and that is Karna! I am but a boy, I cannot fight them!",
+      "speaker_emotion": "CONFUSED",
+      "next_dialogue_id": "cr_arjuna_reveals"
+    },
+    {
+      "dialogue_id": "cr_arjuna_reveals",
+      "speaker_id": "arjuna",
+      "dialogue_text": "Hold the reins, Prince Uttara. You are the charioteer today, and I am the warrior. Dig into the Shami tree and retrieve my weapons.",
+      "speaker_emotion": "NEUTRAL",
+      "choices": [
+        {
+          "choice_id": "cr_c1",
+          "choice_text": "[Unwrap the Gandiva bow. Blow the Devadatta conch.]",
+          "dharma_impact": 10,
+          "next_dialogue_id": "cr_drona_hears"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "cr_drona_hears",
+      "speaker_id": "drona",
+      "dialogue_text": "That sound... The twang of that bowstring and the roar of that conch. The 13 years have ended, Duryodhana. Arjuna is here.",
+      "speaker_emotion": "ENLIGHTENED",
+      "next_dialogue_id": "cr_arjuna_sammohana"
+    },
+    {
+      "dialogue_id": "cr_arjuna_sammohana",
+      "speaker_id": "arjuna",
+      "dialogue_text": "I will not kill them today; they are my elders and kin. But they must learn who stands against them. I invoke the Sammohana Astra!",
+      "speaker_emotion": "ANGRY",
+      "tactical_override_event": "KNOCKOUT_KAURAVAS",
+      "is_endpoint": true
+    }
+  ]
+}

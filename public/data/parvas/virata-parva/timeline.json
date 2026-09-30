@@ -1,0 +1,24 @@
+{
+  "nodes": [
+    {
+      "node_id": "vip-incognito",
+      "parva_id": 4,
+      "war_day": 0,
+      "phase_name": "BEGINNING",
+      "title": "The Incognito Year",
+      "historical_context": "The Pandavas assume disguises: Yudhishthira as Kanka, Bhima as Ballava, Arjuna as Brihannala, Nakula as Granthika, Sahadeva as Tantipala, and Draupadi as Sairandhri.",
+      "initial_scene_type": "VN",
+      "map_id": "map_virata_court"
+    },
+    {
+      "node_id": "vip-virata-war",
+      "parva_id": 4,
+      "war_day": 0,
+      "phase_name": "END",
+      "title": "The Virata War",
+      "historical_context": "The Kaurava army attacks Virata to steal cattle and expose the Pandavas. Arjuna heads out with Prince Uttara.",
+      "initial_scene_type": "TACTICAL",
+      "map_id": "map_virata_plains"
+    }
+  ]
+}

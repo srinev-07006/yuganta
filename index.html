@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!--
+    =============================================================
+    VIEWPORT META TAG
+    =============================================================
+    This controls how the page scales on mobile devices.
+    - width=device-width: match the screen width
+    - initial-scale=1.0: no zoom on load
+    - user-scalable=no: prevent pinch-to-zoom (important for games,
+      because pinch-zoom interferes with touch controls)
+    =============================================================
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <title>Yuganta — Mahābhārata Tactical Engine</title>
+
+    <!--
+    =============================================================
+    PAGE STYLES
+    =============================================================
+    The game canvas needs to fill the browser window.
+    We remove all default margins/padding and set a dark background.
+    
+    The #game-container div holds the Phaser canvas.
+    The #ui-overlay div will later hold the DOM-based VN layer
+    (Role 2's responsibility), positioned OVER the canvas.
+    =============================================================
+    -->
+        <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; overflow: hidden; background-color: #1a1a2e; font-family: monospace; }
+        
+        #game-container {
+            width: 1280px; height: 720px; margin: 20px auto 0; position: relative;
+        }
+
+        #ui-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            pointer-events: none; /* Lets clicks pass through to canvas */
+            z-index: 10;
+        }
+
+        /* --- TACTICAL ACTION MENU STYLES --- */
+        .tactical-menu {
+            position: absolute;
+            background: rgba(10, 10, 25, 0.95);
+            border: 2px solid #e8d5b7;
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: auto; /* Buttons MUST catch clicks */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.7);
+            transition: opacity 0.2s;
+            min-width: 180px;
+        }
+
+        .tactical-menu.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .tactical-btn {
+            background: #2a2a4a;
+            color: #ffffff;
+            border: 1px solid #555577;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 14px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+
+        .tactical-btn:hover:not(:disabled) {
+            background: #4488ff;
+            border-color: #ffffff;
+            color: #ffffff;
+        }
+
+        .tactical-btn:disabled {
+            background: #1a1a2e;
+            color: #555555;
+            cursor: not-allowed;
+        }
+
+        .astra-cost {
+            float: right;
+            color: #ffaa00;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <!-- DOM UI Layer -->
+        <div id="ui-overlay">
+            
+            <!-- Main Action Menu -->
+            <div id="action-menu" class="tactical-menu hidden">
+                <button id="btn-attack" class="tactical-btn">⚔️ Attack</button>
+                <button id="btn-astra" class="tactical-btn">🌟 Use Astra</button>
+                <button id="btn-wait" class="tactical-btn">🛡️ Wait</button>
+                <button id="btn-cancel" class="tactical-btn">❌ Cancel</button>
+            </div>
+
+            <!-- Astra Selection Sub-Menu -->
+            <div id="astra-menu" class="tactical-menu hidden">
+                <div id="astra-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+                <button id="btn-astra-cancel" class="tactical-btn" style="margin-top:10px; background:#442222;">⬅ Back</button>
+            </div>
+
+        </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>

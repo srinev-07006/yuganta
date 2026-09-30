@@ -1,0 +1,11 @@
+{
+  "directives": [
+    {
+      "directive_id": "accept-the-fall",
+      "directive_type": "SACRIFICE",
+      "fail_on_deviation": true,
+      "deviation_dialogue_id": "dev-yudhishthira-turns-back"
+    }
+  ],
+  "triggers": []
+}

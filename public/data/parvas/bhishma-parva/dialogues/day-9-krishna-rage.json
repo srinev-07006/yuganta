@@ -1,0 +1,74 @@
+{
+  "sequence_id": "seq_day9_krishna_rage",
+  "node_id": "bp-day9-krishna-rage",
+  "trigger_event": "NODE_START",
+  "background_asset_key": "bg_battlefield_dusk",
+  "bgm_asset_key": "bgm_divine_wrath",
+  "nodes": [
+    {
+      "dialogue_id": "d9_krishna_fury",
+      "speaker_id": "krishna",
+      "dialogue_text": "Enough! I have watched this slaughter for nine days. Your grandfather decimates your army while you hold back out of filial piety. If you will not end this, I will!",
+      "speaker_emotion": "ANGRY",
+      "camera_focus_target": "GRID_COORD:krishna",
+      "next_dialogue_id": "d9_krishna_leaps"
+    },
+    {
+      "dialogue_id": "d9_krishna_leaps",
+      "speaker_id": "sanjaya",
+      "dialogue_text": "Then the Lord of the Worlds leapt from the chariot, his yellow garments billowing like a sun descending to earth. He seized the Sudarshana Chakra and strode toward Bhishma, the very ground trembling beneath His feet.",
+      "speaker_emotion": "NEUTRAL",
+      "camera_focus_target": "GRID_COORD:krishna",
+      "next_dialogue_id": "d9_bhishma_welcomes"
+    },
+    {
+      "dialogue_id": "d9_bhishma_welcomes",
+      "speaker_id": "bhishma",
+      "dialogue_text": "Come, O Keshava! Come! To fall by Your hand would be the supreme honour. Let this wretched life end in the embrace of the Lord Himself. I welcome You!",
+      "speaker_emotion": "ENLIGHTENED",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "next_dialogue_id": "d9_arjuna_intervenes"
+    },
+    {
+      "dialogue_id": "d9_arjuna_intervenes",
+      "speaker_id": "arjuna",
+      "dialogue_text": "Madhava, stop! You swore an oath — no weapons! The world watches. If You break Your word, what hope remains for dharma? I will do it. I swear to you — tomorrow, Bhishma falls. By my hand. Please... return to the chariot.",
+      "speaker_emotion": "GRIEF",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "choices": [
+        {
+          "choice_id": "d9_c1",
+          "choice_text": "[Let Krishna advance. Bhishma dies by divine hand.]",
+          "dharma_impact": -50,
+          "moksha_impact": 30,
+          "next_dialogue_id": "d9_dharma_breach",
+          "tactical_override_event": "NONE"
+        },
+        {
+          "choice_id": "d9_c2",
+          "choice_text": "[Pull Krishna back. Swear the oath to fell Bhishma tomorrow.]",
+          "dharma_impact": 20,
+          "moksha_impact": 5,
+          "next_dialogue_id": "d9_krishna_relents",
+          "tactical_override_event": "MORALE_BOOST"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "d9_krishna_relents",
+      "speaker_id": "krishna",
+      "dialogue_text": "...Very well, Partha. I will hold. But mark my words — tomorrow, there will be no mercy. No hesitation. You will place Shikhandi before you, and you will strike without pause until the Patriarch falls.",
+      "speaker_emotion": "ANGRY",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "is_endpoint": true
+    },
+    {
+      "dialogue_id": "d9_dharma_breach",
+      "speaker_id": "vyasa",
+      "dialogue_text": "The cosmic order fractures. Krishna Vasudeva has broken His sacred vow. The weight of adharma ripples across the battlefield. Time itself recoils. This path cannot hold.",
+      "speaker_emotion": "ENLIGHTENED",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "is_endpoint": true
+    }
+  ]
+}

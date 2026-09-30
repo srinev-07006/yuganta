@@ -1,0 +1,24 @@
+{
+  "nodes": [
+    {
+      "node_id": "ap-final-teachings",
+      "parva_id": 13,
+      "war_day": 50,
+      "phase_name": "END",
+      "title": "Final Teachings",
+      "historical_context": "Bhishma recites the Vishnu Sahasranama to Yudhishthira.",
+      "initial_scene_type": "VN",
+      "map_id": "map_bhishma_tent"
+    },
+    {
+      "node_id": "ap-departure",
+      "parva_id": 13,
+      "war_day": 58,
+      "phase_name": "END",
+      "title": "Bhishma's Departure",
+      "historical_context": "The sun begins its northward journey. Bhishma relinquishes his life-breath.",
+      "initial_scene_type": "VN",
+      "map_id": "map_bhishma_tent"
+    }
+  ]
+}

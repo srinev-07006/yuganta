@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Aesthetics & Audio Directive Schema",
+  "description": "Ruleset for UI styling, sprite art direction, and BGM tracks.",
+  "type": "object",
+  "definitions": {
+    "art_directive": {
+      "type": "object",
+      "properties": {
+        "faction": { "type": "string" },
+        "visual_motif": { "type": "string" },
+        "color_palette_hex": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "armor_reference_era": { "type": "string" },
+        "do_not_use_tropes": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "shloka_track": {
+      "type": "object",
+      "properties": {
+        "track_id": { "type": "string" },
+        "source_text": { "type": "string" },
+        "trigger_context": {
+          "type": "string",
+          "enum": ["BATTLE_START", "DHARMA_CRISIS", "MOKSHA_MOMENT", "TRAGIC_DEATH"]
+        },
+        "instrumentation": { "type": "string" },
+        "sanskrit_lyrics": { "type": "string" }
+      },
+      "required": ["track_id", "source_text", "trigger_context"]
+    }
+  },
+  "properties": {
+    "art_direction": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/art_directive" }
+    },
+    "audio_shlokas": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/shloka_track" }
+    }
+  }
+}

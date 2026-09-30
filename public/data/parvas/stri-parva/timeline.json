@@ -1,0 +1,24 @@
+{
+  "nodes": [
+    {
+      "node_id": "sp-lament",
+      "parva_id": 11,
+      "war_day": 19,
+      "phase_name": "END",
+      "title": "The Lament of the Women",
+      "historical_context": "The battlefield is silent, filled only with the cries of the grieving women. Dhritarashtra is crushed by the loss of his 100 sons.",
+      "initial_scene_type": "VN",
+      "map_id": "map_kurukshetra_aftermath"
+    },
+    {
+      "node_id": "sp-gandhari-curse",
+      "parva_id": 11,
+      "war_day": 19,
+      "phase_name": "END",
+      "title": "Gandhari's Curse",
+      "historical_context": "Gandhari blames Krishna for the war. In a moment of immense agony backed by her tapasyā, she curses him and his clan to doom.",
+      "initial_scene_type": "VN",
+      "map_id": "map_gandhari_camp"
+    }
+  ]
+}

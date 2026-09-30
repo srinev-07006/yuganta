@@ -1,0 +1,50 @@
+{
+  "sequence_id": "seq_day15_drona_fall",
+  "node_id": "dp-day15-drona-fall",
+  "trigger_event": "MID_BATTLE",
+  "background_asset_key": "bg_drona_meditating",
+  "bgm_asset_key": "bgm_dharma_break",
+  "nodes": [
+    {
+      "dialogue_id": "d15_krishna_persuades",
+      "speaker_id": "krishna",
+      "dialogue_text": "Yudhishthira, Drona will consume this entire army. He will only lay down arms if he loses the will to live. He loves his son Ashwatthama above all. You must tell him Ashwatthama is dead.",
+      "speaker_emotion": "NEUTRAL",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "next_dialogue_id": "d15_yudhishthira_refuses"
+    },
+    {
+      "dialogue_id": "d15_yudhishthira_refuses",
+      "speaker_id": "yudhishthira",
+      "dialogue_text": "A lie? You ask me to speak a lie? My entire life is built upon the foundation of truth! I cannot do this, Madhava.",
+      "speaker_emotion": "GRIEF",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "choices": [
+        {
+          "choice_id": "d15_c1",
+          "choice_text": "[Accept Krishna's compromise. Tell the half-truth.]",
+          "dharma_impact": -30,
+          "artha_impact": 40,
+          "next_dialogue_id": "d15_the_lie",
+          "tactical_override_event": "NONE"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "d15_the_lie",
+      "speaker_id": "yudhishthira",
+      "dialogue_text": "Ashwatthama is dead... \n...the elephant.",
+      "speaker_emotion": "GRIEF",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "next_dialogue_id": "d15_chariot_falls"
+    },
+    {
+      "dialogue_id": "d15_chariot_falls",
+      "speaker_id": "sanjaya",
+      "dialogue_text": "Hearing these words from the King of Dharma, Drona lost all desire to live. He dropped the Gandiva and sat in meditation. And in that moment, Yudhishthira's chariot, which always hovered above the ground, fell and touched the earth.",
+      "speaker_emotion": "NEUTRAL",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "is_endpoint": true
+    }
+  ]
+}
