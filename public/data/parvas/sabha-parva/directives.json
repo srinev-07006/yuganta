@@ -1,0 +1,11 @@
+{
+  "directives": [
+    {
+      "directive_id": "never-refuse-dice",
+      "directive_type": "SACRIFICE",
+      "fail_on_deviation": true,
+      "deviation_dialogue_id": "dev-refuse-dice"
+    }
+  ],
+  "triggers": []
+}

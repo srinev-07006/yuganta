@@ -1,0 +1,29 @@
+{
+  "sequence_id": "seq_arjuna_falls",
+  "node_id": "avp-babruvahana-fight",
+  "trigger_event": "MID_BATTLE",
+  "background_asset_key": "bg_manipura_forest",
+  "bgm_asset_key": "bgm_tragic_duel",
+  "nodes": [
+    {
+      "dialogue_id": "avp_b1",
+      "speaker_id": "babruvahana",
+      "dialogue_text": "I have struck down the great Arjuna... What have I done?",
+      "speaker_emotion": "GRIEF",
+      "choices": [
+        {
+          "choice_id": "avp_c1",
+          "choice_text": "[Ulupi arrives with the Sanjeevani gem.]",
+          "next_dialogue_id": "avp_u1"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "avp_u1",
+      "speaker_id": "ulupi",
+      "dialogue_text": "Do not weep, my son. It was ordained that Arjuna must fall to cleanse the sin of slaying Bhishma through deceit. I shall revive him.",
+      "speaker_emotion": "NEUTRAL",
+      "is_endpoint": true
+    }
+  ]
+}

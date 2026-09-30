@@ -1,0 +1,30 @@
+{
+  "sequence_id": "seq_the_falling",
+  "node_id": "mhp-the-falling",
+  "trigger_event": "NODE_START",
+  "background_asset_key": "bg_snow_mountain",
+  "bgm_asset_key": "bgm_cold_wind_sadness",
+  "nodes": [
+    {
+      "dialogue_id": "mhp_draupadi_falls",
+      "speaker_id": "bhima",
+      "dialogue_text": "O King! Princess Draupadi has fallen. She never committed any sin. Why has she fallen?",
+      "speaker_emotion": "GRIEF",
+      "choices": [
+        {
+          "choice_id": "mhp_c1",
+          "choice_text": "She had great partiality for Dhananjaya (Arjuna). She reaps the fruit of that flaw.",
+          "dharma_impact": 10,
+          "next_dialogue_id": "mhp_keep_walking"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "mhp_keep_walking",
+      "speaker_id": "yudhishthira",
+      "dialogue_text": "Do not look back, Bhima. Walk on.",
+      "speaker_emotion": "NEUTRAL",
+      "is_endpoint": true
+    }
+  ]
+}

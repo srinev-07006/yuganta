@@ -1,0 +1,41 @@
+{
+  "sequence_id": "seq_day18_mace_duel",
+  "node_id": "shp-day18-lake",
+  "trigger_event": "MID_BATTLE",
+  "background_asset_key": "bg_lake_duel",
+  "bgm_asset_key": "bgm_dharma_break",
+  "nodes": [
+    {
+      "dialogue_id": "d18_bhima_staggering",
+      "speaker_id": "bhima",
+      "dialogue_text": "[Gasping] His body is like iron! Gandhari's boon protects his entire upper half. I cannot break him!",
+      "speaker_emotion": "GRIEF",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "next_dialogue_id": "d18_krishna_signal"
+    },
+    {
+      "dialogue_id": "d18_krishna_signal",
+      "speaker_id": "krishna",
+      "dialogue_text": "[Krishna looks at Bhima, then deliberately slaps his own left thigh.]",
+      "speaker_emotion": "NEUTRAL",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "choices": [
+        {
+          "choice_id": "d18_c1",
+          "choice_text": "[Strike below the waist. Break his thighs.]",
+          "dharma_impact": -50,
+          "next_dialogue_id": "d18_duryodhana_falls",
+          "tactical_override_event": "NONE"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "d18_duryodhana_falls",
+      "speaker_id": "duryodhana",
+      "dialogue_text": "Fouls! Traitors! To strike below the navel in a mace duel is adharma! You win this kingdom through deceit and trickery!",
+      "speaker_emotion": "ANGRY",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "is_endpoint": true
+    }
+  ]
+}

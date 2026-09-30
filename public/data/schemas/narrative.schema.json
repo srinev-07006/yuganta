@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Narrative Schema",
+  "description": "Schema for Visual Novel dialogue sequences, nodes, and moral branching choices.",
+  "type": "object",
+  "definitions": {
+    "narrative_choice": {
+      "type": "object",
+      "properties": {
+        "choice_id": { "type": "string" },
+        "choice_text": { "type": "string" },
+        "dharma_impact": { "type": "integer", "default": 0 },
+        "artha_impact": { "type": "integer", "default": 0 },
+        "kama_impact": { "type": "integer", "default": 0 },
+        "moksha_impact": { "type": "integer", "default": 0 },
+        "next_dialogue_id": { "type": "string" },
+        "tactical_override_event": {
+          "type": "string",
+          "enum": ["ROUT_CHANGE", "MORALE_BOOST", "NONE"],
+          "default": "NONE"
+        }
+      },
+      "required": ["choice_id", "choice_text", "next_dialogue_id"]
+    },
+    "dialogue_node": {
+      "type": "object",
+      "properties": {
+        "dialogue_id": { "type": "string" },
+        "speaker_id": { "type": "string" },
+        "dialogue_text": { "type": "string" },
+        "speaker_emotion": {
+          "type": "string",
+          "enum": ["NEUTRAL", "ANGRY", "GRIEF", "ENLIGHTENED", "CONFUSED", "SMUG"]
+        },
+        "camera_focus_target": {
+          "type": "string",
+          "default": "PORTRAIT_ONLY"
+        },
+        "choices": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/narrative_choice" }
+        },
+        "next_dialogue_id": { "type": "string" },
+        "is_endpoint": { "type": "boolean", "default": false }
+      },
+      "required": ["dialogue_id", "speaker_id", "dialogue_text"]
+    }
+  },
+  "properties": {
+    "sequence_id": { "type": "string" },
+    "node_id": { "type": "string" },
+    "trigger_event": {
+      "type": "string",
+      "enum": ["NODE_START", "TURN_START", "MID_BATTLE", "TIMELINE_FAIL"]
+    },
+    "background_asset_key": { "type": "string" },
+    "bgm_asset_key": { "type": "string" },
+    "nodes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/dialogue_node" }
+    }
+  },
+  "required": ["sequence_id", "nodes"]
+}

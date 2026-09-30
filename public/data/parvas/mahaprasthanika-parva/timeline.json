@@ -1,0 +1,34 @@
+{
+  "nodes": [
+    {
+      "node_id": "mhp-journey-begins",
+      "parva_id": 17,
+      "war_day": 0,
+      "phase_name": "BEGINNING",
+      "title": "The Great Journey Begins",
+      "historical_context": "The Pandavas renounce their kingdom.",
+      "initial_scene_type": "VN",
+      "map_id": "map_himalayan_path"
+    },
+    {
+      "node_id": "mhp-the-falling",
+      "parva_id": 17,
+      "war_day": 0,
+      "phase_name": "MIDDLE",
+      "title": "The Falling",
+      "historical_context": "Draupadi falls first, followed by Sahadeva, Nakula, Arjuna, and Bhima.",
+      "initial_scene_type": "VN",
+      "map_id": "map_snowy_ascent"
+    },
+    {
+      "node_id": "mhp-the-dog",
+      "parva_id": 17,
+      "war_day": 0,
+      "phase_name": "END",
+      "title": "The Dog",
+      "historical_context": "Indra arrives in his chariot to take Yudhishthira to heaven, but asks him to leave the dog behind.",
+      "initial_scene_type": "VN",
+      "map_id": "map_meru_peak"
+    }
+  ]
+}

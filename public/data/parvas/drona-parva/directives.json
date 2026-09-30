@@ -1,0 +1,22 @@
+{
+  "directives": [
+    {
+      "directive_id": "abhimanyu-survive",
+      "directive_type": "SURVIVE_TURNS",
+      "target_turns": 15,
+      "target_unit_id": "abhimanyu",
+      "fail_on_deviation": false
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "trigger-abhimanyu-death",
+      "condition_type": "UNIT_HP_BELOW_PERCENT",
+      "condition_value": 0,
+      "target_unit_id": "abhimanyu",
+      "linked_sequence_id": "seq_abhimanyu_death",
+      "pauses_tactical_scene": true,
+      "is_repeatable": false
+    }
+  ]
+}

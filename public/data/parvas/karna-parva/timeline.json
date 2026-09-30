@@ -1,0 +1,24 @@
+{
+  "nodes": [
+    {
+      "node_id": "kp-ghatotkacha",
+      "parva_id": 8,
+      "war_day": 16,
+      "phase_name": "MIDDLE",
+      "title": "The Death of Ghatotkacha",
+      "historical_context": "Ghatotkacha wreaks havoc on the Kaurava forces at night. Driven to desperation, Karna uses the infallible Shakti Astra—originally saved for Arjuna—to kill him.",
+      "initial_scene_type": "VN",
+      "map_id": "map_night_battle"
+    },
+    {
+      "node_id": "kp-final-duel",
+      "parva_id": 8,
+      "war_day": 17,
+      "phase_name": "END",
+      "title": "The Final Duel",
+      "historical_context": "Karna and Arjuna face off. The curses laid upon Karna manifest simultaneously: his chariot wheel sinks into the earth, and he forgets the mantras for his divine weapons.",
+      "initial_scene_type": "TACTICAL",
+      "map_id": "map_kurukshetra_crater"
+    }
+  ]
+}

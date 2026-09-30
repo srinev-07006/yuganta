@@ -1,0 +1,33 @@
+{
+  "sequence_id": "seq_day13_abhimanyu_fall",
+  "node_id": "dp-day13-end",
+  "trigger_event": "MID_BATTLE",
+  "background_asset_key": "bg_abhimanyu_surrounded",
+  "bgm_asset_key": "bgm_tragic_end",
+  "nodes": [
+    {
+      "dialogue_id": "d13_karna_advice",
+      "speaker_id": "karna",
+      "dialogue_text": "Acharya, the boy is a tempest! As long as he holds a bow, even the gods cannot touch him. We must strike from behind and break his weapons.",
+      "speaker_emotion": "ANGRY",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "next_dialogue_id": "d13_drona_agrees"
+    },
+    {
+      "dialogue_id": "d13_drona_agrees",
+      "speaker_id": "drona",
+      "dialogue_text": "It is adharma... but there is no other way. Karna, cut his bowstring from behind. The rest of you, converge!",
+      "speaker_emotion": "GRIEF",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "next_dialogue_id": "d13_abhimanyu_last_stand"
+    },
+    {
+      "dialogue_id": "d13_abhimanyu_last_stand",
+      "speaker_id": "abhimanyu",
+      "dialogue_text": "Cowards! Six maharathis against one unarmed boy! Come then! Even with just this chariot wheel, I am the son of Arjuna, and I yield to no one!",
+      "speaker_emotion": "ANGRY",
+      "camera_focus_target": "PORTRAIT_ONLY",
+      "is_endpoint": true
+    }
+  ]
+}

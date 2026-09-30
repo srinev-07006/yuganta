@@ -1,0 +1,30 @@
+{
+  "sequence_id": "seq_swayamvara",
+  "node_id": "ap-swayamvara",
+  "trigger_event": "NODE_START",
+  "background_asset_key": "bg_panchala_court",
+  "bgm_asset_key": "bgm_royal_court",
+  "nodes": [
+    {
+      "dialogue_id": "ap_d1",
+      "speaker_id": "drupada",
+      "dialogue_text": "Whoever can string this mighty bow and pierce the eye of the revolving fish above, looking only at its reflection in the oil below, shall win the hand of my daughter, Draupadi.",
+      "speaker_emotion": "NEUTRAL",
+      "choices": [
+        {
+          "choice_id": "ap_c1",
+          "choice_text": "[Arjuna steps forward from among the Brahmins.]",
+          "dharma_impact": 10,
+          "next_dialogue_id": "ap_a1"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "ap_a1",
+      "speaker_id": "arjuna",
+      "dialogue_text": "[Strings the bow effortlessly. He aims at the reflection, and with a single twang, the arrow finds its mark.]",
+      "speaker_emotion": "NEUTRAL",
+      "is_endpoint": true
+    }
+  ]
+}

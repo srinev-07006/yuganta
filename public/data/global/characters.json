@@ -1,0 +1,314 @@
+{
+  "characters": [
+    {
+      "character_id": "bhishma",
+      "canonical_name": "Bhishma Pitamah",
+      "default_faction": "KAURAVA",
+      "base_sprite_key": "spr_bhishma_chariot",
+      "portrait_atlas_key": "port_bhishma",
+      "traits": ["iccha-mrityu", "ganga-putra"],
+      "astras": ["brahmastra", "pashupatastra"],
+      "vows": ["lifelong-celibacy", "kuru-throne-protection"]
+    },
+    {
+      "character_id": "arjuna",
+      "canonical_name": "Arjuna",
+      "default_faction": "PANDAVA",
+      "base_sprite_key": "spr_arjuna_chariot",
+      "portrait_atlas_key": "port_arjuna",
+      "traits": ["vijaya-wielder", "sabyasachi"],
+      "astras": ["pashupatastra", "brahmashira", "agneyastra", "varunastra"],
+      "vows": ["slay-jayadratha-sunset"]
+    },
+    {
+      "character_id": "krishna",
+      "canonical_name": "Krishna Vasudeva",
+      "default_faction": "PANDAVA",
+      "base_sprite_key": "spr_krishna_charioteer",
+      "portrait_atlas_key": "port_krishna",
+      "traits": ["sarathi", "sudarshana-wielder"],
+      "astras": ["narayanastra", "sudarshana-chakra"],
+      "vows": ["no-weapons-war"]
+    },
+    {
+      "character_id": "yudhishthira",
+      "canonical_name": "Yudhishthira",
+      "default_faction": "PANDAVA",
+      "base_sprite_key": "spr_yudhishthira_chariot",
+      "portrait_atlas_key": "port_yudhishthira",
+      "traits": ["dharma-putra"],
+      "astras": ["brahmastra"],
+      "vows": ["never-refuse-dice", "truth-bound"]
+    },
+    {
+      "character_id": "bhima",
+      "canonical_name": "Bhimasena",
+      "default_faction": "PANDAVA",
+      "base_sprite_key": "spr_bhima_mace",
+      "portrait_atlas_key": "port_bhima",
+      "traits": ["vayu-putra", "mace-master"],
+      "astras": [],
+      "vows": ["drink-duhshasana-blood", "break-duryodhana-thigh"]
+    },
+    {
+      "character_id": "nakula",
+      "canonical_name": "Nakula",
+      "default_faction": "PANDAVA",
+      "base_sprite_key": "spr_nakula_sword",
+      "portrait_atlas_key": "port_nakula",
+      "traits": ["ashvini-putra", "sword-master"],
+      "astras": [],
+      "vows": []
+    },
+    {
+      "character_id": "sahadeva",
+      "canonical_name": "Sahadeva",
+      "default_faction": "PANDAVA",
+      "base_sprite_key": "spr_sahadeva_sword",
+      "portrait_atlas_key": "port_sahadeva",
+      "traits": ["ashvini-putra", "astrologer"],
+      "astras": [],
+      "vows": []
+    },
+    {
+      "character_id": "draupadi",
+      "canonical_name": "Draupadi",
+      "default_faction": "PANDAVA",
+      "base_sprite_key": "spr_draupadi",
+      "portrait_atlas_key": "port_draupadi",
+      "traits": ["agni-kanya"],
+      "astras": [],
+      "vows": ["untied-hair"]
+    },
+    {
+      "character_id": "karna",
+      "canonical_name": "Karna",
+      "default_faction": "KAURAVA",
+      "base_sprite_key": "spr_karna_chariot",
+      "portrait_atlas_key": "port_karna",
+      "traits": ["surya-putra", "daanveer"],
+      "astras": ["brahmastra", "bhargavastra", "shakti-astra"],
+      "vows": ["never-refuse-charity", "surpass-arjuna"]
+    },
+    {
+      "character_id": "duryodhana",
+      "canonical_name": "Duryodhana",
+      "default_faction": "KAURAVA",
+      "base_sprite_key": "spr_duryodhana_mace",
+      "portrait_atlas_key": "port_duryodhana",
+      "traits": ["mace-master", "vajra-thighs"],
+      "astras": [],
+      "vows": ["never-share-kingdom"]
+    },
+    {
+      "character_id": "drona",
+      "canonical_name": "Dronacharya",
+      "default_faction": "KAURAVA",
+      "base_sprite_key": "spr_drona_chariot",
+      "portrait_atlas_key": "port_drona",
+      "traits": ["acharya", "brahmin-warrior"],
+      "astras": ["brahmastra", "brahmashira", "agneyastra"],
+      "vows": ["guru-dharma"]
+    },
+    {
+      "character_id": "duhshasana",
+      "canonical_name": "Duhshasana",
+      "default_faction": "KAURAVA",
+      "base_sprite_key": "spr_duhshasana",
+      "portrait_atlas_key": "port_duhshasana",
+      "traits": [],
+      "astras": [],
+      "vows": []
+    },
+    {
+      "character_id": "shakuni",
+      "canonical_name": "Shakuni",
+      "default_faction": "KAURAVA",
+      "base_sprite_key": "spr_shakuni",
+      "portrait_atlas_key": "port_shakuni",
+      "traits": ["dice-master", "maya-expert"],
+      "astras": [],
+      "vows": ["destroy-kuru-line"]
+    },
+    {
+      "character_id": "shikhandi",
+      "canonical_name": "Shikhandi",
+      "default_faction": "PANDAVA",
+      "base_sprite_key": "spr_shikhandi_chariot",
+      "portrait_atlas_key": "port_shikhandi",
+      "traits": ["bhishma-bane"],
+      "astras": [],
+      "vows": ["amba-revenge"]
+    },
+    {
+      "character_id": "abhimanyu",
+      "canonical_name": "Abhimanyu",
+      "default_faction": "PANDAVA",
+      "base_sprite_key": "spr_abhimanyu_chariot",
+      "portrait_atlas_key": "port_abhimanyu",
+      "traits": ["chakravyuha-enterer"],
+      "astras": ["brahmastra"],
+      "vows": []
+    },
+    {
+      "character_id": "jayadratha",
+      "canonical_name": "Jayadratha",
+      "default_faction": "KAURAVA",
+      "base_sprite_key": "spr_jayadratha_chariot",
+      "portrait_atlas_key": "port_jayadratha",
+      "traits": ["gate-blocker"],
+      "astras": [],
+      "vows": []
+    },
+    {
+      "character_id": "ghatotkacha",
+      "canonical_name": "Ghatotkacha",
+      "default_faction": "PANDAVA",
+      "base_sprite_key": "spr_ghatotkacha",
+      "portrait_atlas_key": "port_ghatotkacha",
+      "traits": ["rakshasa-prince", "night-fighter"],
+      "astras": [],
+      "vows": []
+    },
+    {
+      "character_id": "ashwatthama",
+      "canonical_name": "Ashwatthama",
+      "default_faction": "KAURAVA",
+      "base_sprite_key": "spr_ashwatthama",
+      "portrait_atlas_key": "port_ashwatthama",
+      "traits": ["chiranjivi", "mani-bearer", "rudra-possession"],
+      "astras": ["brahmastra", "brahmashira", "narayanastra"],
+      "vows": []
+    },
+    {
+      "character_id": "shalya",
+      "canonical_name": "Shalya",
+      "default_faction": "KAURAVA",
+      "base_sprite_key": "spr_shalya_chariot",
+      "portrait_atlas_key": "port_shalya",
+      "traits": ["charioteer-master"],
+      "astras": [],
+      "vows": []
+    },
+    {
+      "character_id": "dhritarashtra",
+      "canonical_name": "Dhritarashtra",
+      "default_faction": "KAURAVA",
+      "base_sprite_key": "spr_dhritarashtra",
+      "portrait_atlas_key": "port_dhritarashtra",
+      "traits": ["blind-king"],
+      "astras": [],
+      "vows": []
+    },
+    {
+      "character_id": "sanjaya",
+      "canonical_name": "Sanjaya",
+      "default_faction": "NEUTRAL",
+      "base_sprite_key": "spr_sanjaya",
+      "portrait_atlas_key": "port_sanjaya",
+      "traits": ["divya-drishti"],
+      "astras": [],
+      "vows": ["truth-to-king"]
+    },
+    {
+      "character_id": "vidura",
+      "canonical_name": "Vidura",
+      "default_faction": "NEUTRAL",
+      "base_sprite_key": "spr_vidura",
+      "portrait_atlas_key": "port_vidura",
+      "traits": ["dharma-incarnate"],
+      "astras": [],
+      "vows": []
+    },
+    {
+      "character_id": "kunti",
+      "canonical_name": "Kunti",
+      "default_faction": "PANDAVA",
+      "base_sprite_key": "spr_kunti",
+      "portrait_atlas_key": "port_kunti",
+      "traits": [],
+      "astras": [],
+      "vows": ["secret-of-karna"]
+    },
+    {
+      "character_id": "gandhari",
+      "canonical_name": "Gandhari",
+      "default_faction": "KAURAVA",
+      "base_sprite_key": "spr_gandhari",
+      "portrait_atlas_key": "port_gandhari",
+      "traits": ["blindfolded-queen", "pativrata-power"],
+      "astras": [],
+      "vows": ["eternal-blindfold"]
+    },
+    {
+      "character_id": "vyasa",
+      "canonical_name": "Vyasa",
+      "default_faction": "NEUTRAL",
+      "base_sprite_key": "spr_vyasa",
+      "portrait_atlas_key": "port_vyasa",
+      "traits": ["chiranjivi", "omniscient-narrator"],
+      "astras": [],
+      "vows": []
+    },
+    {
+      "character_id": "kripacharya",
+      "canonical_name": "Kripacharya",
+      "default_faction": "KAURAVA",
+      "base_sprite_key": "spr_kripa",
+      "portrait_atlas_key": "port_kripa",
+      "traits": ["chiranjivi", "acharya"],
+      "astras": ["brahmastra"],
+      "vows": ["guru-dharma"]
+    },
+    {
+      "character_id": "satyaki",
+      "canonical_name": "Satyaki",
+      "default_faction": "PANDAVA",
+      "base_sprite_key": "spr_satyaki_chariot",
+      "portrait_atlas_key": "port_satyaki",
+      "traits": ["vrishni-warrior"],
+      "astras": [],
+      "vows": []
+    },
+    {
+      "character_id": "drupada",
+      "canonical_name": "Drupada",
+      "default_faction": "PANDAVA",
+      "base_sprite_key": "spr_drupada",
+      "portrait_atlas_key": "port_drupada",
+      "traits": [],
+      "astras": [],
+      "vows": ["destroy-drona"]
+    },
+    {
+      "character_id": "dhrishtadyumna",
+      "canonical_name": "Dhrishtadyumna",
+      "default_faction": "PANDAVA",
+      "base_sprite_key": "spr_dhrishtadyumna",
+      "portrait_atlas_key": "port_dhrishtadyumna",
+      "traits": ["agni-putra", "drona-killer"],
+      "astras": [],
+      "vows": ["slay-drona"]
+    },
+    {
+      "character_id": "virata",
+      "canonical_name": "King Virata",
+      "default_faction": "PANDAVA",
+      "base_sprite_key": "spr_virata",
+      "portrait_atlas_key": "port_virata",
+      "traits": [],
+      "astras": [],
+      "vows": []
+    },
+    {
+      "character_id": "uttara",
+      "canonical_name": "Uttara",
+      "default_faction": "PANDAVA",
+      "base_sprite_key": "spr_uttara",
+      "portrait_atlas_key": "port_uttara",
+      "traits": [],
+      "astras": [],
+      "vows": []
+    }
+  ]
+}

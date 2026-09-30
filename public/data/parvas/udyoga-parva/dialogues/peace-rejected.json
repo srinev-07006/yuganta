@@ -1,0 +1,29 @@
+{
+  "sequence_id": "seq_peace_rejected",
+  "node_id": "udp-peace-envoy",
+  "trigger_event": "NODE_START",
+  "background_asset_key": "bg_kuru_court",
+  "bgm_asset_key": "bgm_tension",
+  "nodes": [
+    {
+      "dialogue_id": "udp_k1",
+      "speaker_id": "krishna",
+      "dialogue_text": "Duryodhana, give them merely five villages. One for each brother. Keep the rest of the vast empire and let there be peace.",
+      "speaker_emotion": "NEUTRAL",
+      "choices": [
+        {
+          "choice_id": "udp_c1",
+          "choice_text": "[Duryodhana laughs.]",
+          "next_dialogue_id": "udp_d1"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "udp_d1",
+      "speaker_id": "duryodhana",
+      "dialogue_text": "Five villages? I will not give them enough land to cover the point of a needle without war. Guards, arrest this cowherd!",
+      "speaker_emotion": "ANGRY",
+      "is_endpoint": true
+    }
+  ]
+}

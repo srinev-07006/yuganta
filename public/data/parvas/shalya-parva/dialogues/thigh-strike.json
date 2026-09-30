@@ -1,0 +1,43 @@
+{
+  "sequence_id": "seq_thigh_strike",
+  "node_id": "shp-mace-duel",
+  "trigger_event": "MID_BATTLE",
+  "background_asset_key": "bg_lake_combat",
+  "bgm_asset_key": "bgm_heavy_combat",
+  "nodes": [
+    {
+      "dialogue_id": "shp_b1",
+      "speaker_id": "bhima",
+      "dialogue_text": "He is too fast! His thighs are made of vajra thanks to Gandhari's gaze. I cannot break his guard with fair strikes.",
+      "speaker_emotion": "ANGRY",
+      "choices": [
+        {
+          "choice_id": "shp_c1",
+          "choice_text": "[Look to Krishna for guidance.]",
+          "next_dialogue_id": "shp_k1"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "shp_k1",
+      "speaker_id": "krishna",
+      "dialogue_text": "[Krishna looks at Bhima, then deliberately slaps his own left thigh.]",
+      "speaker_emotion": "NEUTRAL",
+      "choices": [
+        {
+          "choice_id": "shp_c2",
+          "choice_text": "[Strike Duryodhana below the belt.]",
+          "dharma_impact": -30,
+          "next_dialogue_id": "shp_d1"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "shp_d1",
+      "speaker_id": "duryodhana",
+      "dialogue_text": "Aggh!! You coward! It is strictly forbidden to strike below the navel in mace combat! You have won through deceit, like everything else you Pandavas do!",
+      "speaker_emotion": "GRIEF",
+      "is_endpoint": true
+    }
+  ]
+}

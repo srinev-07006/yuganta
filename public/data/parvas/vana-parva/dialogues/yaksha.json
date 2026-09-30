@@ -1,0 +1,43 @@
+{
+  "sequence_id": "seq_yaksha",
+  "node_id": "vp-yaksha-prashna",
+  "trigger_event": "NODE_START",
+  "background_asset_key": "bg_poison_lake",
+  "bgm_asset_key": "bgm_riddle",
+  "nodes": [
+    {
+      "dialogue_id": "vp_y1",
+      "speaker_id": "yaksha",
+      "dialogue_text": "Answer my questions, O King, or you shall die like your brothers. What is the greatest wonder in the world?",
+      "speaker_emotion": "NEUTRAL",
+      "choices": [
+        {
+          "choice_id": "vp_c1",
+          "choice_text": "The magic of the gods.",
+          "dharma_impact": -10,
+          "next_dialogue_id": "vp_wrong"
+        },
+        {
+          "choice_id": "vp_c2",
+          "choice_text": "Day after day countless beings go to the abode of Yama, yet those that remain believe they will live forever. This is the greatest wonder.",
+          "dharma_impact": 50,
+          "next_dialogue_id": "vp_correct"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "vp_wrong",
+      "speaker_id": "yaksha",
+      "dialogue_text": "Incorrect.",
+      "speaker_emotion": "ANGRY",
+      "is_endpoint": true
+    },
+    {
+      "dialogue_id": "vp_correct",
+      "speaker_id": "yaksha",
+      "dialogue_text": "You speak the truth, Yudhishthira. I am Yama, your father. I restore your brothers to life.",
+      "speaker_emotion": "ENLIGHTENED",
+      "is_endpoint": true
+    }
+  ]
+}

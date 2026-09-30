@@ -1,0 +1,54 @@
+{
+  "nodes": [
+    {
+      "node_id": "dp-day13-chakravyuha",
+      "parva_id": 7,
+      "war_day": 13,
+      "phase_name": "BEGINNING",
+      "title": "The Chakravyuha Formation",
+      "historical_context": "On the thirteenth day, Drona arranges his troops in the deadly Chakravyuha (disc formation), a labyrinth from which entry is possible but exit is known to only a few warriors. Abhimanyu enters bravely but finds himself trapped.",
+      "initial_scene_type": "TACTICAL",
+      "map_id": "map_chakravyuha"
+    },
+    {
+      "node_id": "dp-day13-abhimanyu-fall",
+      "parva_id": 7,
+      "war_day": 13,
+      "phase_name": "END",
+      "title": "The Fall of Abhimanyu",
+      "historical_context": "Surrounded by six Maharathis and attacked against all rules of war, the valiant Abhimanyu is slain while attempting to break out of the Chakravyuha. His death enrages Arjuna and sets the stage for a terrifying oath.",
+      "initial_scene_type": "VN",
+      "map_id": "map_chakravyuha_carnage"
+    },
+    {
+      "node_id": "dp-day14-jayadratha-vow",
+      "parva_id": 7,
+      "war_day": 14,
+      "phase_name": "BEGINNING",
+      "title": "Arjuna's Terrible Oath",
+      "historical_context": "Consumed by grief and rage, Arjuna swears to kill Jayadratha before sunset the next day, threatening self-immolation if he fails. This sets up a tense race against time.",
+      "initial_scene_type": "VN",
+      "map_id": "map_jayadratha_hunt"
+    },
+    {
+      "node_id": "dp-day14-artificial-eclipse",
+      "parva_id": 7,
+      "war_day": 14,
+      "phase_name": "END",
+      "title": "Krishna's Eclipse",
+      "historical_context": "As Jayadratha hides behind Drona's protective formations, Krishna uses his divine power to obscure the sun, creating an artificial eclipse. Jayadratha emerges in celebration—only to be beheaded by Arjuna's arrow.",
+      "initial_scene_type": "VN",
+      "map_id": "map_eclipse_moment"
+    },
+    {
+      "node_id": "dp-day15-drona-meditation",
+      "parva_id": 7,
+      "war_day": 15,
+      "phase_name": "BEGINNING",
+      "title": "The Lie That Shook Heaven",
+      "historical_context": "Desperate to break Drona's invincible defense, Krishna devises a plan: if Drona believes his beloved son Ashwatthama is dead, he will lay down his weapons. Yudhishthira must speak the falsehood, whispering clarification to save his vow. This single lie causes his divine chariot to crash to earth.",
+      "initial_scene_type": "VN",
+      "map_id": "map_drona_lie"
+    }
+  ]
+}

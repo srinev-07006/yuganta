@@ -1,0 +1,24 @@
+{
+  "nodes": [
+    {
+      "node_id": "shp-lake-hiding",
+      "parva_id": 9,
+      "war_day": 18,
+      "phase_name": "BEGINNING",
+      "title": "The Lake Dvaipayana",
+      "historical_context": "His army gone, Duryodhana uses magic to solidify the waters of a lake and hides beneath. The Pandavas track him down.",
+      "initial_scene_type": "VN",
+      "map_id": "map_dvaipayana_lake"
+    },
+    {
+      "node_id": "shp-mace-duel",
+      "parva_id": 9,
+      "war_day": 18,
+      "phase_name": "END",
+      "title": "The Mace Duel",
+      "historical_context": "Duryodhana emerges to fight a one-on-one mace duel with Bhima.",
+      "initial_scene_type": "TACTICAL",
+      "map_id": "map_lake_shore"
+    }
+  ]
+}

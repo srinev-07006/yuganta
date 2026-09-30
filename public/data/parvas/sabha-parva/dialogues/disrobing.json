@@ -1,0 +1,267 @@
+{
+  "sequence_id": "seq_disrobing",
+  "node_id": "sp-disrobing",
+  "trigger_event": "MID_BATTLE",
+  "background_asset_key": "bg_hastinapura_assembly",
+  "bgm_asset_key": "bgm_ominous_court",
+  "nodes": [
+    {
+      "dialogue_id": "di_shakuni_wins",
+      "speaker_id": "shakuni",
+      "dialogue_text": "The dice have fallen! Lo, King of Kings, Yudhishthira has staked and lost his crown, his wealth, his brothers, himself—and now, Queen Panchali herself is won! The proud Pandavas are our slaves!",
+      "speaker_emotion": "SMUG",
+      "next_dialogue_id": "di_duryodhana_orders"
+    },
+    {
+      "dialogue_id": "di_duryodhana_orders",
+      "speaker_id": "duryodhana",
+      "dialogue_text": "Duhshasana! Go to the inner chambers! Drag our new servant into this sabha. Let the proud daughter of Drupada sweep the floor before the rightful kings of the earth!",
+      "speaker_emotion": "SMUG",
+      "next_dialogue_id": "di_draupadi_dragged"
+    },
+    {
+      "dialogue_id": "di_draupadi_dragged",
+      "speaker_id": "duhshasana",
+      "dialogue_text": "Come, tender princess! In clad of single garment, in your monthly course, weep as you will—the Kuru hall awaits you!",
+      "speaker_emotion": "ANGRY",
+      "next_dialogue_id": "di_draupadi_question"
+    },
+    {
+      "dialogue_id": "di_draupadi_question",
+      "speaker_id": "draupadi",
+      "dialogue_text": "Elders of the Kuru clan! Bhishma, Drona, Kripa, and Dhritarashtra! I stand before you dishonored, yet I ask a question of jurisprudence: Did the King of Dharma, Yudhishthira, lose himself before he wagered me, or wager me while he was still a free man? If he was already a masterless slave, who granted him the property right to stake my freedom?",
+      "speaker_emotion": "GRIEF",
+      "choices": [
+        {
+          "choice_id": "c_ask_bhishma",
+          "choice_text": "[Direct the question to Bhishma's legal intellect (Sukshma Dharma)]",
+          "dharma_impact": 10,
+          "artha_impact": -5,
+          "kama_impact": -10,
+          "moksha_impact": 5,
+          "next_dialogue_id": "di_bhishma_sukshma"
+        },
+        {
+          "choice_id": "c_support_vikarna",
+          "choice_text": "[Inspire Prince Vikarna to break the elders' silence]",
+          "dharma_impact": 25,
+          "artha_impact": -20,
+          "kama_impact": 15,
+          "moksha_impact": 10,
+          "next_dialogue_id": "di_vikarna_outcry"
+        },
+        {
+          "choice_id": "c_confront_karna",
+          "choice_text": "[Challenge Karna's silence on chivalry and honor]",
+          "dharma_impact": -10,
+          "artha_impact": 15,
+          "kama_impact": 20,
+          "moksha_impact": -10,
+          "next_dialogue_id": "di_karna_retort"
+        },
+        {
+          "choice_id": "c_invoke_vidura",
+          "choice_text": "[Summon Vidura's prophetic warning of cosmic destruction]",
+          "dharma_impact": 20,
+          "artha_impact": -15,
+          "kama_impact": -5,
+          "moksha_impact": 15,
+          "next_dialogue_id": "di_vidura_prophecy"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "di_bhishma_sukshma",
+      "speaker_id": "bhishma",
+      "dialogue_text": "Na dharmo vidyate sūkṣmaḥ... The intricacies of Dharma are subtle and profound, daughter. A man who is not master of himself cannot stake what belongs to another. Yet, tradition holds that a wife is forever under the dominion of her husband. Yudhishthira would yield the three worlds before uttering an unrighteous word. Because he accepts this loss, I cannot unravel this knot.",
+      "speaker_emotion": "GRIEF",
+      "choices": [
+        {
+          "choice_id": "c_bhishma_reproach",
+          "choice_text": "[Reproach Bhishma: 'If the mighty cannot tell right from wrong, Dharma is already dead in Hastinapura!']",
+          "dharma_impact": 15,
+          "artha_impact": -10,
+          "kama_impact": 10,
+          "moksha_impact": 0,
+          "next_dialogue_id": "di_draupadi_lament_elders"
+        },
+        {
+          "choice_id": "c_bhishma_yield",
+          "choice_text": "[Despair at the legal paralysis of the great patriarch]",
+          "dharma_impact": -15,
+          "artha_impact": 10,
+          "kama_impact": -15,
+          "moksha_impact": 5,
+          "next_dialogue_id": "di_duryodhana_mocks"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "di_vikarna_outcry",
+      "speaker_id": "vidura",
+      "dialogue_text": "Look! Young Vikarna, son of Dhritarashtra, rises! He stands alone among his hundred brothers!",
+      "speaker_emotion": "ENLIGHTENED",
+      "next_dialogue_id": "di_vikarna_speaks"
+    },
+    {
+      "dialogue_id": "di_vikarna_speaks",
+      "speaker_id": "vidura",
+      "dialogue_text": "Vikarna shouts: 'Answer her, O Kings! Hunting, drinking, women, and dice—these four vices lead kings astray. Yudhishthira was lured into this match by deceptive conspirators. Draupadi is the common queen of five brothers; staked by one while his own freedom was lost! I declare: Panchali has NOT been won by law!'",
+      "speaker_emotion": "ENLIGHTENED",
+      "choices": [
+        {
+          "choice_id": "c_applaud_vikarna",
+          "choice_text": "[Applaud Vikarna's solitary courage against his entire family]",
+          "dharma_impact": 30,
+          "artha_impact": -25,
+          "kama_impact": 10,
+          "moksha_impact": 15,
+          "tactical_override_event": "MORALE_BOOST",
+          "next_dialogue_id": "di_karna_silences_vikarna"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "di_karna_silences_vikarna",
+      "speaker_id": "karna",
+      "dialogue_text": "Silence, boy! You are but a fledgling chirping in the council of lions! When Yudhishthira staked all his possessions, Draupadi was included in all he owned. Furthermore, the scriptures decree one husband for a woman. She who takes five is no queen, but a fallen woman! To bring her here clad or unclad violates no law!",
+      "speaker_emotion": "ANGRY",
+      "next_dialogue_id": "di_karna_orders_strip"
+    },
+    {
+      "dialogue_id": "di_karna_retort",
+      "speaker_id": "karna",
+      "dialogue_text": "Why do you weep now, Panchali? When you mocked me in your father's court saying 'I will not wed a charioteer's son,' was that your Dharma? The wheel of fate turns. The Pandavas are vanquished slaves. Take off their upper garments, Duhshasana, and strip this woman as well!",
+      "speaker_emotion": "ANGRY",
+      "next_dialogue_id": "di_karna_orders_strip"
+    },
+    {
+      "dialogue_id": "di_vidura_prophecy",
+      "speaker_id": "vidura",
+      "dialogue_text": "Dhritarashtra, awake! You nourish a venomous snake in your lap! Dharma violated in an assembly destroys the judges, the king, and the kingdom alike. Half the sin falls upon the perpetrator, a quarter on the witnesses who remain mute, and a quarter upon the king who permits it! Stop this madness or Kurukshetra will be tilled with your sons' bones!",
+      "speaker_emotion": "ANGRY",
+      "choices": [
+        {
+          "choice_id": "c_dhritarashtra_hesitates",
+          "choice_text": "[Observe Dhritarashtra's tragic silence, paralyzed by love for his son]",
+          "dharma_impact": -20,
+          "artha_impact": 10,
+          "kama_impact": -20,
+          "moksha_impact": 0,
+          "next_dialogue_id": "di_duryodhana_mocks"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "di_draupadi_lament_elders",
+      "speaker_id": "draupadi",
+      "dialogue_text": "If this is the assembly of the Bharatas, where truth is strangled by technicalities, then righteousness is an empty phantom! My husbands sit bound by the fetters of a gambler's promise, while the beasts of the court surround me!",
+      "speaker_emotion": "GRIEF",
+      "next_dialogue_id": "di_duryodhana_mocks"
+    },
+    {
+      "dialogue_id": "di_duryodhana_mocks",
+      "speaker_id": "duryodhana",
+      "dialogue_text": "Let your five heroic husbands speak! Let Yudhishthira declare before all that he is not your master, and we shall set you free! But he cannot, for he is a truthful man who knows he has lost you. Duhshasana, strip her! Let all see the spoils of the game!",
+      "speaker_emotion": "SMUG",
+      "next_dialogue_id": "di_karna_orders_strip"
+    },
+    {
+      "dialogue_id": "di_karna_orders_strip",
+      "speaker_id": "duhshasana",
+      "dialogue_text": "Lay hold of her robes! No god shall protect you today, proud princess!",
+      "speaker_emotion": "ANGRY",
+      "next_dialogue_id": "di_draupadi_prayer_choice"
+    },
+    {
+      "dialogue_id": "di_draupadi_prayer_choice",
+      "speaker_id": "draupadi",
+      "dialogue_text": "Duhshasana clutches the edge of my garment. My husbands look at the floor. The elders shut their eyes. There is no king on earth, no warrior, no judge to stay his hands.",
+      "speaker_emotion": "GRIEF",
+      "choices": [
+        {
+          "choice_id": "c_pray_krishna",
+          "choice_text": "[Let go of the robe with both hands; surrender completely to Krishna (Sharanagati)]",
+          "dharma_impact": 20,
+          "artha_impact": -10,
+          "kama_impact": -20,
+          "moksha_impact": 40,
+          "next_dialogue_id": "di_krishna_miracle"
+        },
+        {
+          "choice_id": "c_curse_kurus",
+          "choice_text": "[Cling to the garment while spitting curses upon the Kuru throne]",
+          "dharma_impact": -5,
+          "artha_impact": 5,
+          "kama_impact": 30,
+          "moksha_impact": -20,
+          "next_dialogue_id": "di_krishna_miracle"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "di_krishna_miracle",
+      "speaker_id": "draupadi",
+      "dialogue_text": "Hā Govinda! Dvārakāvāsin! Kṛṣṇa! Gopījanapriya! Kauravaiḥ paribhūtāṃ māṃ kiṃ na jānāsi keśava?! O Protector of the helpless, I surrender all to Thee!",
+      "speaker_emotion": "ENLIGHTENED",
+      "next_dialogue_id": "di_endless_cloth"
+    },
+    {
+      "dialogue_id": "di_endless_cloth",
+      "speaker_id": "sanjaya",
+      "dialogue_text": "A miracle unfolds before our stunned eyes! As Duhshasana pulls away one garment, another of radiant color appears beneath it! Yards of lustrous silk multiply endlessly—hundreds, thousands of robes pile high across the assembly floor until Duhshasana falls to the ground, exhausted, panting in defeat!",
+      "speaker_emotion": "ENLIGHTENED",
+      "next_dialogue_id": "di_bhima_thunderous_oath"
+    },
+    {
+      "dialogue_id": "di_bhima_thunderous_oath",
+      "speaker_id": "bhima",
+      "dialogue_text": "Hear my roar, all Kshatriyas of the earth! If I do not rip open the chest of this wretched Duhshasana in battle and drink his hot heart's blood, may I never attain the realms of my ancestors! And you, Duryodhana—who bared your left thigh to Panchali—I will shatter that very thigh with my mace in the sight of all the gods!",
+      "speaker_emotion": "ANGRY",
+      "choices": [
+        {
+          "choice_id": "c_seal_bhima_oath",
+          "choice_text": "[Witness the inevitable doom sealed upon the Kuru house]",
+          "dharma_impact": 15,
+          "artha_impact": -10,
+          "kama_impact": 25,
+          "moksha_impact": 0,
+          "next_dialogue_id": "di_dhritarashtra_panic"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "di_dhritarashtra_panic",
+      "speaker_id": "dhritarashtra",
+      "dialogue_text": "Jackals howl in the sacrificial room! Donkeys bray on the rooftops! Gandhari, Vidura, Bhishma—the portents of total doom are upon us! Panchali, noble daughter of Drupada, ask of me whatever boons you desire. Forgive the transgressions of my foolish sons!",
+      "speaker_emotion": "GRIEF",
+      "choices": [
+        {
+          "choice_id": "c_boon_first",
+          "choice_text": "[Ask for the unconditional release of King Yudhishthira from slavery]",
+          "dharma_impact": 20,
+          "artha_impact": 10,
+          "kama_impact": 5,
+          "moksha_impact": 5,
+          "next_dialogue_id": "di_draupadi_boon_grant"
+        },
+        {
+          "choice_id": "c_boon_brothers",
+          "choice_text": "[Ask for the liberation of the four brothers with their chariots and weapons]",
+          "dharma_impact": 15,
+          "artha_impact": 25,
+          "kama_impact": 10,
+          "moksha_impact": 0,
+          "next_dialogue_id": "di_draupadi_boon_grant"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "di_draupadi_boon_grant",
+      "speaker_id": "draupadi",
+      "dialogue_text": "I ask only for the freedom and arms of my husbands, O King. A Kshatriya woman asks for no third boon—my husbands, once free, will carve out their destiny by their own might.",
+      "speaker_emotion": "NEUTRAL",
+      "is_endpoint": true
+    }
+  ]
+}
