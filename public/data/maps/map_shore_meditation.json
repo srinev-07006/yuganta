@@ -1,0 +1,16 @@
+{
+  "map_id": "map_shore_meditation",
+  "grid_width": null,
+  "grid_height": null,
+  "tile_size": null,
+  "orientation": "VN_ONLY",
+  "tileset_asset_key": "tileset_shore_meditation",
+  "description": "A quiet beach after the slaughter. Balarama (Krishna's brother) sits in yogic meditation and releases his life force. His soul departs as a white serpent (Shesha). Mausala Parva — The Death of Balarama. Peaceful departure of a god.",
+  "scene_type": "VN_ONLY",
+  "vn_backdrop_notes": {
+    "lighting": "Sunset over the ocean.",
+    "mood": "Serene, voluntary, transcendent.",
+    "interactive_elements": ["Balarama in lotus pose", "White serpent emerging from his mouth"],
+    "no_tactical_grid": true
+  }
+}

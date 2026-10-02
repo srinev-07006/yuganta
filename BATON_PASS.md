@@ -1,72 +1,49 @@
-# YUGANTA: Narrative & Lore Baton Pass
+# 🤝 BATON PASS: Phase 1 Engine Handoff
 
-**To:** Role 1 (Tactical Engine), Role 2 (Frontend/UI), Role 3 (Level Design)
-**From:** Role 4 (Itihāsa Lore Lead & Narrative Designer)
-**Date:** September 24, 2026
+**To:** Role 2 (Frontend/UI), Role 3 (Level Design), Role 4 (Lore Lead)
+**From:** Role 1 (Tactical Engine)
+**Status:** Core Engine COMPLETE & VALIDATED. Ready for integration.
 
-The structural foundation for the Narrative Data Layer is now **100% complete**. The Mahābhārata’s moral complexities, canonical history, and timeline boundaries have been translated into a strict, engine-agnostic JSON architecture. 
+The WebGL tactical engine is now fully operational. Pathfinding, terrain rules, the Chaturanga unit hierarchy, trait interactions, and canonical survival directives are all functioning on the 5x5 prototype board.
 
-It is now time to bridge this pure data into the Phaser.js engine and DOM UI.
-
----
-
-## 1. What Has Been Built (The Single Source of Truth)
-
-All narrative logic is housed in the `D:/Projects/Yuganta/data/` directory.
-
-### The JSON Schemas (`/schemas`)
-Do not break these. `narrative.schema.json`, `tactical.schema.json`, and `lore.schema.json` use Draft-07 to define exactly how our game state works. If the engine needs new data fields, consult these schemas first.
-
-### Global Lore & Roster (`global/characters.json` & `global/lore.json`)
-The complete roster of the Kuru dynasty and allies is defined here, alongside their mechanical ties to the Lore.
-* **Role 1 (Engine):** Pay close attention to `lore.json`. The traits are not flavor text. For example, Ashwatthama’s `"chiranjivi"` trait grants `"invulnerable_to_standard_damage": true`. Your combat math *must* read this boolean and return 0 damage unless countered by a specific script handler.
-
-### The 18 Parvas (`/parvas`)
-The entire epic is mapped from Parva 1 (Adi Parva) to 18 (Svargarohana). Each folder contains:
-* `timeline.json`: The sequence of events.
-* `directives.json`: The tactical goals (e.g., `SURVIVE_TURNS`).
-* `dialogues/`: Branching VN nodes.
+Here is what you need to know and do next.
 
 ---
 
-## 2. Core Mechanics You Must Implement
+## 🎨 Role 2: Frontend, UI & Visual Novel Bridge
 
-### A. The Canonical Loop (For Roles 1 & 3)
-In `directives.json`, pay attention to the `fail_on_deviation` boolean.
-* **If `true`:** (e.g., The player fails to escort Shikhandi to Bhishma). The tactical scene must halt, throw a "Dharma Imbalance" game-over state, and reset the timeline node. The player cannot rewrite core canon.
-* **If `false`:** (e.g., The Sauptika Night Raid where Ashwatthama wipes the player's camp). The player's tactical defeat *progresses the story* canonically to the next node.
+The engine uses a DOM-based overlay (`#ui-overlay` in `index.html`) sitting on top of the Phaser WebGL canvas. This ensures text remains crisp and scales natively.
 
-### B. The Puruṣārtha Dharma Meter (For Roles 1 & 2)
-In the dialogue files (like `sabha-parva/dialogues/disrobing.json` or `drona-parva/dialogues/day-15-drona-lie.json`), every player choice carries integer impacts: `dharma_impact`, `artha_impact`, `kama_impact`, `moksha_impact`.
-* **Role 2 (UI):** You need to build a global HUD state (likely reading from `Phaser.Data.DataManager`) taking these variables and adjusting the balance scales in the DOM UI in real-time.
-* **Role 1 (Engine):** Some narrative choices include a `tactical_override_event` (e.g., `DRONA_RAMPAGE_CONTINUES`). The engine must intercept this string and dynamically adjust the ensuing tactical combat (e.g., buffing enemy stats).
+**Your Action Items:**
 
-### C. Tactical Event Interception (For Roles 1 & 2)
-In `directives.json`, there is a `triggers` array.
-* **Example:** When Bhishma drops below 50% HP, the engine must evaluate `pauses_tactical_scene: true`. 
-* **Role 1/Role 2 Bridge:** `TacticalScene.js` must literally run `.pause()` and awaken `VNScene.js` to render the narrative beat over the frozen battlefield.
-
-### D. The Anti-Trope Aesthetics (For Role 2 & Asset Artists)
-* Read `data/aesthetics/direction.json`. Modern fantasy tropes are strictly banned. The UI and asset generation must reflect historical Mauryan/Gupta/Kushan armor and color palettes as defined in my exact Hex codes. 
-* Audio tracks must dynamically hook into the `trigger_context` for proper Sanskrit Shlokas.
+1. **The Action Menu:** I have built a functional HTML action menu (`[Attack]`, `[Use Astra]`, `[Wait]`). Feel free to completely reskin this in `index.html` using the color palettes from `aesthetics.schema.json`.
+2. **Combat Log:** The engine maintains a cumulative history array (`this.fullCombatLog`). I need you to design a scrollable DOM panel to display this history cleanly.
+3. **VN Pause/Resume Hooks:** `TacticalScene.js` uses `this.scene.pause('TacticalScene')` when a battle trigger trips. We need to finalize the `EventRegistry` payload format so you can launch `VNScene`, render the dialogue, and emit a `vn_complete` event for the engine to resume.
 
 ---
 
-## 3. Next Steps / Action Items
+## 🗺️ Role 3: Level & Systems Design
 
-### Role 1 (Tactical Engine Programmer)
-1. Initialize the Phaser 3 environment (`index.html`, `BootScene.js`, `TacticalScene.js`).
-2. Build the basic pathfinding Grid (start with Orthogonal for prototyping).
-3. Build the Data Manager that parses `global/lore.json` and properly immunizes units with the `chiranjivi` trait from base damage.
+The engine accurately translates Chaturanga army rules. Note: **Warrior + Charioteer (e.g., Arjuna & Krishna) share a single tile on the grid.** Krishna's `sarathi` buffs apply to the chariot at a 70% scale, while Arjuna handles the attacking.
 
-### Role 2 (Frontend / UI Engineer)
-1. Build `VNScene.js`: an absolute-positioned DOM layer over the WebGL canvas.
-2. Build the JSON narrative parser. Test it by having it successfully read and render `sabha-parva/dialogues/disrobing.json`, displaying the choices and recording the Dharma impact scores.
-3. Build Sanjaya's Timeline Scrubber UI that parses the `timeline.json` files and lets the player jump between Parva nodes.
+**Your Action Items:**
 
-### Role 3 (Level / Systems Designer)
-1. Start designing the physical tilemaps that correspond to the `map_id` variables defined in `timeline.json` (e.g., `map_kurukshetra_crater` or `map_sabha_hall`).
-2. Calibrate unit archetypes (Infantry vs Cavalry).
+1. **Map Data Format:** I am ready to load custom maps. Please format your level designs as a 2D array of terrain strings (`plains`, `forest`, `mountain`, `desert`, `river`, `lake`).
+2. **Scale Up to 10x10:** Design an 8x8 or 10x10 skirmish map for our next test. Include a mix of Maharathis and generic battalions (`PADATI_MELEE`, `GAJA`, etc.).
+3. **Note on 50x50 Maps:** Please hold off on massive campaign maps until we implement Camera Pan/Zoom and the `TimelineManager`.
 
-Let's build a masterpiece.
-- *The Lore Lead*
+---
+
+## 📜 Role 4: Lore Lead
+
+Your data architecture is brilliant. The `validate.cjs` script successfully checks your data against Draft-07 schemas every time we run the game. Traits like `iccha-mrityu` and Astras like `Pashupatastra` are math-accurate in the `CombatResolver`.
+
+**I have 3 minor requests regarding your tactical data:**
+
+1. **Directive Node Links:** In `directives.json`, directives currently lack a `node_id`. Since some Parvas (like Bhishma Parva) have multiple tactical battles, the engine needs to know *which* battle a directive belongs to. Can we add an optional `node_id` field to the schema?
+2. **Escort / Reach Tile Destinations:** For `REACH_TILE`, the engine needs exact `{x,y}` coordinates. For `ESCORT`, it needs a target unit or tile. Let's confirm the JSON key names for these destinations.
+3. **The "EVERY_TURN" Trigger:** In Sauptika Parva, Ashwatthama has a turn trigger set to `"EVERY_TURN"`. The engine can handle this, but it might be cleaner to add a new `condition_type` (e.g., `TURN_START`) rather than mixing strings and integers in `condition_value`. Let me know your thoughts.
+
+---
+
+*Let's build a masterpiece.*

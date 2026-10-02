@@ -1,0 +1,18 @@
+{
+  "map_id": "map_burning_forest",
+  "grid_width": null,
+  "grid_height": null,
+  "tile_size": null,
+  "orientation": "VN_ONLY",
+  "tileset_asset_key": "tileset_burning_forest",
+  "description": "The hermitage consumed by wildfire. Dhritarashtra, Gandhari, and Kunti refuse to flee. They die in the flames — a final act of tapasya (austerity). Ashramvasika Parva — The Forest Fire. Purification through fire.",
+  "scene_type": "VN_ONLY",
+  "vn_backdrop_notes": {
+    "lighting": "Orange flames, smoke, chaos.",
+    "mood": "Apocalyptic, sacrificial, liberation.",
+    "color_palette": ["#E74C3C", "#C0392B", "#34495E"],
+    "interactive_elements": ["Flames engulfing the hermitage", "Three figures sitting calmly in meditation as fire approaches"],
+    "no_tactical_grid": true,
+    "note": "The last of the old generation departs. The cycle closes."
+  }
+}

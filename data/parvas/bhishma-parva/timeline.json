@@ -18,7 +18,9 @@
       "title": "The Vyuha Wars",
       "historical_context": "Both armies deploy elaborate military formations — Krauncha Vyuha, Garuda Vyuha, Makara Vyuha. Bhishma and Drona coordinate devastating counter-formations against the Pandava advance. Arjuna and Bhima anchor the Pandava response but the Kauravas hold the field.",
       "initial_scene_type": "TACTICAL",
-      "map_id": "map_kurukshetra_formations"
+      "map_id": "map_kurukshetra_formations",
+      "pandava_formation": "KRAUNCHA",
+      "kaurava_formation": "GARUDA"
     },
     {
       "node_id": "bp-day5-rampage",
@@ -28,7 +30,9 @@
       "title": "Arjuna's Rampage",
       "historical_context": "Arjuna, guided by Krishna, cuts a devastating swath through the Kaurava forces. His arrows darken the sky. The Trigarta army attempts to draw him away from the main battle, but he annihilates them before returning to the center.",
       "initial_scene_type": "TACTICAL",
-      "map_id": "map_kurukshetra_open_field"
+      "map_id": "map_kurukshetra_open_field",
+      "pandava_formation": "VAJRA",
+      "kaurava_formation": "GARUDA"
     },
     {
       "node_id": "bp-day9-krishna-rage",
@@ -48,7 +52,9 @@
       "title": "The Fall of the Patriarch",
       "historical_context": "On the 10th day, the Pandavas place Shikhandi at the forefront. Bhishma lowers his weapons, allowing Arjuna to pierce him with arrows.",
       "initial_scene_type": "TACTICAL",
-      "map_id": "map_kurukshetra_crater"
+      "map_id": "map_kurukshetra_crater",
+      "pandava_formation": "KRAUNCHA",
+      "kaurava_formation": "SHAKATA"
     }
   ]
 }

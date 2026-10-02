@@ -1,0 +1,17 @@
+{
+  "map_id": "map_poison_lake",
+  "grid_width": null,
+  "grid_height": null,
+  "tile_size": null,
+  "orientation": "VN_ONLY",
+  "tileset_asset_key": "tileset_forest_lake",
+  "description": "The poisoned lake in the forest during the Pandavas' exile. Yudhishthira faces the Yaksha (Dharma in disguise) who poses riddles. His brothers lie dead around the lake shore. Vana Parva.",
+  "scene_type": "VN_ONLY",
+  "vn_backdrop_notes": {
+    "lighting": "Twilight. Eerie mist over the water.",
+    "mood": "Solemn, philosophical, deadly.",
+    "interactive_elements": ["The Yaksha's voice from the lake", "Four fallen brothers (Bhima, Arjuna, Nakula, Sahadeva)"],
+    "no_tactical_grid": true,
+    "note": "The Yaksha Prashna — one of the epic's most famous dialogues."
+  }
+}

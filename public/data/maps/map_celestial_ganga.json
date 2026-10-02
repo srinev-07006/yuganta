@@ -1,0 +1,18 @@
+{
+  "map_id": "map_celestial_ganga",
+  "grid_width": null,
+  "grid_height": null,
+  "tile_size": null,
+  "orientation": "VN_ONLY",
+  "tileset_asset_key": "tileset_celestial_ganga",
+  "description": "The celestial Ganga (heavenly river). All souls — Pandavas, Kauravas, allies, enemies — bathe in the sacred waters and achieve Moksha (liberation). The cycle ends. All debts paid. Svargarohana Parva — Moksha.",
+  "scene_type": "VN_ONLY",
+  "vn_backdrop_notes": {
+    "lighting": "Pure, radiant, timeless white-gold light.",
+    "mood": "Peace, unity, transcendence, the dissolution of all conflict.",
+    "color_palette": ["#FDFEFE", "#AED6F1", "#F8F9F9"],
+    "interactive_elements": ["The flowing celestial river", "All characters in their divine forms", "Vyasa narrating"],
+    "no_tactical_grid": true,
+    "note": "The game's final scene. Everyone — hero, villain, victim, perpetrator — is freed. The Mahabharata ends not with victory, but with release."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "map_id": "map_svarga_naraka",
+  "grid_width": null,
+  "grid_height": null,
+  "tile_size": null,
+  "orientation": "VN_ONLY",
+  "tileset_asset_key": "tileset_svarga_naraka",
+  "description": "The realm of Svarga (heaven) and Naraka (hell) blurred together. Yudhishthira enters 'heaven' but finds the Kauravas there. He asks for hell and finds his brothers. The gods reveal it was an illusion — the final test of compassion. Svargarohana Parva — Heaven's Illusion.",
+  "scene_type": "VN_ONLY",
+  "vn_backdrop_notes": {
+    "lighting": "Surreal, shifting between golden paradise and tormented darkness.",
+    "mood": "Confusion, moral test, revelation.",
+    "interactive_elements": ["Duryodhana on a celestial throne", "His brothers in torment", "The gods watching"],
+    "no_tactical_grid": true,
+    "note": "The epic's final philosophical twist. Heaven and hell are temporary illusions. Dharma is tested one last time."
+  }
+}

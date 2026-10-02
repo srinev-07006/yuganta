@@ -1,0 +1,36 @@
+{
+  "map_id": "map_kurukshetra_crater",
+  "grid_width": 12,
+  "grid_height": 12,
+  "tile_size": 64,
+  "orientation": "ORTHOGONAL",
+  "tileset_asset_key": "tileset_kurukshetra",
+  "description": "A narrow, scarred arena. Used for two pivotal events: (1) Karna's Final Duel — Arjuna vs. Karna. Must include a CHARIOT_MUD_TRAP tile cluster near Karna's spawn (Karna's cursed wheel sinks into the mud). (2) The Fall of the Patriarch — Bhishma's bed of arrows. Dual-use map.",
+  "tiles": [
+    {
+      "region": "OPEN_ARENA",
+      "x_min": 0, "x_max": 11, "y_min": 0, "y_max": 11,
+      "terrain_type": "PLAIN",
+      "movement_cost": 1,
+      "defense_multiplier": 1.0,
+      "is_impassable": false,
+      "special_flag": "NONE"
+    }
+  ],
+  "tile_overrides": [
+    { "x": 8, "y": 7, "terrain_type": "MUD", "movement_cost": 2, "defense_multiplier": 0.8, "is_impassable": false, "special_flag": "CHARIOT_MUD_TRAP", "note": "Karna's wheel sinks here. When CHARIOTEER with vijaya-wielder enters this tile, triggers seq_wheel_stuck. Karna loses chariot movement for remaining turns." },
+    { "x": 9, "y": 7, "terrain_type": "MUD", "movement_cost": 2, "defense_multiplier": 0.8, "is_impassable": false, "special_flag": "CHARIOT_MUD_TRAP" },
+    { "x": 8, "y": 8, "terrain_type": "MUD", "movement_cost": 2, "defense_multiplier": 0.8, "is_impassable": false, "special_flag": "CHARIOT_MUD_TRAP" },
+    { "x": 9, "y": 8, "terrain_type": "MUD", "movement_cost": 2, "defense_multiplier": 0.8, "is_impassable": false, "special_flag": "CHARIOT_MUD_TRAP" },
+    { "x": 5, "y": 5, "terrain_type": "PLAIN", "movement_cost": 1, "defense_multiplier": 1.0, "is_impassable": false, "special_flag": "DUEL_CENTER", "note": "The point of maximum dramatic tension. VNScene triggers when both Arjuna and Karna stand adjacent to this tile." }
+  ],
+  "spawn_zones": {
+    "PANDAVA": { "x_min": 0, "x_max": 3, "y_min": 0, "y_max": 11, "hero": "arjuna" },
+    "KAURAVA": { "x_min": 7, "x_max": 11, "y_min": 0, "y_max": 11, "hero": "karna", "note": "Karna spawns near the MUD cluster at (8-9, 7-8)." }
+  },
+  "directive_notes": {
+    "primary_directive": "defeat-karna (DEFEAT_UNIT, fail_on_deviation: true)",
+    "trigger": "trigger-wheel-stuck fires seq_wheel_stuck when karna HP < 30%",
+    "note": "When Karna dismounts to lift his wheel (wheel_stuck trigger), he cannot attack for 1 turn. This is the window. Arjuna's decision to strike an unarmed man is a Dharma crisis moment."
+  }
+}

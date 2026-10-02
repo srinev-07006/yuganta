@@ -11,7 +11,23 @@
 // loading images, we're loading the RULES of the universe.
 // =============================================================
 
+import Phaser from 'phaser';
+import manifest from 'virtual:yuganta-manifest';
 import { parseHandlerString } from '../handlers/TraitHandlers.js';
+import { GameState } from '../core/GameState.js';
+import { TimelineManager } from '../core/TimelineManager.js';
+import { VNBridge } from '../core/VNBridge.js';
+import { DebugVNOverlay } from '../ui/DebugVNOverlay.js';
+import { mountDevNodePicker } from '../ui/DevNodePicker.js';
+
+// Node loaded at start-up when the URL has no ?node=<node_id>
+const DEFAULT_DEV_NODE = 'bp-day10-sunset';
+
+const fetchJson = async (url) => {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`${url} → HTTP ${res.status}`);
+    return res.json();
+};
 
 export class BootScene extends Phaser.Scene {
 
@@ -50,6 +66,7 @@ export class BootScene extends Phaser.Scene {
         // ----------------------------------------------------------
         this.load.json('loreData', 'data/global/lore.json');
         this.load.json('charData', 'data/global/characters.json');
+        this.load.json('formationsData', 'data/maps/formations.json');
     }
 
     // =============================================================
@@ -64,6 +81,7 @@ export class BootScene extends Phaser.Scene {
         // ----------------------------------------------------------
         const loreData = this.cache.json.get('loreData');
         const charData = this.cache.json.get('charData');
+        const formationsData = this.cache.json.get('formationsData') || [];
 
         // Validate that data loaded successfully
         if (!loreData || !charData) {
@@ -116,12 +134,13 @@ export class BootScene extends Phaser.Scene {
         const characterMap = new Map();
 
         charData.characters.forEach(char => {
+            const broken = { traits: [], astras: [], vows: [] };
             // Resolve trait references: ["iccha-mrityu"] → [{ trait_id: "iccha-mrityu", ...full object }]
             const resolvedTraits = char.traits
                 .map(traitId => {
                     const trait = traitMap.get(traitId);
                     if (!trait) {
-                        console.warn(`[BootScene] Character "${char.character_id}" references unknown trait "${traitId}"`);
+                        broken.traits.push(traitId);
                     }
                     return trait;
                 })
@@ -132,7 +151,7 @@ export class BootScene extends Phaser.Scene {
                 .map(astraId => {
                     const astra = astraMap.get(astraId);
                     if (!astra) {
-                        console.warn(`[BootScene] Character "${char.character_id}" references unknown astra "${astraId}"`);
+                        broken.astras.push(astraId);
                     }
                     return astra;
                 })
@@ -143,11 +162,18 @@ export class BootScene extends Phaser.Scene {
                 .map(vowId => {
                     const vow = vowMap.get(vowId);
                     if (!vow) {
-                        console.warn(`[BootScene] Character "${char.character_id}" references unknown vow "${vowId}"`);
+                        broken.vows.push(vowId);
                     }
                     return vow;
                 })
                 .filter(v => v !== undefined);
+
+            // One consolidated warning per character listing every broken reference
+            const brokenParts = Object.entries(broken).filter(([, ids]) => ids.length)
+                .map(([k, ids]) => `${k}: ${ids.join(', ')}`);
+            if (brokenParts.length) {
+                console.warn(`[BootScene] Character "${char.character_id}" has unresolved references → ${brokenParts.join(' | ')}`);
+            }
 
             // Determine if this character is a combatant
             const isNonCombatant = resolvedTraits.some(t =>
@@ -190,28 +216,51 @@ export class BootScene extends Phaser.Scene {
         this.registry.set('characterMap', characterMap);
         this.registry.set('loreData', loreData);
 
-        // ----------------------------------------------------------
-        // STEP 7: Initialize global game state
-        // ----------------------------------------------------------
-        this.registry.set('gameState', {
-            dharmaMeter: 100,          // Starts at full dharma
-            currentParva: 1,           // Starting at Adi Parva
-            currentWarDay: 0,          // Pre-war (no battle day yet)
-            isNight: false,            // Day/night cycle for Ghatotkacha
-            consumedAstras: new Set(), // Global tracking of one-time astras
-            vowStates: {}              // Tracks fulfilled/broken vows
+        // Build formations registry (formation_id → formation object)
+        const formationsMap = new Map();
+        formationsData.forEach(formation => {
+            formationsMap.set(formation.formation_id, formation);
         });
+        this.registry.set('formationsMap', formationsMap);
+        console.log(`[BootScene] Registered ${formationsMap.size} formations.`);
 
-        console.log('[BootScene] All data loaded and registries built.');
-        console.log('[BootScene] Starting TacticalScene...');
+        // ----------------------------------------------------------
+        // STEP 7: Global game state (owner of dharma & snapshots)
+        // ----------------------------------------------------------
+        // Same registry key and field names as before, so CombatResolver works
+        // unchanged — but dharma is now clamped, emits events, and can be
+        // snapshotted/restored by TimelineManager.
+        // ----------------------------------------------------------
+        const gameState = new GameState();
+        this.registry.set('gameState', gameState);
 
         // ----------------------------------------------------------
-        // STEP 8: Launch TacticalScene
+        // STEP 8: Services shared by every scene (decoupled via registry)
+        //   timeline — loads timeline nodes, owns the reset snapshot
+        //   vnBridge — the single tactical <-> narrative handshake
         // ----------------------------------------------------------
-        // this.scene.start() stops BootScene and starts TacticalScene.
-        // BootScene's preloaded data stays in the cache.
-        // The registries stay in this.registry (global).
-        // ----------------------------------------------------------
-        this.scene.start('TacticalScene');
+        const timeline = new TimelineManager({ manifest, fetchJson, gameState, baseUrl: 'data' });
+        const vnBridge = new VNBridge({ gameState, events: this.game.events, fallbackProvider: new DebugVNOverlay() });
+        this.registry.set('timeline', timeline);
+        this.registry.set('vnBridge', vnBridge);
+
+        console.log(`[BootScene] Timeline ready: ${manifest.parvas.length} parvas, ` +
+            `${manifest.parvas.reduce((n, p) => n + p.nodes.length, 0)} nodes, ${manifest.maps.length} map file(s).`);
+        (manifest.problems || []).forEach(p => console.warn('[BootScene] manifest problem:', p));
+
+        mountDevNodePicker(this.game, timeline);
+        this._launchFirstNode(timeline);
+    }
+
+    async _launchFirstNode(timeline) {
+        const wanted = new URLSearchParams(window.location.search).get('node');
+        const nodeId = [wanted, DEFAULT_DEV_NODE].find(id => id && timeline.findNode(id)) || timeline.getDefaultNodeId();
+        try {
+            const bundle = await timeline.loadNode(nodeId);
+            this.scene.start('TacticalScene', { bundle });
+        } catch (err) {
+            console.error('[BootScene] Failed to load node — starting demo board.', err);
+            this.scene.start('TacticalScene', { bundle: null });
+        }
     }
 }

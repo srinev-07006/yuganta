@@ -22,7 +22,7 @@
 //   node_id, target_tile {x,y}, escort_to_unit_id, escort_radius
 // =============================================================
 
-import Phaser from 'phaser';
+import { Emitter } from '../core/Emitter.js';
 
 // Event names TacticalScene (and later the narrative queue) listen for
 export const DIRECTIVE_EVENTS = Object.freeze({
@@ -58,11 +58,11 @@ export class DirectiveManager {
         this.nodeId = options.nodeId || null;
         this.playerFaction = options.playerFaction || 'PANDAVA';
 
-        this.emitter = new Phaser.Events.EventEmitter();
+        this.emitter = new Emitter();
         this.isResolved = false;
         this.resolution = null;   // { event, payload } once the battle is decided
 
-        // TODO(TimelineManager): On DHARMA_IMBALANCE / DEFEAT reset, restore the
+        // DONE (TimelineManager): On DHARMA_IMBALANCE / DEFEAT reset, TimelineManager restores the
         // gameState snapshot taken when this timeline node started (dharmaMeter,
         // artha/kama/moksha, consumedAstras, vowStates). DirectiveManager must NOT
         // own that snapshot — TimelineManager loads the node, owns the snapshot,
@@ -162,6 +162,10 @@ export class DirectiveManager {
         for (const c of completions) {
             this._complete(c.state, c.reason);
         }
+
+        // Army wipe: after all other evaluation, before the victory check
+        if (!this.isResolved) this._checkArmyWipe();
+        if (this.isResolved) return;
 
         // Victory: every directive completed
         const allDone = this.states.length > 0 &&

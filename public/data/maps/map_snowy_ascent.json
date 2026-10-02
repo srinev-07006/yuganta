@@ -1,0 +1,41 @@
+{
+  "map_id": "map_snowy_ascent",
+  "grid_width": 16,
+  "grid_height": 20,
+  "tile_size": 64,
+  "orientation": "ORTHOGONAL",
+  "tileset_asset_key": "tileset_himalayas",
+  "description": "The steeper climb toward Mount Meru. One by one, the Pandavas and Draupadi fall. Only Yudhishthira and the dog continue. The Falling.",
+  "tiles": [
+    {
+      "region": "SNOWY_SLOPE",
+      "x_min": 0, "x_max": 15, "y_min": 0, "y_max": 19,
+      "terrain_type": "ELEVATED",
+      "movement_cost": 3,
+      "defense_multiplier": 0.8,
+      "is_impassable": false,
+      "special_flag": "SNOW"
+    }
+  ],
+  "tile_overrides": [
+    { "x": 8, "y": 4, "terrain_type": "ELEVATED", "movement_cost": 3, "defense_multiplier": 0.8, "is_impassable": false, "special_flag": "DRAUPADI_FALLS_HERE", "note": "Draupadi collapses at turn 4." },
+    { "x": 8, "y": 8, "terrain_type": "ELEVATED", "movement_cost": 3, "defense_multiplier": 0.8, "is_impassable": false, "special_flag": "SAHADEVA_FALLS_HERE", "note": "Sahadeva falls at turn 6." },
+    { "x": 8, "y": 11, "terrain_type": "ELEVATED", "movement_cost": 3, "defense_multiplier": 0.8, "is_impassable": false, "special_flag": "NAKULA_FALLS_HERE", "note": "Nakula falls at turn 8." },
+    { "x": 8, "y": 14, "terrain_type": "ELEVATED", "movement_cost": 3, "defense_multiplier": 0.8, "is_impassable": false, "special_flag": "ARJUNA_FALLS_HERE", "note": "Arjuna falls at turn 10." },
+    { "x": 8, "y": 17, "terrain_type": "ELEVATED", "movement_cost": 3, "defense_multiplier": 0.8, "is_impassable": false, "special_flag": "BHIMA_FALLS_HERE", "note": "Bhima falls at turn 12." },
+    { "x": 8, "y": 19, "terrain_type": "ELEVATED", "movement_cost": 3, "defense_multiplier": 0.8, "is_impassable": false, "special_flag": "PATH_EXIT", "note": "Only Yudhishthira and the dog reach here. Transition to map_meru_peak." }
+  ],
+  "spawn_zones": {
+    "PANDAVA": { "x_min": 8, "x_max": 8, "y_min": 0, "y_max": 0, "note": "All five Pandavas + Draupadi + dog spawn together." }
+  },
+  "directive_notes": {
+    "primary_directive": "accept-the-fall (SACRIFICE)",
+    "fail_on_deviation": true,
+    "deviation_dialogue_id": "dev-yudhishthira-turns-back",
+    "note": "Yudhishthira must not turn back when his siblings fall. Each fall triggers a VNScene explaining their flaw."
+  },
+  "special_mechanics": {
+    "falling_mechanic": "At specific turns, characters automatically 'die' (removed from the party). Yudhishthira is asked if he will turn back. Choosing to turn back = game over (Dharma imbalance).",
+    "the_dog": "A mysterious dog follows. It is Dharma in disguise. Test of loyalty."
+  }
+}

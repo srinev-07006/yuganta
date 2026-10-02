@@ -1,0 +1,32 @@
+{
+  "map_id": "map_kurukshetra_formations",
+  "grid_width": 22,
+  "grid_height": 18,
+  "tile_size": 64,
+  "orientation": "ORTHOGONAL",
+  "tileset_asset_key": "tileset_kurukshetra",
+  "description": "The Vyuha Wars — Days 2-9 of the Bhishma Parva. Armies clash in structured formations. GARUDA vs KRAUNCHA.",
+  "formation_ref": ["GARUDA", "KRAUNCHA"],
+  "tiles": [
+    {
+      "region": "BATTLEFIELD_CENTER",
+      "x_min": 0, "x_max": 21, "y_min": 0, "y_max": 17,
+      "terrain_type": "PLAIN",
+      "movement_cost": 1,
+      "defense_multiplier": 1.0,
+      "is_impassable": false,
+      "special_flag": "NONE"
+    }
+  ],
+  "tile_overrides": [
+    { "x": 5, "y": 9, "terrain_type": "ELEVATED", "movement_cost": 2, "defense_multiplier": 1.5, "is_impassable": false, "special_flag": "COMMAND_HILL", "note": "Yudhishthira's command post." },
+    { "x": 16, "y": 9, "terrain_type": "ELEVATED", "movement_cost": 2, "defense_multiplier": 1.5, "is_impassable": false, "special_flag": "COMMAND_HILL", "note": "Bhishma's command post." }
+  ],
+  "spawn_zones": {
+    "PANDAVA": { "x_min": 0, "x_max": 8, "y_min": 0, "y_max": 17, "formation": "KRAUNCHA" },
+    "KAURAVA": { "x_min": 13, "x_max": 21, "y_min": 0, "y_max": 17, "formation": "GARUDA" }
+  },
+  "special_mechanics": {
+    "formation_clash": "Both armies spawn in their Vyuha formations. Breaking the formation's structural integrity (killing the head/beak Maharathi) causes morale penalties to the rest of the army."
+  }
+}

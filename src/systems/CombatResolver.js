@@ -35,6 +35,20 @@ export class CombatResolver {
     // Returns a detailed result object describing what happened.
     // =============================================================
 
+    // [{ trait, source, scale }] — Maharathi gives charioteer-aware entries;
+    // plain Units fall back to their own traits at full scale.
+    _traitEntries(unit) {
+        if (typeof unit.getEffectiveTraitEntries === 'function') return unit.getEffectiveTraitEntries();
+        return (unit.resolvedTraits || []).map(t => ({ trait: t, source: 'warrior', scale: 1.0 }));
+    }
+
+    // Scale a multiplier toward 1.0 (scale 0.7 on ×1.5 → ×1.35)
+    _scaled(mult, scale) { return 1 + (mult - 1) * scale; }
+
+    _tag(entry) {
+        return entry.source === 'warrior' ? '' : ` (${entry.source} ×${entry.scale.toFixed(1)})`;
+    }
+
     resolveAttack(attacker, defender, astraId = null) {
         // ----------------------------------------------------------
         // COMBAT LOG
@@ -80,7 +94,8 @@ export class CombatResolver {
                         unit: defender,
                         attacker: attacker,
                         defender: defender,
-                        grid: this.grid
+                        grid: this.grid,
+                        astraId: astraId // lets handlers decide astra-specific behaviour
                     });
 
                     if (result.invulnerable === false) {
@@ -145,37 +160,40 @@ export class CombatResolver {
         let stunTarget = false;
         let astraExpertiseMultiplier = 1.0; // FIX: was computed by traits (e.g. Drona) but never read/applied
 
-        for (const trait of attacker.resolvedTraits) {
+        for (const entry of this._traitEntries(attacker)) {
+            const trait = entry.trait;
+            const tag = this._tag(entry);
             const result = executeHandler(trait.custom_script_handler, {
                 unit: attacker,
                 attacker: attacker,
                 defender: defender,
                 grid: this.grid,
-                gameState: this.scene.registry.get('gameState')
+                gameState: this.scene.registry.get('gameState'),
+                astraId: astraId
             });
 
             if (result.damageMultiplier && result.damageMultiplier !== 1.0) {
-                attackMultiplier *= result.damageMultiplier;
-                log.push(`🔥 ${trait.trait_name}: Damage ×${result.damageMultiplier}`);
+                const m = this._scaled(result.damageMultiplier, entry.scale);
+                attackMultiplier *= m;
+                log.push(`🔥 ${trait.trait_name}${tag}: Damage ×${m.toFixed(2)}`);
             }
 
-            if (result.extraAttack) {
+            // Binary effects only apply from the warrior (or a full-strength source)
+            if (result.extraAttack && entry.scale >= 1.0) {
                 extraAttack = true;
                 log.push(`🎯 ${trait.trait_name}: DUAL ATTACK triggered!`);
             }
 
-            if (result.stunTarget) {
+            if (result.stunTarget && entry.scale >= 1.0) {
                 stunTarget = true;
                 log.push(`⚡ ${trait.trait_name}: STUN triggered!`);
             }
 
-            // FIX: AstraExpertise (e.g. Drona) returns { astraMultiplier }.
-            // This was being computed and thrown away — it never affected
-            // damage. It only matters when an astra is actually invoked,
-            // so it's applied conditionally in STEP 5 below.
+            // AstraExpertise (e.g. Drona) — only matters if an astra is invoked (STEP 5)
             if (result.astraMultiplier && result.astraMultiplier !== 1.0) {
-                astraExpertiseMultiplier *= result.astraMultiplier;
-                log.push(`📜 ${trait.trait_name}: Astra Expertise ×${result.astraMultiplier} (applies if an astra is used)`);
+                const m = this._scaled(result.astraMultiplier, entry.scale);
+                astraExpertiseMultiplier *= m;
+                log.push(`📜 ${trait.trait_name}${tag}: Astra Expertise ×${m.toFixed(2)} (applies if an astra is used)`);
             }
         }
 
@@ -186,6 +204,7 @@ export class CombatResolver {
         let dharmaCost = 0;
 
         if (astraId && attacker.canUseAstra) {
+            // Read gameState fresh so affordability check and deduction see the same value
             const astraCheck = attacker.canUseAstra(astraId, this.scene.registry.get('gameState').dharmaMeter);
 
             if (astraCheck.allowed) {
@@ -193,7 +212,15 @@ export class CombatResolver {
                 // FIX: fold in AstraExpertise here, now that we know an astra is actually being used
                 astraMultiplier = astraResult.multiplier * astraExpertiseMultiplier;
                 dharmaCost = astraResult.dharmaCost;
-                log.push(`🌟 ASTRA: ${astraResult.name} (×${astraResult.multiplier}${astraExpertiseMultiplier !== 1.0 ? ` × ${astraExpertiseMultiplier} expertise` : ''} = ×${astraMultiplier.toFixed(2)}, Dharma cost: ${dharmaCost})`);
+                log.push(`🌟 ASTRA: ${astraResult.name} (×${astraResult.multiplier}${astraExpertiseMultiplier !== 1.0 ? ` × ${astraExpertiseMultiplier.toFixed(2)} expertise` : ''} = ×${astraMultiplier.toFixed(2)}, Dharma cost: ${dharmaCost})`);
+
+                // Pay the dharma cost BEFORE any damage is resolved
+                if (dharmaCost > 0) {
+                    const gs = this.scene.registry.get('gameState');
+                    if (typeof gs.change === 'function') gs.change(-dharmaCost, `astra:${astraId}`);
+                    else gs.dharmaMeter -= dharmaCost;
+                    log.push(`☸️ Dharma: -${dharmaCost} (now ${gs.dharmaMeter})`);
+                }
             } else {
                 log.push(`❌ ASTRA blocked: ${astraCheck.reason}`);
             }
@@ -227,14 +254,6 @@ export class CombatResolver {
         if (stunTarget && defender.isAlive) {
             defender.isStunned = true;
             log.push(`⚡ ${defender.name} is STUNNED for 1 turn!`);
-        }
-
-        // Deduct dharma
-        if (dharmaCost > 0) {
-            const gameState = this.scene.registry.get('gameState');
-            gameState.dharmaMeter -= dharmaCost;
-            this.scene.registry.set('gameState', gameState);
-            log.push(`☸️ Dharma: -${dharmaCost} (now ${gameState.dharmaMeter})`);
         }
 
         // ----------------------------------------------------------

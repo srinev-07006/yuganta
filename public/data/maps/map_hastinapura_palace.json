@@ -1,0 +1,16 @@
+{
+  "map_id": "map_hastinapura_palace",
+  "grid_width": null,
+  "grid_height": null,
+  "tile_size": null,
+  "orientation": "VN_ONLY",
+  "tileset_asset_key": "tileset_hastinapura_palace",
+  "description": "The rebuilt palace of Hastinapura after the war. Yudhishthira now rules. The Ashvamedha (horse sacrifice) begins here. Ashvamedhika Parva. Opulent but haunted by the cost of victory.",
+  "scene_type": "VN_ONLY",
+  "vn_backdrop_notes": {
+    "lighting": "Bright interior. Attempts at normalcy.",
+    "mood": "Rebuilding, but shadows of the past remain.",
+    "interactive_elements": ["Throne room", "The sacrificial horse being blessed"],
+    "no_tactical_grid": true
+  }
+}

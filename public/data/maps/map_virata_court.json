@@ -1,0 +1,16 @@
+{
+  "map_id": "map_virata_court",
+  "grid_width": null,
+  "grid_height": null,
+  "tile_size": null,
+  "orientation": "VN_ONLY",
+  "tileset_asset_key": "tileset_virata_court",
+  "description": "The royal court of King Virata. The Pandavas live here in disguise during their 13th year of exile. Yudhishthira as a courtier, Bhima as a cook, Arjuna as Brihannala the eunuch dancer. Modest, provincial.",
+  "scene_type": "VN_ONLY",
+  "vn_backdrop_notes": {
+    "lighting": "Natural daylight, open air pavilion style.",
+    "mood": "Provincial simplicity, less grand than Hastinapura.",
+    "interactive_elements": ["Cooking area (Bhima's domain)", "Dance hall (Arjuna/Brihannala)", "Throne (Virata)"],
+    "no_tactical_grid": true
+  }
+}

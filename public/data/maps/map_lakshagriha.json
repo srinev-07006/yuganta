@@ -1,0 +1,16 @@
+{
+  "map_id": "map_lakshagriha",
+  "grid_width": null,
+  "grid_height": null,
+  "tile_size": null,
+  "orientation": "VN_ONLY",
+  "tileset_asset_key": "tileset_lakshagriha",
+  "description": "The House of Wax (Lakshagriha). A mansion built by Duryodhana's architect Purochana, secretly constructed with flammable lac. The Pandavas' first assassination attempt. VN-only backdrop for the Adi Parva escape scene.",
+  "scene_type": "VN_ONLY",
+  "vn_backdrop_notes": {
+    "lighting": "Warm interior firelight transitioning to panic as flames spread.",
+    "mood": "Claustrophobic, ominous. The walls are slick with resin.",
+    "interactive_elements": ["Secret tunnel entrance that Vidura warned about", "Burning walls collapsing"],
+    "no_tactical_grid": true
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "map_id": "map_prabhasa_shore",
+  "grid_width": null,
+  "grid_height": null,
+  "tile_size": null,
+  "orientation": "VN_ONLY",
+  "tileset_asset_key": "tileset_prabhasa_shore",
+  "description": "The shore at Prabhasa. The Yadavas descend into drunken madness and slaughter each other with blades of grass (hardened by Krishna's will). Gandhari's curse fulfilled. Mausala Parva — The Yadava Slaughter. Chaos, divine fate.",
+  "scene_type": "VN_ONLY",
+  "vn_backdrop_notes": {
+    "lighting": "Harsh midday sun. Blood on sand.",
+    "mood": "Madness, inevitability, divine judgment.",
+    "interactive_elements": ["Bodies of Yadava warriors", "Blades of grass turned to iron"],
+    "no_tactical_grid": true,
+    "note": "Krishna watches his entire clan destroy itself. The curse he accepted from Gandhari manifests."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "map_id": "map_gandhari_camp",
+  "grid_width": null,
+  "grid_height": null,
+  "tile_size": null,
+  "orientation": "VN_ONLY",
+  "tileset_asset_key": "tileset_gandhari_camp",
+  "description": "Gandhari's mourning tent near the battlefield. She confronts Krishna and curses the Yadava dynasty to annihilation. Stri Parva — Gandhari's Curse. Dark, vengeful energy.",
+  "scene_type": "VN_ONLY",
+  "vn_backdrop_notes": {
+    "lighting": "Single oil lamp. Deep shadows.",
+    "mood": "Rage, grief, divine wrath.",
+    "interactive_elements": ["Gandhari removing her blindfold", "Krishna accepting the curse calmly"],
+    "no_tactical_grid": true,
+    "note": "Gandhari's pativrata-power trait allows her CurseAbility() to work even on Krishna."
+  }
+}

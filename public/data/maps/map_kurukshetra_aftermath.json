@@ -1,0 +1,18 @@
+{
+  "map_id": "map_kurukshetra_aftermath",
+  "grid_width": null,
+  "grid_height": null,
+  "tile_size": null,
+  "orientation": "VN_ONLY",
+  "tileset_asset_key": "tileset_kurukshetra_aftermath",
+  "description": "The battlefield after 18 days of war. Bodies everywhere. Smoke rising. The Pandava women (Draupadi, Kunti, Uttara, Subhadra) and Kaurava women (Gandhari, widows) walk among the dead, mourning. Stri Parva — the Lament.",
+  "scene_type": "VN_ONLY",
+  "vn_backdrop_notes": {
+    "lighting": "Gray overcast sky. Ash and smoke.",
+    "mood": "Devastation, grief, silence.",
+    "color_palette": ["#34495E", "#95A5A6", "#7B241C"],
+    "interactive_elements": ["Fallen warriors", "Burning pyres", "Gandhari approaching"],
+    "no_tactical_grid": true,
+    "note": "The aesthetic must emphasize the hollow victory. No triumphalism."
+  }
+}

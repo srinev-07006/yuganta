@@ -1,0 +1,40 @@
+{
+  "map_id": "map_jayadratha_hunt",
+  "grid_width": 30,
+  "grid_height": 12,
+  "tile_size": 64,
+  "orientation": "ORTHOGONAL",
+  "tileset_asset_key": "tileset_kurukshetra",
+  "description": "A long rectangular gauntlet. Arjuna starts at the west end (x=0). Jayadratha hides behind layers of Kaurava defenders at the far east end. A sunset timer ends the mission.",
+  "tiles": [
+    {
+      "region": "OPEN_PLAIN",
+      "x_min": 0, "x_max": 29, "y_min": 0, "y_max": 11,
+      "terrain_type": "PLAIN",
+      "movement_cost": 1,
+      "defense_multiplier": 1.0,
+      "is_impassable": false,
+      "special_flag": "NONE"
+    }
+  ],
+  "tile_overrides": [
+    { "x": 8, "y": 0, "x_max": 8, "y_max": 11, "terrain_type": "ELEVATED", "movement_cost": 2, "defense_multiplier": 1.5, "is_impassable": false, "special_flag": "KAURAVA_DEFENSE_LINE_1", "note": "First defensive embankmment — Drona's vanguard holds here." },
+    { "x": 16, "y": 0, "x_max": 16, "y_max": 11, "terrain_type": "ELEVATED", "movement_cost": 2, "defense_multiplier": 1.5, "is_impassable": false, "special_flag": "KAURAVA_DEFENSE_LINE_2", "note": "Second defense line." },
+    { "x": 22, "y": 0, "x_max": 22, "y_max": 11, "terrain_type": "FORTIFIED", "movement_cost": 1, "defense_multiplier": 2.0, "is_impassable": false, "special_flag": "KAURAVA_DEFENSE_LINE_3", "note": "Fortified wall of ELEPHANT_CORPS protecting Jayadratha." },
+    { "x": 27, "y": 3, "terrain_type": "SANCTUARY", "movement_cost": 1, "defense_multiplier": 1.0, "is_impassable": false, "special_flag": "JAYADRATHA_LAST_STAND", "note": "Jayadratha's final position. gate-blocker trait prevents all Pandavas except Arjuna from targeting him." }
+  ],
+  "spawn_zones": {
+    "PANDAVA": { "x_min": 0, "x_max": 3, "y_min": 0, "y_max": 11, "note": "Arjuna spawns at (0, 5) with Krishna as charioteer." },
+    "KAURAVA": { "x_min": 6, "x_max": 29, "y_min": 0, "y_max": 11 }
+  },
+  "timer": {
+    "type": "SUNSET_COUNTDOWN",
+    "max_turns": 20,
+    "fail_condition": "If Jayadratha is not defeated by end of turn 20, Arjuna self-immolates (instant game-over, fail_on_deviation: true).",
+    "note": "Krishna's eclipse ruse happens mid-battle — a VNScene pause at a specific narrative turn that briefly fools Jayadratha into thinking he's survived."
+  },
+  "special_mechanics": {
+    "gate_blocker": "Jayadratha's gate-blocker trait makes him untargetable by all Pandavas except Arjuna. Only Arjuna's attacks register damage on Jayadratha tile.",
+    "eclipse_ruse": "At turn 15, trigger seq-krishna-eclipse: Krishna temporarily obscures the sun. Jayadratha lowers guard (loses 1 turn), but VN reveal occurs before Arjuna can exploit it — Arjuna must still close distance."
+  }
+}

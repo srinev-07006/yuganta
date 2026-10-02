@@ -2,121 +2,214 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Yuganta - Tactical Engine (2.5D Isometric)</title>
+    <style>
+        * { box-sizing: border-box; user-select: none; }
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: #0d0d11;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
 
-    <!--
-    =============================================================
-    VIEWPORT META TAG
-    =============================================================
-    This controls how the page scales on mobile devices.
-    - width=device-width: match the screen width
-    - initial-scale=1.0: no zoom on load
-    - user-scalable=no: prevent pinch-to-zoom (important for games,
-      because pinch-zoom interferes with touch controls)
-    =============================================================
-    -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-
-    <title>Yuganta — Mahābhārata Tactical Engine</title>
-
-    <!--
-    =============================================================
-    PAGE STYLES
-    =============================================================
-    The game canvas needs to fill the browser window.
-    We remove all default margins/padding and set a dark background.
-    
-    The #game-container div holds the Phaser canvas.
-    The #ui-overlay div will later hold the DOM-based VN layer
-    (Role 2's responsibility), positioned OVER the canvas.
-    =============================================================
-    -->
-        <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { width: 100%; height: 100%; overflow: hidden; background-color: #1a1a2e; font-family: monospace; }
-        
+        /* Game fills the window; this element is what we fullscreen */
         #game-container {
-            width: 1280px; height: 720px; margin: 20px auto 0; position: relative;
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            width: 100dvw;   /* dynamic viewport — avoids mobile/fullscreen bar gap */
+            height: 100dvh;
+            overflow: hidden;
+            background: #0d0d11;
+        }
+        #game-container canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
         }
 
-        #ui-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            pointer-events: none; /* Lets clicks pass through to canvas */
-            z-index: 10;
+        /* When browser fullscreen is active on our container */
+        #game-container:fullscreen,
+        #game-container:-webkit-full-screen {
+            width: 100vw;
+            height: 100vh;
+            background: #0d0d11;
         }
 
-        /* --- TACTICAL ACTION MENU STYLES --- */
-        .tactical-menu {
+        #hud-header {
             position: absolute;
-            background: rgba(10, 10, 25, 0.95);
-            border: 2px solid #e8d5b7;
-            border-radius: 8px;
-            padding: 10px;
+            top: 12px;
+            left: 16px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+        #hud-header h1 {
+            margin: 0;
+            font-size: 18px;
+            color: #d4af37;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+            letter-spacing: 1px;
+        }
+        #hud-header p {
+            margin: 4px 0 0 0;
+            font-size: 11px;
+            color: #a0a0a0;
+        }
+
+        .dom-action-menu {
+            position: fixed;
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            background: rgba(18, 18, 24, 0.95);
+            border: 1px solid #c9a063;
+            padding: 8px;
+            border-radius: 4px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.8);
+        }
+        .dom-action-menu button {
+            background: #2a241d;
+            color: #f0e6d2;
+            border: 1px solid #5a4833;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+        .dom-action-menu button:hover {
+            background: #c9a063;
+            color: #121218;
+        }
+
+        #combat-log-panel {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            width: min(320px, 42vw);
+            height: 160px;
+            background: rgba(12, 12, 16, 0.92);
+            border: 1px solid #4a3b2c;
+            border-radius: 4px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            pointer-events: auto; /* Buttons MUST catch clicks */
+            z-index: 1000;
             box-shadow: 0 4px 15px rgba(0,0,0,0.7);
-            transition: opacity 0.2s;
-            min-width: 180px;
+        }
+        #combat-log-header {
+            background: #1c1712;
+            padding: 6px 10px;
+            font-size: 11px;
+            font-weight: bold;
+            color: #c9a063;
+            border-bottom: 1px solid #332a1e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        #combat-log-content {
+            flex: 1;
+            padding: 8px 10px;
+            font-size: 11px;
+            line-height: 1.4;
+            overflow-y: auto;
+            color: #d0d0d0;
+        }
+        .log-entry {
+            margin-bottom: 4px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            padding-bottom: 2px;
+        }
+        #combat-log-content::-webkit-scrollbar { width: 5px; }
+        #combat-log-content::-webkit-scrollbar-thumb {
+            background: #4a3b2c;
+            border-radius: 2px;
         }
 
-        .tactical-menu.hidden {
-            opacity: 0;
+        #fs-hint {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            z-index: 1000;
+            font-size: 11px;
+            color: #888;
             pointer-events: none;
         }
 
-        .tactical-btn {
-            background: #2a2a4a;
-            color: #ffffff;
-            border: 1px solid #555577;
-            padding: 10px;
-            font-family: monospace;
-            font-size: 14px;
-            text-align: left;
-            cursor: pointer;
-            transition: all 0.1s;
-        }
-
-        .tactical-btn:hover:not(:disabled) {
-            background: #4488ff;
-            border-color: #ffffff;
-            color: #ffffff;
-        }
-
-        .tactical-btn:disabled {
-            background: #1a1a2e;
-            color: #555555;
-            cursor: not-allowed;
-        }
-
-        .astra-cost {
-            float: right;
-            color: #ffaa00;
+        /* Unit info tooltip on hover */
+        #unit-info-tooltip {
+            position: fixed;
+            display: none;
+            z-index: 3000;
+            background: rgba(18, 18, 24, 0.98);
+            border: 1px solid #c9a063;
+            padding: 10px 14px;
+            border-radius: 4px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.9);
             font-size: 12px;
+            line-height: 1.5;
+            color: #e0e0e0;
+            max-width: 220px;
+            pointer-events: none;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        #unit-info-tooltip .unit-name {
+            color: #d4af37;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        #unit-info-tooltip .unit-stat {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            font-size: 11px;
+            color: #b0b0b0;
         }
     </style>
 </head>
 <body>
     <div id="game-container">
-        <!-- DOM UI Layer -->
-        <div id="ui-overlay">
-            
-            <!-- Main Action Menu -->
-            <div id="action-menu" class="tactical-menu hidden">
-                <button id="btn-attack" class="tactical-btn">⚔️ Attack</button>
-                <button id="btn-astra" class="tactical-btn">🌟 Use Astra</button>
-                <button id="btn-wait" class="tactical-btn">🛡️ Wait</button>
-                <button id="btn-cancel" class="tactical-btn">❌ Cancel</button>
-            </div>
-
-            <!-- Astra Selection Sub-Menu -->
-            <div id="astra-menu" class="tactical-menu hidden">
-                <div id="astra-list" style="display:flex; flex-direction:column; gap:8px;"></div>
-                <button id="btn-astra-cancel" class="tactical-btn" style="margin-top:10px; background:#442222;">⬅ Back</button>
-            </div>
-
+        <div id="hud-header">
+            <h1 id="parva-title">YUGANTA: 2.5D ENGINE PHASE 2</h1>
+            <p id="parva-subtitle">128×64 Diamond · Distinct Terrain · Double-Click Fullscreen</p>
         </div>
+        <div id="fs-hint">Double-click empty space to toggle fullscreen</div>
+        <div id="combat-log-panel">
+            <div id="combat-log-header">Battle Chronicle</div>
+            <div id="combat-log-content"></div>
+        </div>
+        <div id="unit-info-tooltip"></div>
     </div>
+
     <script type="module" src="/src/main.js"></script>
+    <script>
+        // Fullscreen the GAME CONTAINER (not <html>) so layout stays 100% and
+        // the canvas can resize to the real fullscreen box — avoids the black bar.
+        document.addEventListener('dblclick', (e) => {
+            if (e.target.closest('#combat-log-panel') || e.target.closest('#action-menu')) return;
+
+            const el = document.getElementById('game-container');
+            if (!document.fullscreenElement) {
+                el.requestFullscreen?.() || el.webkitRequestFullscreen?.();
+            } else {
+                document.exitFullscreen?.() || document.webkitExitFullscreen?.();
+            }
+        });
+
+        // Tell Phaser to match the container whenever fullscreen toggles
+        document.addEventListener('fullscreenchange', () => {
+            window.dispatchEvent(new Event('resize'));
+        });
+        document.addEventListener('webkitfullscreenchange', () => {
+            window.dispatchEvent(new Event('resize'));
+        });
+    </script>
 </body>
 </html>

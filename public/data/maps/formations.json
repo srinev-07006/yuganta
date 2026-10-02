@@ -1,0 +1,102 @@
+[
+  {
+    "formation_id": "KRAUNCHA",
+    "name": "Krauncha Vyuha (Heron)",
+    "shape": "V_WEDGE",
+    "description": "A sharp V-shaped wedge designed to pierce enemy lines.",
+    "rings": null,
+    "entry_tile": null,
+    "exit_tile": null,
+    "rotation_per_turn": 0,
+    "unit_placement": [
+      { "position": "BEAK", "class": "MAHARATHI", "count": 1, "character_id_suggestion": "bhima" },
+      { "position": "NECK", "class": "CHARIOTEER", "count": 4 },
+      { "position": "WINGS", "class": "CAVALRY", "count": 20 },
+      { "position": "BODY", "class": "INFANTRY", "count": 40 }
+    ]
+  },
+  {
+    "formation_id": "GARUDA",
+    "name": "Garuda Vyuha (Eagle)",
+    "shape": "WINGED_CENTER",
+    "description": "Spread wings with a heavily defended central body.",
+    "rings": null,
+    "entry_tile": null,
+    "exit_tile": null,
+    "rotation_per_turn": 0,
+    "unit_placement": [
+      { "position": "HEAD", "class": "MAHARATHI", "count": 1, "character_id_suggestion": "bhishma" },
+      { "position": "EYES", "class": "MAHARATHI", "count": 2 },
+      { "position": "WINGS", "class": "CAVALRY", "count": 30 },
+      { "position": "TALONS", "class": "ELEPHANT_CORPS", "count": 10 },
+      { "position": "BODY", "class": "INFANTRY", "count": 50 }
+    ]
+  },
+  {
+    "formation_id": "CHAKRAVYUHA",
+    "name": "Chakravyuha (Spinning Disc)",
+    "shape": "CONCENTRIC_RINGS",
+    "description": "A lethal labyrinth of spinning rings. No exit.",
+    "rings": 7,
+    "entry_tile": { "x": 12, "y": 0 },
+    "exit_tile": null,
+    "rotation_per_turn": 1,
+    "unit_placement": [
+      { "ring": 1, "class": "INFANTRY", "count": 12 },
+      { "ring": 2, "class": "CAVALRY", "count": 8 },
+      { "ring": 3, "class": "CHARIOTEER", "count": 6 },
+      { "ring": 4, "class": "INFANTRY", "count": 10 },
+      { "ring": 5, "class": "ELEPHANT_CORPS", "count": 4 },
+      { "ring": 6, "class": "CAVALRY", "count": 6 },
+      { "ring": 7, "class": "MAHARATHI", "character_ids": ["drona", "karna", "duhshasana", "kripacharya", "ashwatthama", "shalya"] }
+    ]
+  },
+  {
+    "formation_id": "PADMA",
+    "name": "Padma Vyuha (Lotus)",
+    "shape": "CIRCULAR_LAYERED",
+    "description": "Layered circular petals protecting a central target.",
+    "rings": 4,
+    "entry_tile": null,
+    "exit_tile": null,
+    "rotation_per_turn": 0,
+    "unit_placement": [
+      { "ring": 1, "class": "INFANTRY", "count": 20 },
+      { "ring": 2, "class": "CAVALRY", "count": 15 },
+      { "ring": 3, "class": "ELEPHANT_CORPS", "count": 8 },
+      { "ring": 4, "class": "MAHARATHI", "count": 3, "character_id_suggestion": "jayadratha" }
+    ]
+  },
+  {
+    "formation_id": "VAJRA",
+    "name": "Vajra Vyuha (Thunderbolt)",
+    "shape": "COMPACT_SPEARHEAD",
+    "description": "A dense, high-impact block meant to smash through defenses.",
+    "rings": null,
+    "entry_tile": null,
+    "exit_tile": null,
+    "rotation_per_turn": 0,
+    "unit_placement": [
+      { "position": "FRONT", "class": "MAHARATHI", "count": 1, "character_id_suggestion": "arjuna" },
+      { "position": "FLANKS", "class": "CHARIOTEER", "count": 6 },
+      { "position": "CENTER", "class": "ELEPHANT_CORPS", "count": 5 },
+      { "position": "REAR", "class": "CAVALRY", "count": 12 }
+    ]
+  },
+  {
+    "formation_id": "SHAKATA",
+    "name": "Shakata Vyuha (Cart)",
+    "shape": "RECTANGULAR_BOX",
+    "description": "A defensive rectangular box formation.",
+    "rings": null,
+    "entry_tile": null,
+    "exit_tile": null,
+    "rotation_per_turn": 0,
+    "unit_placement": [
+      { "position": "FRONT", "class": "MAHARATHI", "count": 2, "character_id_suggestion": "drona" },
+      { "position": "SIDES", "class": "INFANTRY", "count": 30 },
+      { "position": "CENTER", "class": "CAVALRY", "count": 10 },
+      { "position": "REAR", "class": "CHARIOTEER", "count": 8 }
+    ]
+  }
+]

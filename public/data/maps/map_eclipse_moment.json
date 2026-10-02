@@ -1,0 +1,31 @@
+{
+  "map_id": "map_eclipse_moment",
+  "grid_width": 16,
+  "grid_height": 16,
+  "tile_size": 64,
+  "orientation": "ORTHOGONAL",
+  "tileset_asset_key": "tileset_kurukshetra",
+  "description": "The moment Krishna creates a false eclipse to trick Jayadratha. The battlefield darkens. Jayadratha thinks the sun has set and Arjuna failed his oath. He emerges from hiding.",
+  "tiles": [
+    {
+      "region": "DARKENED_FIELD",
+      "x_min": 0, "x_max": 15, "y_min": 0, "y_max": 15,
+      "terrain_type": "PLAIN",
+      "movement_cost": 1,
+      "defense_multiplier": 1.0,
+      "is_impassable": false,
+      "special_flag": "NONE"
+    }
+  ],
+  "tile_overrides": [
+    { "x": 8, "y": 8, "terrain_type": "SANCTUARY", "movement_cost": 1, "defense_multiplier": 1.0, "is_impassable": false, "special_flag": "ECLIPSE_CENTER", "note": "Krishna manipulates cosmic forces here." }
+  ],
+  "spawn_zones": {
+    "PANDAVA": { "x_min": 0, "x_max": 5, "y_min": 0, "y_max": 15, "hero": "arjuna" },
+    "KAURAVA": { "x_min": 10, "x_max": 15, "y_min": 0, "y_max": 15, "hero": "jayadratha", "note": "Jayadratha in the center, behind Padma Vyuha defenders." }
+  },
+  "special_mechanics": {
+    "false_eclipse": "At turn 3, the sun 'disappears' (VNScene trigger). Jayadratha's guard drops. He becomes targetable for 2 turns before the ruse is revealed.",
+    "fog_of_war": "Darkness creates visibility radius 3 tiles."
+  }
+}

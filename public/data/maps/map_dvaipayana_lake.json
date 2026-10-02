@@ -1,0 +1,40 @@
+{
+  "map_id": "map_dvaipayana_lake",
+  "grid_width": 16,
+  "grid_height": 16,
+  "tile_size": 64,
+  "orientation": "ORTHOGONAL",
+  "tileset_asset_key": "tileset_lake",
+  "description": "Lake Dvaipayana. Duryodhana hides underwater using mystical Samadhi (yogic trance). The Pandavas taunt him to emerge for the final mace duel. This map is the lake area before the duel.",
+  "tiles": [
+    {
+      "region": "LAKE_SURFACE",
+      "x_min": 4, "x_max": 12, "y_min": 4, "y_max": 12,
+      "terrain_type": "RIVER",
+      "movement_cost": 3,
+      "defense_multiplier": 0.5,
+      "is_impassable": true,
+      "special_flag": "LAKE_DVAIPAYANA",
+      "note": "The lake. Impassable. Duryodhana is hidden beneath."
+    },
+    {
+      "region": "SHORE",
+      "x_min": 0, "x_max": 15, "y_min": 0, "y_max": 15,
+      "terrain_type": "PLAIN",
+      "movement_cost": 1,
+      "defense_multiplier": 1.0,
+      "is_impassable": false,
+      "special_flag": "NONE"
+    }
+  ],
+  "tile_overrides": [
+    { "x": 8, "y": 8, "terrain_type": "RIVER", "movement_cost": 3, "defense_multiplier": 0.5, "is_impassable": true, "special_flag": "DURYODHANA_HIDING_SPOT", "note": "Duryodhana hides here using yogic powers." }
+  ],
+  "spawn_zones": {
+    "PANDAVA": { "x_min": 0, "x_max": 3, "y_min": 0, "y_max": 15, "note": "The five Pandavas and Krishna approach the shore." },
+    "KAURAVA": { "x_min": 8, "x_max": 8, "y_min": 8, "y_max": 8, "hero": "duryodhana", "note": "Duryodhana emerges from the lake center after taunts." }
+  },
+  "special_mechanics": {
+    "taunt_trigger": "At turn 3, VNScene: Krishna taunts Duryodhana as a coward. Duryodhana emerges. Transition to map_lake_shore for the actual duel."
+  }
+}

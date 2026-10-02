@@ -1,0 +1,16 @@
+{
+  "map_id": "map_panchala_court",
+  "grid_width": null,
+  "grid_height": null,
+  "tile_size": null,
+  "orientation": "VN_ONLY",
+  "tileset_asset_key": "tileset_panchala_court",
+  "description": "The royal court of King Drupada in Panchala. Site of Draupadi's Swayamvara. Arjuna (disguised as a Brahmin) wins by piercing the fish-eye target. Opulent but martial.",
+  "scene_type": "VN_ONLY",
+  "vn_backdrop_notes": {
+    "lighting": "Bright daylight streaming through open pavilion.",
+    "color_palette": ["#E67E22", "#F39C12", "#27AE60"],
+    "interactive_elements": ["The archery target hanging above", "The bow of Shiva", "Draupadi's garland"],
+    "no_tactical_grid": true
+  }
+}

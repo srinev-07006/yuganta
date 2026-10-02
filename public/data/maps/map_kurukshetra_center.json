@@ -1,0 +1,40 @@
+{
+  "map_id": "map_kurukshetra_center",
+  "grid_width": 20,
+  "grid_height": 15,
+  "tile_size": 64,
+  "orientation": "ORTHOGONAL",
+  "tileset_asset_key": "tileset_kurukshetra",
+  "description": "Open plains of Kurukshetra, Day 1. Flat terrain with a river on the west edge. The stage for Arjuna's Vishada Yoga and the initial vyuha clash.",
+  "tiles": [
+    {
+      "region": "WEST_EDGE",
+      "x_min": 0, "x_max": 1, "y_min": 0, "y_max": 14,
+      "terrain_type": "RIVER",
+      "movement_cost": 3,
+      "defense_multiplier": 0.5,
+      "is_impassable_for": ["CHARIOTEER", "ELEPHANT_CORPS"],
+      "special_flag": "NONE"
+    },
+    {
+      "region": "CENTRAL_PLAINS",
+      "x_min": 2, "x_max": 19, "y_min": 0, "y_max": 14,
+      "terrain_type": "PLAIN",
+      "movement_cost": 1,
+      "defense_multiplier": 1.0,
+      "is_impassable": false,
+      "special_flag": "NONE"
+    }
+  ],
+  "tile_overrides": [
+    { "x": 9, "y": 7, "terrain_type": "SANCTUARY", "movement_cost": 1, "defense_multiplier": 1.0, "is_impassable": false, "special_flag": "SANCTUARY", "note": "The exact spot Arjuna collapses with grief. Attacking here triggers Dharma penalty." }
+  ],
+  "spawn_zones": {
+    "PANDAVA": { "x_min": 2, "x_max": 6, "y_min": 0, "y_max": 14 },
+    "KAURAVA": { "x_min": 14, "x_max": 19, "y_min": 0, "y_max": 14 }
+  },
+  "event_triggers": {
+    "on_turn_1_start": "seq_bhagavad_gita_opening — VNScene opens before first move",
+    "on_pandava_reach_river": "VNScene flash: Bhishma's ganga-putra trait acknowledged"
+  }
+}

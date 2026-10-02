@@ -10,8 +10,40 @@
 // =============================================================
 
 import { defineConfig } from 'vite';
+import path from 'node:path';
+import { buildManifest } from './tools/buildManifest.js';
+
+// Virtual module `virtual:yuganta-manifest`: index of public/data (parvas, nodes, dialogue
+// files, map files). Derived at dev/build time — nobody edits an index by hand.
+function yugantaManifest() {
+    const ID = 'virtual:yuganta-manifest', RESOLVED = '\0' + ID;
+    const dataDir = path.resolve(process.cwd(), 'public/data');
+    return {
+        name: 'yuganta-manifest',
+        resolveId(id) { return id === ID ? RESOLVED : null; },
+        load(id) {
+            if (id !== RESOLVED) return null;
+            // (no addWatchFile on a directory: Vite dev tries to import it as a module and errors;
+            //  configureServer below already watches dataDir and triggers a full reload)
+            return `export default ${JSON.stringify(buildManifest(dataDir))};`;
+        },
+        configureServer(server) {
+            // Data edits (Role 3/4) → reload the page with a fresh manifest
+            server.watcher.add(dataDir);
+            server.watcher.on('all', (_e, file) => {
+                if (file.startsWith(dataDir)) {
+                    const mod = server.moduleGraph.getModuleById(RESOLVED);
+                    if (mod) server.moduleGraph.invalidateModule(mod);
+                    server.ws.send({ type: 'full-reload' });
+                }
+            });
+        }
+    };
+}
 
 export default defineConfig({
+
+    plugins: [yugantaManifest()],
 
     // ----------------------------------------------------------
     // BASE PATH

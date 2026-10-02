@@ -1,0 +1,22 @@
+{
+  "map_id": "map_sabha_hall",
+  "grid_width": null,
+  "grid_height": null,
+  "tile_size": null,
+  "orientation": "VN_ONLY",
+  "tileset_asset_key": "tileset_sabha_interior",
+  "description": "The royal assembly hall of Hastinapura. Interior. The stage for the Game of Dice and the Humiliation of Draupadi. No combat grid — purely a backdrop for VN scenes. The space is oppressive: a grand court designed to make outsiders feel small.",
+  "scene_type": "VN_ONLY",
+  "active_directive": "never-refuse-dice (SACRIFICE, fail_on_deviation: true)",
+  "vn_backdrop_notes": {
+    "lighting": "Warm torch-lit interior. Oppressive heat implied by color palette (#4A235A, #900C3F, #FFC300 per KAURAVA aesthetics).",
+    "layout_description": "A long rectangular hall. Dhritarashtra sits on the throne (north). Dice table center. Draupadi's quarters (east, off-screen). Crowds line the walls.",
+    "interactive_elements": [
+      "Dice table — the focus of the gameplay mechanic (SACRIFICE directive: player must not refuse or interfere).",
+      "Draupadi's entry point — triggers the Disrobing dialogue sequence.",
+      "Vidura's corner — he speaks. Listening to his counsel is optional but raises Dharma slightly."
+    ],
+    "no_tactical_grid": true,
+    "note": "This map serves as a stage only. It must be buildable as a rich parallax background in VNScene.js, not TacticalScene.js."
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "map_id": "map_chakravyuha",
+  "grid_width": 25,
+  "grid_height": 25,
+  "tile_size": 64,
+  "orientation": "ORTHOGONAL",
+  "tileset_asset_key": "tileset_kurukshetra",
+  "description": "The spinning disc formation on Day 13. A spiral of Kaurava units with a single entry point at the outer ring and NO exit. Abhimanyu (PANDAVA) spawns at tile (12,0).",
+  "formation_ref": "CHAKRAVYUHA",
+  "tiles": [
+    {
+      "region": "OUTER_PERIMETER",
+      "x_min": 0, "x_max": 24, "y_min": 0, "y_max": 0,
+      "terrain_type": "PLAIN",
+      "movement_cost": 1,
+      "defense_multiplier": 1.0,
+      "is_impassable": false,
+      "special_flag": "CHAKRAVYUHA_ENTRY"
+    },
+    {
+      "region": "INNER_RINGS",
+      "x_min": 1, "x_max": 23, "y_min": 1, "y_max": 23,
+      "terrain_type": "PLAIN",
+      "movement_cost": 1,
+      "defense_multiplier": 1.0,
+      "is_impassable": false,
+      "special_flag": "NONE"
+    },
+    {
+      "region": "CORE",
+      "x_min": 10, "x_max": 14, "y_min": 10, "y_max": 14,
+      "terrain_type": "ELEVATED",
+      "movement_cost": 2,
+      "defense_multiplier": 1.5,
+      "is_impassable": false,
+      "special_flag": "CHAKRAVYUHA_CORE",
+      "note": "Drona stands here. Defeating him would break the formation — but Dharma locks him as the formation's heart."
+    }
+  ],
+  "tile_overrides": [
+    { "x": 12, "y": 0, "terrain_type": "PLAIN", "movement_cost": 1, "defense_multiplier": 1.0, "is_impassable": false, "special_flag": "CHAKRAVYUHA_ENTRY", "note": "The ONLY entry tile. Requires chakravyuha-enterer trait to pass. All other perimeter tiles block non-Kaurava units." },
+    { "x": 12, "y": 1, "terrain_type": "PLAIN", "movement_cost": 2, "defense_multiplier": 1.0, "is_impassable": false, "special_flag": "NO_RETURN", "note": "Once passed into the ring, exit is closed. The formation seals behind Abhimanyu." }
+  ],
+  "perimeter_impassable_rule": "All tiles at x_min=0, x_max=24, y_min=0, y_max=24 perimeter except tile (12,0) are impassable for all PANDAVA units except those with chakravyuha-enterer trait.",
+  "spawn_zones": {
+    "PANDAVA": { "x_min": 12, "x_max": 12, "y_min": 0, "y_max": 0, "note": "Abhimanyu alone enters. Pandava allies cannot follow." },
+    "KAURAVA": {
+      "ring_1": { "description": "Infantry ring, outer radius ~11 tiles from center", "class": "INFANTRY", "count": 12 },
+      "ring_2": { "description": "Cavalry ring", "class": "CAVALRY", "count": 8 },
+      "ring_3": { "description": "Charioteer ring", "class": "CHARIOTEER", "count": 6 },
+      "ring_7_inner": { "description": "Maharathi core", "character_ids": ["drona", "karna", "duhshasana", "kripacharya", "ashwatthama", "shalya"] }
+    }
+  },
+  "rotation_mechanic": {
+    "rotation_per_turn": 1,
+    "effect": "All unit placements shift clockwise by 1 step per turn, making paths unpredictable."
+  },
+  "directive_notes": {
+    "abhimanyu_target_turns": 15,
+    "fail_on_deviation": false,
+    "note": "Abhimanyu dying IS canonical progression. Surviving all 15 turns unlocks a hidden 'What-If' branch."
+  }
+}

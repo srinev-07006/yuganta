@@ -1,0 +1,47 @@
+{
+  "map_id": "map_lake_shore",
+  "grid_width": 10,
+  "grid_height": 10,
+  "tile_size": 64,
+  "orientation": "ORTHOGONAL",
+  "tileset_asset_key": "tileset_lake_shore",
+  "description": "The shore of Lake Dvaipayana. Duryodhana has been hiding in the lake (impassable) and is drawn out for the final mace duel with Bhima. Intimate arena, maximum narrative tension.",
+  "tiles": [
+    {
+      "region": "SHORE_ARENA",
+      "x_min": 0, "x_max": 9, "y_min": 0, "y_max": 7,
+      "terrain_type": "MUD",
+      "movement_cost": 2,
+      "defense_multiplier": 0.8,
+      "is_impassable": false,
+      "special_flag": "NONE",
+      "note": "Muddy shore — Duryodhana's footing is as cursed here as anywhere. Adds tension to a mace duel."
+    },
+    {
+      "region": "LAKE",
+      "x_min": 0, "x_max": 9, "y_min": 8, "y_max": 9,
+      "terrain_type": "RIVER",
+      "movement_cost": 3,
+      "defense_multiplier": 0.5,
+      "is_impassable": true,
+      "special_flag": "LAKE_DVAIPAYANA",
+      "note": "The lake where Duryodhana hid using mystical power. Now impassable. Units cannot retreat into it."
+    }
+  ],
+  "tile_overrides": [
+    { "x": 5, "y": 5, "terrain_type": "MUD", "movement_cost": 2, "defense_multiplier": 0.8, "is_impassable": false, "special_flag": "DUEL_ZONE_CENTER", "note": "The focal point of the mace duel." }
+  ],
+  "spawn_zones": {
+    "PANDAVA": { "x_min": 0, "x_max": 2, "y_min": 0, "y_max": 7, "hero": "bhima", "note": "Bhima spawns at (1, 4)." },
+    "KAURAVA": { "x_min": 7, "x_max": 9, "y_min": 0, "y_max": 7, "hero": "duryodhana", "note": "Duryodhana emerges from the lake edge at (8, 7)." }
+  },
+  "special_mechanics": {
+    "vajra_thighs": "Duryodhana's vajra-thighs trait means LowerBodyInvulnerable() — standard strikes to the legs deal 0 damage. The player must discover that only a foul blow (striking the thigh with a non-standard attack command) deals full damage. This unlocks when Duryodhana HP reaches 30% (trigger-thigh-strike → seq_thigh_strike VNScene).",
+    "audience": "The rest of the Pandava forces watch from the perimeter (non-combatants). Only Bhima fights. Krishna coaches from the sideline — his presence provides a hint system (VN choice to receive a hint breaks Dharma slightly).",
+    "dharma_note": "Bhima striking the thigh is adharmic per Kshatriya rules but canonically fated. fail_on_deviation: true if Duryodhana is not defeated."
+  },
+  "directive_notes": {
+    "primary_directive": "defeat-duryodhana (DEFEAT_UNIT, fail_on_deviation: true)",
+    "trigger": "trigger-thigh-strike fires seq_thigh_strike when duryodhana HP < 30%"
+  }
+}
