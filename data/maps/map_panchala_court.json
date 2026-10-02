@@ -1,16 +1,36 @@
 {
   "map_id": "map_panchala_court",
-  "grid_width": null,
-  "grid_height": null,
-  "tile_size": null,
-  "orientation": "VN_ONLY",
-  "tileset_asset_key": "tileset_panchala_court",
-  "description": "The royal court of King Drupada in Panchala. Site of Draupadi's Swayamvara. Arjuna (disguised as a Brahmin) wins by piercing the fish-eye target. Opulent but martial.",
-  "scene_type": "VN_ONLY",
-  "vn_backdrop_notes": {
-    "lighting": "Bright daylight streaming through open pavilion.",
-    "color_palette": ["#E67E22", "#F39C12", "#27AE60"],
-    "interactive_elements": ["The archery target hanging above", "The bow of Shiva", "Draupadi's garland"],
-    "no_tactical_grid": true
-  }
+  "width": 16,
+  "height": 12,
+  "description": "The royal court of King Drupada in Panchala. Site of Draupadi's Swayamvara. Arjuna (disguised as a Brahmin) must shoot the fish-eye target suspended above the court.",
+  "terrain": [
+    ["lake", "lake", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "lake", "lake", "lake", "lake"],
+    ["lake", "plains", "plains", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "plains", "plains", "lake", "lake", "lake"],
+    ["plains", "plains", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "plains", "plains", "lake", "lake"],
+    ["plains", "plains", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "plains", "plains", "plains", "lake"],
+    ["plains", "plains", "hall", "hall", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "hall", "hall", "plains", "plains", "plains", "plains"],
+    ["plains", "hall", "hall", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "hall", "hall", "plains", "plains", "plains"],
+    ["plains", "hall", "hall", "carpet", "carpet", "dais", "dais", "dais", "dais", "carpet", "carpet", "hall", "hall", "plains", "plains", "plains"],
+    ["plains", "hall", "hall", "carpet", "carpet", "dais", "dais", "dais", "dais", "carpet", "carpet", "hall", "hall", "plains", "plains", "plains"],
+    ["plains", "plains", "hall", "hall", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "hall", "hall", "plains", "plains", "plains", "plains"],
+    ["plains", "plains", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "plains", "plains", "plains", "plains"],
+    ["lake", "plains", "plains", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "plains", "plains", "lake", "lake", "lake"],
+    ["lake", "lake", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "lake", "lake", "lake", "lake"]
+  ],
+  "spawns": [
+    {
+      "character_id": "arjuna",
+      "faction": "PANDAVA",
+      "x": 2,
+      "y": 9,
+      "name": "Arjuna (disguised)"
+    },
+    {
+      "unit_class": "RATHA",
+      "faction": "KAURAVA",
+      "x": 7,
+      "y": 7,
+      "name": "Fish Target"
+    }
+  ]
 }
