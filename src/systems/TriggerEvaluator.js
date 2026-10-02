@@ -74,6 +74,19 @@ export class TriggerEvaluator {
     }
 
     /**
+     * FIX #7: Validate tile format for location-based triggers.
+     * Ensures target_tile has valid {x, y} coordinates.
+     */
+    _isValidTile(tile) {
+        if (!tile || typeof tile !== 'object') return false;
+        if (typeof tile.x !== 'number' || typeof tile.y !== 'number') {
+            console.warn(`[TriggerEvaluator] Malformed tile: expected {x:number, y:number}, got`, tile);
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Routes trigger execution to either internal tactical system or external VN engine.
      */
     _executeTrigger(trigger) {
