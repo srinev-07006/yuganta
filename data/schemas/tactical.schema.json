@@ -1,73 +1,69 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Tactical & Timeline Schema",
-  "description": "Schema for Timeline Nodes, Canonical Directives, and Battle Triggers.",
   "type": "object",
-  "definitions": {
-    "canonical_directive": {
-      "type": "object",
-      "properties": {
-        "directive_id": { "type": "string" },
-        "directive_type": {
-          "type": "string",
-          "enum": ["SURVIVE_TURNS", "ESCORT", "SACRIFICE", "REACH_TILE", "DEFEAT_UNIT"]
+  "properties": {
+    "timeline_nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the timeline node"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the timeline event or battle phase"
+          },
+          "fail_on_deviation": {
+            "type": "boolean",
+            "description": "If true, failing a directive triggers canonical rewind via associated dialogue"
+          },
+          "directives": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Unique identifier for the directive"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Description of the directive objective"
+                },
+                "fail_on_deviation": {
+                  "type": "boolean",
+                  "description": "If true, failure triggers canonical rewind"
+                }
+              },
+              "required": ["id", "description"]
+            }
+          }
         },
-        "target_turns": { "type": "integer" },
-        "target_unit_id": { "type": "string" },
-        "fail_on_deviation": { "type": "boolean", "default": true },
-        "deviation_dialogue_id": { "type": "string" }
-      },
-      "required": ["directive_id", "directive_type", "fail_on_deviation"]
+        "required": ["id", "description", "fail_on_deviation", "directives"]
+      }
     },
-    "battle_event_trigger": {
-      "type": "object",
-      "properties": {
-        "trigger_id": { "type": "string" },
-        "condition_type": {
-          "type": "string",
-          "enum": ["UNIT_HP_BELOW_PERCENT", "UNIT_ENTER_TILE", "TURN_COUNT_EQUAL", "UNIT_DEATH"]
+    "canonical_directives": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the canonical directive"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the canonical objective"
+          },
+          "fail_on_deviation": {
+            "type": "boolean",
+            "description": "If true, failing this directive triggers canonical rewind"
+          }
         },
-        "condition_value": { "type": ["integer", "string", "object"] },
-        "target_unit_id": { "type": "string" },
-        "linked_sequence_id": { "type": "string" },
-        "pauses_tactical_scene": { "type": "boolean", "default": true },
-        "is_repeatable": { "type": "boolean", "default": false }
-      },
-      "required": ["trigger_id", "condition_type", "linked_sequence_id"]
-    },
-    "timeline_node": {
-      "type": "object",
-      "properties": {
-        "node_id": { "type": "string" },
-        "parva_id": { "type": "integer" },
-        "war_day": { "type": "integer" },
-        "phase_name": {
-          "type": "string",
-          "enum": ["BEGINNING", "MIDDLE", "END"]
-        },
-        "title": { "type": "string" },
-        "historical_context": { "type": "string" },
-        "initial_scene_type": {
-          "type": "string",
-          "enum": ["TACTICAL", "VN"]
-        },
-        "map_id": { "type": "string" }
-      },
-      "required": ["node_id", "war_day", "initial_scene_type"]
+        "required": ["id", "description", "fail_on_deviation"]
+      }
     }
   },
-  "properties": {
-    "nodes": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/timeline_node" }
-    },
-    "directives": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/canonical_directive" }
-    },
-    "triggers": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/battle_event_trigger" }
-    }
-  }
+  "required": ["timeline_nodes", "canonical_directives"]
 }

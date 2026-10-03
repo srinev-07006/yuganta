@@ -1,23 +1,19 @@
 {
   "directives": [
     {
-      "directive_id": "escort-shikhandi",
-      "directive_type": "ESCORT",
-      "target_turns": 12,
-      "target_unit_id": "shikhandi",
-      "fail_on_deviation": true,
-      "deviation_dialogue_id": "dev-bhishma-survives"
-    }
-  ],
-  "triggers": [
+      "id": "directive-escort-shikhandi",
+      "description": "Ensure Shikhandi reaches safety before Bhishma's death",
+      "fail_on_deviation": true
+    },
     {
-      "trigger_id": "trigger-bhishma-fall",
-      "condition_type": "UNIT_HP_BELOW_PERCENT",
-      "condition_value": 50,
-      "target_unit_id": "bhishma",
-      "linked_sequence_id": "seq_day10_fall",
-      "pauses_tactical_scene": true,
-      "is_repeatable": false
+      "id": "directive-protect-arjuna",
+      "description": "Protect Arjuna during critical battle phases",
+      "fail_on_deviation": false
+    },
+    {
+      "id": "directive-maintain-battle-order",
+      "description": "Maintain proper battle formation throughout the engagement",
+      "fail_on_deviation": false
     }
   ]
 }

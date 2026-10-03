@@ -1,60 +1,57 @@
 {
-  "sequence_id": "seq_day1_gita",
-  "node_id": "bp-day1-morning",
-  "trigger_event": "NODE_START",
-  "background_asset_key": "bg_chariot_between_armies",
-  "bgm_asset_key": "bgm_gita_chant",
-  "nodes": [
+  "dialogue_nodes": [
     {
-      "dialogue_id": "d1_arjuna_grief",
-      "speaker_id": "arjuna",
-      "dialogue_text": "O Madhava, seeing my friends and relatives gathered here eager to fight, my limbs fail me. My mouth dries up, and the Gandiva bow slips from my hand. I desire neither victory, nor kingdom, nor pleasure if it means slaying them.",
-      "speaker_emotion": "GRIEF",
+      "id": "gita-visada",
+      "text": "Arjuna stands on the Kurukshetra battlefield, overwhelmed by the sight of his relatives and teachers.",
+      "speaker": "Arjuna",
       "choices": [
         {
-          "choice_id": "gita_c1",
-          "choice_text": "[Say nothing. Let him lower his bow.]",
-          "dharma_impact": -20,
-          "next_dialogue_id": "d1_arjuna_flee"
+          "id": "choose-dharma",
+          "description": "Accept Krishna's guidance",
+          "impacts": {
+            "dharma_impact": 5,
+            "artha_impact": 0,
+            "kama_impact": 0,
+            "moksha_impact": 0
+          },
+          "next_node_id": "gita-accept"
         },
         {
-          "choice_id": "gita_c2",
-          "choice_text": "Whence brings this delusion upon you, O Arjuna, in this hour of peril? This does not befit a noble man. Arise, and cast off this faint-heartedness!",
-          "dharma_impact": 15,
-          "moksha_impact": 10,
-          "next_dialogue_id": "d1_krishna_reprimand"
+          "id": "choose-artha",
+          "description": "Pursue personal gain",
+          "impacts": {
+            "dharma_impact": -3,
+            "artha_impact": 5,
+            "kama_impact": 0,
+            "moksha_impact": 0
+          },
+          "next_node_id": "gita-refuse"
         }
       ]
+    }
+  ],
+  "narrative_choices": [
+    {
+      "id": "gita-accept",
+      "description": "Arjuna decides to follow Krishna's path.",
+      "impacts": {
+        "dharma_impact": 5,
+        "artha_impact": 0,
+        "kama_impact": 0,
+        "moksha_impact": 0
+      },
+      "next_node_id": "battle-preparation"
     },
     {
-      "dialogue_id": "d1_krishna_reprimand",
-      "speaker_id": "krishna",
-      "dialogue_text": "You grieve for those who should not be grieved for, yet you speak wise words. The truly wise grieve neither for the living nor the dead. The soul is neither born, nor does it die.",
-      "speaker_emotion": "ENLIGHTENED",
-      "choices": [
-        {
-          "choice_id": "gita_c3",
-          "choice_text": "[Accept the wisdom and lift the Gandiva bow.]",
-          "dharma_impact": 10,
-          "moksha_impact": 20,
-          "tactical_override_event": "MORALE_BOOST",
-          "next_dialogue_id": "d1_arjuna_resolve"
-        }
-      ]
-    },
-    {
-      "dialogue_id": "d1_arjuna_resolve",
-      "speaker_id": "arjuna",
-      "dialogue_text": "My delusion is destroyed. I have regained my memory by Your grace, O Achyuta. I am firm, my doubts are gone. I will do Your word.",
-      "speaker_emotion": "NEUTRAL",
-      "is_endpoint": true
-    },
-    {
-      "dialogue_id": "d1_arjuna_flee",
-      "speaker_id": "arjuna",
-      "dialogue_text": "I will not fight. Let the sons of Dhritarashtra, weapons in hand, slay me unresisting in battle. That would be better for me.",
-      "speaker_emotion": "GRIEF",
-      "is_endpoint": true
+      "id": "gita-refuse",
+      "description": "Arjuna resists and seeks personal advantage.",
+      "impacts": {
+        "dharma_impact": -3,
+        "artha_impact": 5,
+        "kama_impact": 0,
+        "moksha_impact": 0
+      },
+      "next_node_id": "battle-preparation"
     }
   ]
 }

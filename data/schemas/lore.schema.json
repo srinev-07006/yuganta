@@ -1,88 +1,152 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Lore & Character Schema",
-  "description": "Schema for character rosters, divine astras, vows (Pratijnas), and boons.",
+  "title": "Lore Schema",
   "type": "object",
-  "definitions": {
-    "astra": {
-      "type": "object",
-      "properties": {
-        "astra_id": { "type": "string" },
-        "name": { "type": "string" },
-        "dharma_cost": { "type": "integer" },
-        "restrictions": { "type": "string" },
-        "damage_multiplier": { "type": "number" }
-      },
-      "required": ["astra_id", "name", "dharma_cost"]
-    },
-    "vow_boon": {
-      "type": "object",
-      "properties": {
-        "id": { "type": "string" },
-        "name": { "type": "string" },
-        "type": {
-          "type": "string",
-          "enum": ["VOW", "BOON", "CURSE"]
-        },
-        "description": { "type": "string" },
-        "fulfillment_condition": { "type": "string" }
-      },
-      "required": ["id", "name", "type"]
-    },
-    "maharathi_trait": {
-      "type": "object",
-      "properties": {
-        "trait_id": { "type": "string" },
-        "trait_name": { "type": "string" },
-        "invulnerable_to_standard_damage": { "type": "boolean", "default": false },
-        "ignores_terrain_cost": { "type": "boolean", "default": false },
-        "custom_script_handler": { "type": "string" }
-      },
-      "required": ["trait_id", "trait_name"]
-    },
-    "character": {
-      "type": "object",
-      "properties": {
-        "character_id": { "type": "string" },
-        "canonical_name": { "type": "string" },
-        "default_faction": {
-          "type": "string",
-          "enum": ["PANDAVA", "KAURAVA", "NEUTRAL"]
-        },
-        "base_sprite_key": { "type": "string" },
-        "portrait_atlas_key": { "type": "string" },
-        "traits": {
-          "type": "array",
-          "items": { "type": "string" }
-        },
-        "astras": {
-          "type": "array",
-          "items": { "type": "string" }
-        },
-        "vows": {
-          "type": "array",
-          "items": { "type": "string" }
-        }
-      },
-      "required": ["character_id", "canonical_name", "default_faction"]
-    }
-  },
   "properties": {
     "characters": {
       "type": "array",
-      "items": { "$ref": "#/definitions/character" }
+      "items": {
+        "$ref": "#/definitions/character"
+      }
     },
-    "astras": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/astra" }
+    "lore": {
+      "type": "object",
+      "properties": {
+        "traits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/trait"
+          }
+        },
+        "auras": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/aura"
+          }
+        },
+        "vows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/vow"
+          }
+        },
+        "boons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/boon"
+          }
+        }
+      },
+      "required": ["traits", "auras", "vows", "boons"]
     },
-    "vows_boons": {
+    "unit_classes": {
       "type": "array",
-      "items": { "$ref": "#/definitions/vow_boon" }
-    },
-    "traits": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/maharathi_trait" }
+      "items": {
+        "$ref": "#/definitions/unit_class"
+      }
     }
+  },
+  "required": ["characters", "lore", "unit_classes"],
+  "additionalProperties": false
+},
+"definitions": {
+  "character": {
+    "type": "object",
+    "properties": {
+      "id": { "type": "string" },
+      "name": { "type": "string" },
+      "faction": { "type": "string" },
+      "sprite_key": { "type": "string" },
+      "traits": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+      "auras": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+      "vows": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+      "boons": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "required": ["id", "name", "faction", "sprite_key", "traits", "auras", "vows", "boons"],
+    "additionalProperties": false
+  },
+  "trait": {
+    "type": "object",
+    "properties": {
+      "id": { "type": "string" },
+      "name": { "type": "string" },
+      "description": { "type": "string" },
+      "applies_to": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "required": ["id", "name", "description", "applies_to"],
+    "additionalProperties": false
+  },
+  "aura": {
+    "type": "object",
+    "properties": {
+      "id": { "type": "string" },
+      "name": { "type": "string" },
+      "description": { "type": "string" },
+      "dharma_cost": { "type": "integer", "minimum": 0 },
+      "restrictions": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "required": ["id", "name", "description", "dharma_cost", "restrictions"],
+    "additionalProperties": false
+  },
+  "vow": {
+    "type": "object",
+    "properties": {
+      "id": { "type": "string" },
+      "name": { "type": "string" },
+      "description": { "type": "string" },
+      "condition": { "type": "string" },
+      "effect": { "type": "string" }
+    },
+    "required": ["id", "name", "description", "condition", "effect"],
+    "additionalProperties": false
+  },
+  "boon": {
+    "type": "object",
+    "properties": {
+      "id": { "type": "string" },
+      "name": { "type": "string" },
+      "description": { "type": "string" },
+      "effect": { "type": "string" }
+    },
+    "required": ["id", "name", "description", "effect"],
+    "additionalProperties": false
+  },
+  "unit_class": {
+    "type": "object",
+    "properties": {
+      "id": { "type": "string" },
+      "name": { "type": "string" },
+      "base_hp": { "type": "integer", "minimum": 0 },
+      "base_attack": { "type": "integer", "minimum": 0 },
+      "base_defense": { "type": "integer", "minimum": 0 },
+      "allowed_auras": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+      "restrictions": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "required": ["id", "name", "base_hp", "base_attack", "base_defense", "allowed_auras", "restrictions"],
+    "additionalProperties": false
   }
 }
