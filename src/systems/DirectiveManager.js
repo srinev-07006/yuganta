@@ -129,6 +129,26 @@ export class DirectiveManager {
         this._evaluate({ type: 'UNIT_MOVED', unit });
     }
 
+    /**
+     * Call when the last enemy falls. Nothing can threaten the player any more, so "hold out N turns" and
+     * "defeat X" objectives are satisfied (a dead target already completed DEFEAT_UNIT; this catches the rest).
+     * A battle with no directives at all is simply won. Objectives that need a position or a sacrifice stay open.
+     */
+    onEnemyWipe() {
+        if (this.isResolved) return;
+        for (const st of this.states) {
+            if (st.status !== DIRECTIVE_STATUS.ACTIVE) continue;
+            if (st.def.directive_type === 'SURVIVE_TURNS') this._complete(st, 'No enemy remains on the field.');
+        }
+        if (this.states.length === 0) {
+            this._resolve(DIRECTIVE_EVENTS.ALL_COMPLETE, { nodeId: this.nodeId, reason: 'The enemy host is destroyed.' });
+            return;
+        }
+        if (this.states.every(s => s.status === DIRECTIVE_STATUS.COMPLETED)) {
+            this._resolve(DIRECTIVE_EVENTS.ALL_COMPLETE, { nodeId: this.nodeId, reason: 'All canonical directives fulfilled.' });
+        }
+    }
+
     /** Call once a full round (player phase + AI phase) has finished. */
     onTurnEnd(turnNumber) {
         if (this.isResolved) return;

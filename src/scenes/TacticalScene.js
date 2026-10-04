@@ -355,62 +355,81 @@ export class TacticalScene extends Phaser.Scene {
         };
     }
 
-    _targetsInRange(unit) {
+    /** Enemies in attack range. Objective props (the Swayamvara fish) are valid targets for the player, never for the AI. */
+    _targetsInRange(unit, { includeProps = false } = {}) {
         const range = unit.attackRange || 1;
         return this.unitManager.getAllUnits().filter(e =>
-            e.isAlive !== false && !e.isProp &&
+            e.isAlive !== false && (includeProps || !e.isProp) &&
             (e.faction || '').toUpperCase() !== (unit.faction || '').toUpperCase() &&
             Math.abs(e.gridX - unit.gridX) + Math.abs(e.gridY - unit.gridY) <= range &&
             (e.gridX !== unit.gridX || e.gridY !== unit.gridY));
     }
 
+    /** Terrain stats for THIS unit: class overrides (chariots can't ford rivers…) applied to the tile. */
+    _terrainFor(unit, tile) {
+        if (!tile) return null;
+        const key = tile.key || (tile.name || 'plains').toLowerCase();
+        return getTerrainForUnit(key, unit.unitClass, unit.weaponType) || tile;
+    }
+
+    /**
+     * Cheapest-path reachability (Dijkstra). Each step costs the tile's moveCost for this unit; tiles that are
+     * impassable for its class (Unit.canTraverseTerrain + terrain overrides) are skipped. Units whose traits
+     * ignore terrain cost (Ghatotkacha flies, Bhishma/Ganga-putra, Rudra-possessed) pay 1 per tile and may cross
+     * water, but still not walls or pillars. Any unit, friend or foe, blocks the tile.
+     * Returns [{x, y, path}] where path = [start, …, tile].
+     */
     _computeReachableTiles(unit) {
         if (!unit || !this.mapGrid) return [];
         const range = unit.moveRange || unit.movement || 3;
+        const flying = typeof unit.ignoresTerrainCost === 'function' && unit.ignoresTerrainCost();
+        const H = this.mapGrid.length, W = this.mapGrid[0]?.length || 0;
+        const best = new Map([[`${unit.gridX},${unit.gridY}`, 0]]);
+        const open = [{ x: unit.gridX, y: unit.gridY, cost: 0, path: [{ x: unit.gridX, y: unit.gridY }] }];
+        const done = new Set();
         const reachable = [];
-        const visited = new Set();
-        const queue = [{ x: unit.gridX, y: unit.gridY, dist: 0, path: [] }];
 
-        while (queue.length > 0) {
-            const { x, y, dist, path } = queue.shift();
-            const key = `${x},${y}`;
-            if (visited.has(key)) continue;
-            visited.add(key);
+        while (open.length) {
+            let mi = 0;                                         // tiny boards: a linear min-scan is plenty
+            for (let i = 1; i < open.length; i++) if (open[i].cost < open[mi].cost) mi = i;
+            const cur = open.splice(mi, 1)[0];
+            const key = `${cur.x},${cur.y}`;
+            if (done.has(key)) continue;
+            done.add(key);
+            if (cur.cost > 0) reachable.push({ x: cur.x, y: cur.y, path: cur.path });
 
-            // Add this tile to reachable if within range
-            if (dist > 0 && dist <= range) {
-                reachable.push({ x, y, path: [...path, { x, y }] });
-            }
-
-            // Don't expand beyond movement range
-            if (dist >= range) continue;
-
-            // Try all 4 adjacent tiles (Manhattan movement)
             for (const [dx, dy] of [[0, 1], [1, 0], [0, -1], [-1, 0]]) {
-                const nx = x + dx, ny = y + dy;
-                const nextKey = `${nx},${ny}`;
-                if (visited.has(nextKey)) continue;
+                const nx = cur.x + dx, ny = cur.y + dy;
+                if (nx < 0 || ny < 0 || ny >= H || nx >= W) continue;
+                const nk = `${nx},${ny}`;
+                if (done.has(nk)) continue;
 
-                // Check bounds
-                if (nx < 0 || ny < 0 || ny >= this.mapGrid.length || nx >= this.mapGrid[0]?.length) continue;
-
-                // Check terrain passability
-                const terrain = this.mapGrid[ny]?.[nx];
-                if (!terrain || terrain.isPassable === false || terrain.moveCost >= 99) continue;
-
-                // Check if tile is occupied by enemy
-                const occupant = this.unitManager.getUnitAt(nx, ny);
-                if (occupant && occupant.isAlive !== false && occupant !== unit && !occupant.isProp) continue;
-
-                // Add to queue with increased distance
-                const moveCost = terrain.moveCost || 1;
-                const nextDist = dist + moveCost;
-                if (nextDist <= range) {
-                    queue.push({ x: nx, y: ny, dist: nextDist, path: [...path, { x, y }] });
+                const tile = this.mapGrid[ny]?.[nx];
+                if (!tile) continue;
+                const eff = this._terrainFor(unit, tile);
+                const isWater = tile.name === 'Lake' || tile.name === 'River';
+                const blocked = tile.isPassable === false || (tile.moveCost ?? 1) >= 99;
+                let step;
+                if (flying) {
+                    if (blocked && !isWater) continue;                             // walls, pillars, fire, abyss: never
+                    step = 1;
+                } else {
+                    if (blocked) continue;                                         // incl. lakes: nobody wades in
+                    if (eff.isPassable === false || (eff.moveCost ?? 1) >= 99) continue;   // class override (chariot vs river)
+                    if (typeof unit.canTraverseTerrain === 'function' && !unit.canTraverseTerrain(tile)) continue;
+                    step = eff.moveCost || 1;
                 }
+
+                const occupant = this.unitManager.getUnitAt(nx, ny);
+                if (occupant && occupant.isAlive !== false && occupant !== unit) continue;
+
+                const cost = cur.cost + step;
+                if (cost > range) continue;
+                if (best.has(nk) && best.get(nk) <= cost) continue;
+                best.set(nk, cost);
+                open.push({ x: nx, y: ny, cost, path: [...cur.path, { x: nx, y: ny }] });
             }
         }
-
         return reachable;
     }
 
@@ -846,7 +865,7 @@ export class TacticalScene extends Phaser.Scene {
     }
 
     _isHoverAllowed() { return this._alive && !this._ended && this._busy === 0 && this.currentState !== this.STATES.EXECUTING_ACTION; }
-    _isEnemyTarget(unit) { return this.selectedUnit && (unit.faction || '').toUpperCase() !== (this.selectedUnit.faction || '').toUpperCase() && !unit.isProp; }
+    _isEnemyTarget(unit) { return this.selectedUnit && (unit.faction || '').toUpperCase() !== (this.selectedUnit.faction || '').toUpperCase(); }
 
     _handleClick(p) {
         if (!this._isPlayerInputOpen()) return;
@@ -925,7 +944,7 @@ export class TacticalScene extends Phaser.Scene {
         this.attackableTiles = this._computeAttackableTiles(u);
         this.gridSystem.clearHighlights();
         this.gridSystem.highlightTiles(this.attackableTiles, 0xe0483a, 0.42);
-        const n = this._targetsInRange(u).length;
+        const n = this._targetsInRange(u, { includeProps: true }).length;
         this.hud.log(n ? `Choose a target for ${u.name} (${n} in range).` : `${u.name} has no target in range — move closer, or Wait.`, 'system');
     }
 

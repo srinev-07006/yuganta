@@ -10,7 +10,7 @@ import { TERRAIN_CONFIG } from '../data/TerrainConfig.js';
 import { isRegionMap, convertRegionMap } from './MapConverter.js';
 
 const FACTIONS = ['PANDAVA', 'KAURAVA'];
-const UNIT_CLASSES = ['RATHA', 'GAJA', 'ASHVA', 'PADATI_MELEE', 'PADATI_RANGED', 'MAHARATHI'];
+const UNIT_CLASSES = ['RATHA', 'GAJA', 'ASHVA', 'PADATI_MELEE', 'PADATI_RANGED', 'MAHARATHI', 'TARGET'];
 
 export function parseMap(json, terrainConfig = TERRAIN_CONFIG) {
     // Region-style files (grid_width/tiles/spawn_zones) are converted to this shape first — see MapConverter.js.

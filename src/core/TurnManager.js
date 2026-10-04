@@ -48,7 +48,7 @@ export class TurnManager extends Emitter {
         return true;
     }
     actors(faction = this.activeFaction) {
-        return (this.units.getUnitsByFaction(faction) || []).filter(u => u.isAlive !== false && u.canAct?.() !== false);
+        return (this.units.getUnitsByFaction(faction) || []).filter(u => u.isAlive !== false && !u.isProp && u.canAct?.() !== false);   // props (the fish) never act
     }
     /** Ends the PLAYER phase when nobody can act. Also call right after 'phase:start'. */
     checkAutoEnd() {

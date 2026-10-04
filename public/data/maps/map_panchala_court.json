@@ -26,10 +26,11 @@
       "name": "Arjuna (disguised)"
     },
     {
-      "unit_class": "RATHA",
+      "unit_class": "TARGET",
+      "tag": "fish-target",
       "faction": "KAURAVA",
       "x": 7,
-      "y": 7,
+      "y": 4,
       "name": "Fish Target"
     }
   ]

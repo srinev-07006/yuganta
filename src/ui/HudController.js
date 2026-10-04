@@ -446,7 +446,7 @@ export class HudController {
     showUnitTip(unit, x, y) {
         if (!this.tipEl || typeof this.tipEl.style === 'undefined') return;
         const hp = `${unit.currentHp}/${unit.maxHp}`;
-        const text = `${unit.name}  [${hp}] ATK ${unit.attack} DEF ${unit.defense}`;
+        const text = `${unit.name}  [${hp}] ATK ${unit.attackPower} DEF ${unit.defense}`;
         this.tipEl.textContent = text;
         this.tipEl.style.left = (x + 15) + 'px';
         this.tipEl.style.top = (y + 15) + 'px';
@@ -471,7 +471,7 @@ export class HudController {
         let html = `<strong>${unit.name}</strong><br/>`;
         html += `Faction: <span style="color: ${unit.faction === 'PANDAVA' ? '#35b6d6' : '#e0483a'}">${unit.faction}</span><br/>`;
         html += `HP: ${unit.currentHp}/${unit.maxHp}<br/>`;
-        html += `ATK: ${unit.attack} · DEF: ${unit.defense}<br/>`;
+        html += `ATK: ${unit.attackPower} · DEF: ${unit.defense}<br/>`;
         html += `Move: ${unit.movement} · Range: ${unit.attackRange}<br/>`;
         if (extra.terrain) html += `<em style="color: #aaa">${extra.terrain}</em><br/>`;
         this.cardEl.innerHTML = html;

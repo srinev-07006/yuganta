@@ -50,6 +50,7 @@ export class Unit {
         // ----------------------------------------------------------
         this.isAlive = true;
         this.hasActedThisTurn = false;
+        this.hasMovedThisTurn = false;   // one move per phase (then Attack / Wait)
         this.isStunned = false;
         this.morale = 100;
 
@@ -137,7 +138,9 @@ export class Unit {
             return true;
         }
 
-        const profile = getTerrainProfile(this.unitClass);
+        // A hero fighting on foot (mace / sword) is not bound by chariot terrain rules.
+        const profileClass = (this.unitClass === 'MAHARATHI' && this.weaponType === 'melee') ? 'PADATI_MELEE' : this.unitClass;
+        const profile = getTerrainProfile(profileClass);
         const terrainName = terrain.name || terrain.id || '';
         if (profile.blockedTerrainNames.includes(terrainName)) {
             return false;
@@ -185,11 +188,17 @@ export class Unit {
     // =============================================================
     startTurn() {
         this.hasActedThisTurn = false;
+        this.hasMovedThisTurn = false;
 
         if (this.isStunned) {
             this.isStunned = false;
             this.hasActedThisTurn = true;
         }
+    }
+
+    /** Commit a move: the unit may still attack or wait, but not move again this phase. */
+    endMove() {
+        this.hasMovedThisTurn = true;
     }
 
     endAction() {

@@ -49,7 +49,7 @@ export class CombatResolver {
         return entry.source === 'warrior' ? '' : ` (${entry.source} ×${entry.scale.toFixed(1)})`;
     }
 
-    resolveAttack(attacker, defender, astraId = null) {
+    resolveAttack(attacker, defender, astraId = null, opts = {}) {
         // ----------------------------------------------------------
         // COMBAT LOG
         // ----------------------------------------------------------
@@ -85,7 +85,7 @@ export class CombatResolver {
             log.push(`🛡️ ${defender.name} has invulnerability trait(s).`);
 
             // Run each invulnerability handler to check for counters
-            let stillInvulnerable = true;
+            let stillInvulnerable = false;   // becomes true if ANY invulnerability trait still holds
             let narrativeLine = '';
 
             for (const trait of defender.resolvedTraits) {
@@ -99,10 +99,10 @@ export class CombatResolver {
                     });
 
                     if (result.invulnerable === false) {
-                        stillInvulnerable = false;
                         narrativeLine = result.narrative || '';
-                        log.push(`💥 Invulnerability BROKEN: ${narrativeLine}`);
+                        log.push(`💥 ${trait.trait_name} BROKEN: ${narrativeLine}`);
                     } else {
+                        stillInvulnerable = true;
                         log.push(`🛡️ ${trait.trait_name}: Still invulnerable.`);
                     }
                 }
@@ -149,7 +149,7 @@ export class CombatResolver {
         const terrainDefenseBonus = terrainConfig ? terrainConfig.defenseModifier : 0;
 
         if (terrainDefenseBonus !== 0) {
-            log.push(`🏔️ Terrain (${defenderTerrain}): +${(terrainDefenseBonus * 100).toFixed(0)}% defense`);
+            log.push(`🏔️ Terrain (${defenderTerrain}): ${terrainDefenseBonus > 0 ? '+' : ''}${(terrainDefenseBonus * 100).toFixed(0)}% defense`);
         }
 
         // ----------------------------------------------------------
@@ -179,7 +179,7 @@ export class CombatResolver {
             }
 
             // Binary effects only apply from the warrior (or a full-strength source)
-            if (result.extraAttack && entry.scale >= 1.0) {
+            if (result.extraAttack && entry.scale >= 1.0 && !opts.isFollowUp) {   // the follow-up strike can't proc another
                 extraAttack = true;
                 log.push(`🎯 ${trait.trait_name}: DUAL ATTACK triggered!`);
             }
@@ -276,7 +276,7 @@ export class CombatResolver {
         if (extraAttack && defender.isAlive) {
             log.push(`🎯 --- DUAL ATTACK ---`);
             // Recursive call WITHOUT astra (can't use astra twice)
-            const dualResult = this.resolveAttack(attacker, defender, null);
+            const dualResult = this.resolveAttack(attacker, defender, null, { isFollowUp: true });
             result.dualAttackResult = dualResult;
             result.damage += dualResult.damage;
         }

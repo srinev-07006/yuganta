@@ -17,7 +17,10 @@ export function spawnMapUnits(unitManager, spawns) {
             } else if (s.character_id) {
                 unit = unitManager.spawnCharacter(s.character_id, s.x, s.y, s.faction);
             } else {
-                unit = unitManager.spawnBattalion(s.unit_class, s.faction, s.x, s.y, { characterId: s.tag || null, name: s.name || null });
+                // Objective props are addressed by directives/triggers via a tag; fall back to the slugged name ("Fish Target" → "fish-target").
+                const slug = s.name ? String(s.name).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') : null;
+                const tag = s.tag || (s.unit_class === 'TARGET' || /target/i.test(s.name || '') ? slug : null);
+                unit = unitManager.spawnBattalion(s.unit_class, s.faction, s.x, s.y, { characterId: tag, name: s.name || null });
             }
         } catch (err) {
             failures.push({ spawn: s, error: err.message });
