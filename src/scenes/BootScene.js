@@ -18,6 +18,7 @@ import { GameState } from '../core/GameState.js';
 import { TimelineManager } from '../core/TimelineManager.js';
 import { VNBridge } from '../core/VNBridge.js';
 import { DebugVNOverlay } from '../ui/DebugVNOverlay.js';
+import { installYugantaVN } from '../vn/install.js';   // Role 2: VN provider + music
 import { mountSanjayaScrubber } from '../ui/SanjayaScrubber.js';
 import { CHARACTER_SPRITE_IDS, spriteTextureKey } from '../data/CharacterSprites.js';
 
@@ -253,12 +254,31 @@ export class BootScene extends Phaser.Scene {
         (manifest.problems || []).forEach(p => console.warn('[BootScene] manifest problem:', p));
 
         mountSanjayaScrubber(this.game, timeline);
+        this._vn = installYugantaVN({ game: this.game, registry: this.registry, vnBridge, timeline });   // Role 2
         this._launchFirstNode(timeline);
     }
 
     async _launchFirstNode(timeline) {
+        if (!new URLSearchParams(window.location.search).get('node') && this._vn?.showTitle) {
+    const first = timeline.listParvas()[0]?.nodes?.[0]?.node_id;
+    const battle = timeline.findNode('day-1-kuru-kshetra') ? 'day-1-kuru-kshetra' : null;
+    this._vn.showTitle({ startId: first, battleId: battle, onStart: async (id) => {
+        const bundle = await timeline.loadNode(id);
+        this.scene.start('TacticalScene', { bundle });
+    } });
+    return;
+}
         const wanted = new URLSearchParams(window.location.search).get('node');
-        const nodeId = [wanted, DEFAULT_DEV_NODE].find(id => id && timeline.findNode(id)) || timeline.getDefaultNodeId();
+        // No ?node= -> title screen first (dev shortcut: add ?node=<node_id> to jump straight in).
+        if (!wanted && this._vn?.showTitle) {
+            const first = timeline.listParvas()[0]?.nodes?.[0]?.node_id;
+            this._vn.showTitle({ startId: first, battleId: timeline.findNode(DEFAULT_DEV_NODE) ? DEFAULT_DEV_NODE : null, onStart: (id) => this._launchNode(timeline, id) });
+            return;
+        }
+        return this._launchNode(timeline, [wanted, DEFAULT_DEV_NODE].find(id => id && timeline.findNode(id)) || timeline.getDefaultNodeId());
+    }
+
+    async _launchNode(timeline, nodeId) {
         try {
             const bundle = await timeline.loadNode(nodeId);
             this.scene.start('TacticalScene', { bundle });

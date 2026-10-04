@@ -1,7 +1,7 @@
 {
   "name": "yuganta",
   "version": "1.0.0",
-  "description": "Mah\u0101bh\u0101rata Tactical Visual Novel \u2014 Tactical Engine & Validator",
+  "description": "Mahābhārata Tactical Visual Novel — Tactical Engine & Validator",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,8 @@
     "validate": "node validate.cjs",
     "test:scene": "node --import ./tests/register.mjs tests/scene-smoke.mjs",
     "test:maps": "node --import ./tests/register.mjs tests/map-converter.mjs",
-    "test:logic": "node --import ./tests/register.mjs tests/battle-logic.mjs"
+    "test:logic": "node --import ./tests/register.mjs tests/battle-logic.mjs",
+    "test:vn": "node tests/vn-provider.mjs"
   },
   "dependencies": {
     "ajv": "^8.20.0",
@@ -19,6 +20,7 @@
     "phaser": "^3.80.1"
   },
   "devDependencies": {
+    "jsdom": "^29.1.1",
     "vite": "^5.4.2"
   },
   "author": "",

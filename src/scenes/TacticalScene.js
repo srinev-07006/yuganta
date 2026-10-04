@@ -26,6 +26,7 @@ import { BattleGrid } from '../core/BattleGrid.js';
 import { AIController } from '../ai/AIController.js';
 import { HudController } from '../ui/HudController.js';
 import { spriteTextureKey } from '../data/CharacterSprites.js';
+import { narrationFor } from '../vn/narration.js';
 
 const PLAYER_FACTION = 'PANDAVA';
 const FACTION_COLOR = { PANDAVA: 0x35b6d6, KAURAVA: 0xe0483a, NEUTRAL: 0xb8b0a0 };
@@ -231,7 +232,9 @@ export class TacticalScene extends Phaser.Scene {
     async _runVNNode() {
         this.hud.log(this.bundle.node.title, 'story');
         this.hud.setTurn({ round: 0, faction: '', isPlayer: false, running: false });
-        for (const seq of this.bundle.startSequences || []) {
+        
+        const seqs = this.bundle.startSequences?.length ? this.bundle.startSequences : [narrationFor(this.bundle.node, this.bundle.parva?.name)];
+for (const seq of seqs) {
             await this._enqueueNarrative(() => this._playSequence(seq));
             if (!this._alive) return;
         }
@@ -242,7 +245,7 @@ export class TacticalScene extends Phaser.Scene {
     async _advance() {
         if (!this._alive) return;
         const next = this.timeline && this.nodeId ? this.timeline.getNextNodeId(this.nodeId) : null;
-        if (!next) { this.hud.banner('The chronicle ends here', 'No further nodes are available.'); return; }
+        if (!next) { this.hud.banner('The chronicle ends here', 'No further nodes are available.'); this.game.events.emit('yuganta:chronicle-end'); return; }
         await this._goToNode(next, false);
     }
 
