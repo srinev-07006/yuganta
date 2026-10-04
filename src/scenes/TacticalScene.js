@@ -25,10 +25,12 @@ import { TurnManager } from '../core/TurnManager.js';
 import { BattleGrid } from '../core/BattleGrid.js';
 import { AIController } from '../ai/AIController.js';
 import { HudController } from '../ui/HudController.js';
+import { spriteTextureKey } from '../data/CharacterSprites.js';
 
 const PLAYER_FACTION = 'PANDAVA';
 const FACTION_COLOR = { PANDAVA: 0x35b6d6, KAURAVA: 0xe0483a, NEUTRAL: 0xb8b0a0 };
 const GOLD = 0xf3d98b;
+const SPRITE_HEIGHT = 112;       // on-board height of character art, in world px (tile is 128x64)
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const TEXT_RES = Math.max(2, (typeof window !== 'undefined' && window.devicePixelRatio) || 1);
@@ -552,21 +554,37 @@ export class TacticalScene extends Phaser.Scene {
         if (unit.sprite && unit.sprite.scene) return unit.sprite;
         const col = this._unitColor(unit);
         const c = this.add.container(0, 0);
+        const texKey = unit.characterId ? spriteTextureKey(unit.characterId) : null;
+        const hasArt = !!(texKey && !unit.isProp && this.textures?.exists?.(texKey));
         const shadow = this.add.ellipse(0, 4, 56, 20, 0x000000, 0.4);
-        const ring = this.add.circle(0, -20, 21, 0x14101c).setStrokeStyle(3, col);
-        const disc = this.add.circle(0, -20, 15, col);
-        const initial = this.add.text(0, -20, (unit.name || '?').trim().charAt(0).toUpperCase(), {
-            fontFamily: 'Cinzel, Georgia, serif', fontSize: '17px', fontStyle: 'bold', color: '#0b0a12', resolution: TEXT_RES
-        }).setOrigin(0.5);
+        let ring, disc, initial, art = null;
+        if (hasArt) {
+            // Character art standing on the tile; a faction-coloured ground ring replaces the round token.
+            ring = this.add.ellipse(0, 3, 64, 24, 0x14101c, 0).setStrokeStyle(3, col);
+            disc = this.add.ellipse(0, 3, 58, 21, col, 0.35);
+            art = this.add.image(0, 4, texKey).setOrigin(0.5, 1);
+            art.setScale(SPRITE_HEIGHT / art.height);
+            initial = this.add.text(0, 0, '', { fontSize: '1px' }).setVisible(false);
+            c._discAlpha = 0.35;
+            c._top = SPRITE_HEIGHT + 15;
+        } else {
+            ring = this.add.circle(0, -20, 21, 0x14101c).setStrokeStyle(3, col);
+            disc = this.add.circle(0, -20, 15, col);
+            initial = this.add.text(0, -20, (unit.name || '?').trim().charAt(0).toUpperCase(), {
+                fontFamily: 'Cinzel, Georgia, serif', fontSize: '17px', fontStyle: 'bold', color: '#0b0a12', resolution: TEXT_RES
+            }).setOrigin(0.5);
+            c._discAlpha = 1;
+            c._top = 51;
+        }
         const hp = this.add.graphics();
-        const plate = this.add.text(0, -51, '', {
+        const plate = this.add.text(0, -c._top, '', {
             fontFamily: 'Inter, "Segoe UI", sans-serif', fontSize: '11px', fontStyle: 'bold', color: '#efe3c8',
             backgroundColor: 'rgba(11,10,18,0.86)', padding: { x: 6, y: 2 }, resolution: TEXT_RES
         }).setOrigin(0.5, 1);
-        c.add([shadow, ring, disc, initial, hp, plate]);
-        c._parts = { ring, disc, hp, plate, initial };
+        c.add(art ? [shadow, disc, ring, art, hp, plate] : [shadow, ring, disc, initial, hp, plate]);
+        c._parts = { ring, disc, hp, plate, initial, art };
         if (unit.crew?.charioteerId) {                       // chariot token: small gold pip on the rim
-            const pip = this.add.circle(15, -34, 4.5, 0xf3d98b).setStrokeStyle(1.5, 0x0b0a12);
+            const pip = this.add.circle(art ? 26 : 15, art ? -4 : -34, 4.5, 0xf3d98b).setStrokeStyle(1.5, 0x0b0a12);
             c.add(pip);
         }
         unit.sprite = c; unit.gameObject = c; unit.label = plate;
@@ -587,16 +605,19 @@ export class TacticalScene extends Phaser.Scene {
         }
     }
 
+    /** Height of the unit's plate above its feet (taller for character art than for the round token). */
+    _tokenTop(unit) { return unit?.sprite?._top ?? 51; }
+
     _redrawUnitFace(unit) {
         const c = unit.sprite; if (!c || !c._parts) return;
         const col = this._unitColor(unit);
         c._parts.ring.setStrokeStyle(3, col);
-        c._parts.disc.setFillStyle(col);
+        c._parts.disc.setFillStyle(col, c._discAlpha ?? 1);
         const name = (typeof unit.getDisplayName === 'function') ? unit.getDisplayName() : unit.name;
         c._parts.plate.setText(name);
         const g = c._parts.hp; g.clear();
         if (unit.isProp) return;
-        const w = 46, h = 5, x = -w / 2, y = -48;
+        const w = 46, h = 5, x = -w / 2, y = -((c._top ?? 51) - 3);
         const f = clamp(unit.maxHp > 0 ? unit.currentHp / unit.maxHp : 0, 0, 1);
         g.fillStyle(0x0b0a12, 0.92); g.fillRect(x - 1, y - 1, w + 2, h + 2);
         g.fillStyle(f > 0.6 ? 0x4fd29b : f > 0.3 ? 0xf0b429 : 0xe0483a, 1); g.fillRect(x, y, Math.max(1, w * f), h);
@@ -618,7 +639,7 @@ export class TacticalScene extends Phaser.Scene {
     _floatText(unit, text, color = '#ffd166') {
         if (!this._alive || !unit || !this.gridSystem || typeof this.gridSystem.unitAnchor !== "function") return;
         const a = this.gridSystem.unitAnchor(unit.gridX, unit.gridY);
-        const t = this.add.text(a.x, a.y - 62, text, {
+        const t = this.add.text(a.x, a.y - this._tokenTop(unit) - 11, text, {
             fontFamily: 'Cinzel, Georgia, serif', fontSize: '22px', fontStyle: 'bold', color,
             stroke: '#0b0a12', strokeThickness: 5, resolution: TEXT_RES
         }).setOrigin(0.5).setDepth(9700);
@@ -657,7 +678,7 @@ export class TacticalScene extends Phaser.Scene {
         if (!this.selArrow) return;
         if (!unit) { this.selArrow.setVisible(false); return; }
         const a = this.gridSystem.unitAnchor(unit.gridX, unit.gridY);
-        this.selArrow.setPosition(a.x, a.y - 70).setVisible(true);
+        this.selArrow.setPosition(a.x, a.y - this._tokenTop(unit) - 19).setVisible(true);
     }
 
     // =============================================================
@@ -686,7 +707,7 @@ export class TacticalScene extends Phaser.Scene {
 
     _unitScreenPos(unit) {
         const a = this.gridSystem.unitAnchor(unit.gridX, unit.gridY);
-        const s = this.gridSystem.worldToScreen(a.x, a.y - 20);          // centre of the token
+        const s = this.gridSystem.worldToScreen(a.x, a.y - (this._tokenTop(unit) > 60 ? 40 : 20));          // centre of the token
         const o = this._canvasOffset();
         return { x: s.x + o.x, y: s.y + o.y };
     }
@@ -762,7 +783,7 @@ export class TacticalScene extends Phaser.Scene {
         for (const u of this.unitManager.getAllUnits()) {
             if (u.isAlive === false) continue;
             const a = this.gridSystem.unitAnchor(u.gridX, u.gridY);
-            if (wx >= a.x - 30 && wx <= a.x + 30 && wy >= a.y - 62 && wy <= a.y + 12) {
+            if (wx >= a.x - 30 && wx <= a.x + 30 && wy >= a.y - this._tokenTop(u) - 11 && wy <= a.y + 12) {
                 const d = this.gridSystem.getUnitDepth(u.gridX, u.gridY);
                 if (d > bestDepth) { best = u; bestDepth = d; }
             }

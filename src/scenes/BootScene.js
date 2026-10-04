@@ -19,6 +19,7 @@ import { TimelineManager } from '../core/TimelineManager.js';
 import { VNBridge } from '../core/VNBridge.js';
 import { DebugVNOverlay } from '../ui/DebugVNOverlay.js';
 import { mountSanjayaScrubber } from '../ui/SanjayaScrubber.js';
+import { CHARACTER_SPRITE_IDS, spriteTextureKey } from '../data/CharacterSprites.js';
 
 // Node loaded at start-up when the URL has no ?node=<node_id>
 const DEFAULT_DEV_NODE = 'day-1-kuru-kshetra';
@@ -67,6 +68,9 @@ export class BootScene extends Phaser.Scene {
         this.load.json('loreData', 'data/global/lore.json');
         this.load.json('charData', 'data/global/characters.json');
         this.load.json('formationsData', 'data/maps/formations.json');
+
+        // Battle sprites (public/sprites/characters/<character_id>.webp). A missing file just falls back to the coloured token.
+        for (const id of CHARACTER_SPRITE_IDS) this.load.image(spriteTextureKey(id), `sprites/characters/${id}.webp`);
     }
 
     // =============================================================

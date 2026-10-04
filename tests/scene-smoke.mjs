@@ -7,6 +7,9 @@ import { TimelineManager } from '../src/core/TimelineManager.js';
 import { VNBridge } from '../src/core/VNBridge.js';
 import { buildManifest } from '../tools/buildManifest.js';
 import { TacticalScene } from '../src/scenes/TacticalScene.js';
+import { GridSystem } from '../src/systems/GridSystem.js';
+// Headless: no renderer, so hide the rendering-only anchor; the scene skips token views when it is absent.
+delete GridSystem.prototype.unitAnchor;
 
 const dataDir = path.resolve('public/data');
 const rj = (f) => JSON.parse(fs.readFileSync(f, 'utf8').replace(/^\uFEFF/, ''));
