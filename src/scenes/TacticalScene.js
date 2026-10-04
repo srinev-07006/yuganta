@@ -123,6 +123,10 @@ export class TacticalScene extends Phaser.Scene {
         const catalog = this.charactersData || this._getFallbackCharacterCatalog();
         this.unitManager = new UnitManager(this, catalog);
         this.battleGrid = new BattleGrid(this.unitManager, () => this.mapGrid);
+
+        // Initialize charioteer synergy manager
+        this.charioteerSynergyManager = new CharioteerSynergyManager(this, this.unitManager);
+
         this.combatResolver = new CombatResolver(this, this.battleGrid, this.charioteerSynergyManager);
         this.triggerEvaluator = new TriggerEvaluator(this);
         this.triggerEvaluator.reset();
@@ -148,9 +152,6 @@ export class TacticalScene extends Phaser.Scene {
         this.turns.on('round:end', ({ round }) => this.directives.onTurnEnd(round));
         this.turns.on('phase:start', (p) => this._onPhaseStart(p));
         this.turns.on('phase:end', () => this._deselectUnit());
-
-        // Initialize charioteer synergy manager
-        this.charioteerSynergyManager = new CharioteerSynergyManager(this, this.unitManager);
 
         this.ai = new AIController(this._aiFacade(), { thinkDelayMs: 280 });
 

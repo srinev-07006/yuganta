@@ -61,7 +61,7 @@ export class CharioteerSynergyManager {
 
         for (const unit of this.unitManager.getAllUnits()) {
             // Skip invalid units
-            if (!unit || !(unit instanceof this.scene.Maharathi)) continue;
+            if (!unit || unit.unitClass !== 'MAHARATHI') continue;
 
             const synergies = this._getCharioteerSynergies(unit);
             if (synergies.length > 0) {
@@ -70,6 +70,12 @@ export class CharioteerSynergyManager {
                     this.activeSynergies.set(unit.unitId, new Map());
                 }
                 const unitSynergies = this.activeSynergies.get(unit.unitId);
+
+                // Create synergy objects with usesLeft for the unit
+                const unitSynergiesWithUses = synergies.map(synergy => ({
+                    ...synergy,
+                    usesLeft: synergy.maxUses || 1
+                }));
 
                 synergies.forEach(synergy => {
                     unitSynergies.set(synergy.type, {
@@ -86,6 +92,9 @@ export class CharioteerSynergyManager {
                         unit: unit || null
                     });
                 });
+
+                // Set the unit's charioteer synergies so it knows what's available
+                unit.setCharioteerSynergies(unitSynergiesWithUses);
             }
         }
     }
