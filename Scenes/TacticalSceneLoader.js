@@ -10,10 +10,11 @@
  *   3. Create Sprites for each unit at spawn_tile coordinates
  */
 
-const fs = require('fs');
-const path = require('path');
 
-class TacticalSceneLoader {
+import fs from 'fs';
+import path from 'path';
+
+export class TacticalSceneLoader {
   constructor(dataStore) {
     this.dataStore = dataStore;
   }
@@ -26,16 +27,16 @@ class TacticalSceneLoader {
    */
   load(mapId, dataDir = null) {
     if (!dataDir) {
-      dataDir = path ? path.join(__dirname, '../data') : '../data';
+      dataDir = process.cwd() ? path.join(process.cwd(), 'public/data') : '../data';
     }
 
-    const mapPath = require('path').join(dataDir, 'maps', `${mapId}.json`);
+    const mapPath = path.join(dataDir, 'maps', `${mapId}.json`);
 
-    if (!require('fs').existsSync(mapPath)) {
+    if (!fs.existsSync(mapPath)) {
       throw new Error(`Map file not found: ${mapPath}`);
     }
 
-    const mapData = require('fs').readFileSync(mapPath, 'utf8');
+    const mapData = fs.readFileSync(mapPath, 'utf8');
     const parsed = JSON.parse(mapData);
 
     // VN-only maps require no grid processing
@@ -274,7 +275,3 @@ class TacticalSceneLoader {
   }
 }
 
-// Node.js compatibility
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = TacticalSceneLoader;
-}

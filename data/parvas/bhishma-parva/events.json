@@ -1,0 +1,36 @@
+{
+  "events": [
+    {
+      "id": "event-bhishma-hp-low",
+      "description": "Triggers when Bhishma's HP drops below 50% and Shikhandi is adjacent",
+      "trigger_condition": {
+        "bhishma_hp_percent": 50,
+        "shikhandi_adjacent": true
+      },
+      "effects": [
+        {
+          "type": "freeze_combat",
+          "duration": "until_choice_made"
+        },
+        {
+          "type": "trigger_dialogue",
+          "dialogue_id": "day-10-fall"
+        }
+      ]
+    },
+    {
+      "id": "event-gita-start",
+      "description": "Triggers at the start of Day 1 to initiate the Bhagavad Gita sequence",
+      "trigger_condition": {
+        "day": 1,
+        "battle_phase": "start"
+      },
+      "effects": [
+        {
+          "type": "trigger_dialogue",
+          "dialogue_id": "gita-visada"
+        }
+      ]
+    }
+  ]
+}
