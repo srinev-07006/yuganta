@@ -23,9 +23,10 @@ import { TERRAIN_CONFIG } from '../data/TerrainConfig.js';
 
 export class CombatResolver {
 
-    constructor(scene, gridSystem) {
+    constructor(scene, gridSystem, charioteerSynergyManager = null) {
         this.scene = scene;
         this.grid = gridSystem;
+        this.charioteerSynergyManager = charioteerSynergyManager;
     }
 
     // =============================================================
@@ -50,6 +51,11 @@ export class CombatResolver {
     }
 
     resolveAttack(attacker, defender, astraId = null, opts = {}) {
+        // Early return if attacker or defender is invalid
+        if (!attacker || !defender) {
+            return { damage: 0, log: ['Invalid attacker or defender'], blocked: true, reason: 'INVALID_UNITS' };
+        }
+
         // ----------------------------------------------------------
         // COMBAT LOG
         // ----------------------------------------------------------
@@ -63,6 +69,10 @@ export class CombatResolver {
         // STEP 0: Can this unit even attack?
         // ----------------------------------------------------------
         // Check for DisableAttackCommand (Krishna's vow)
+        if (typeof attacker.getTraitHandlers !== 'function') {
+            log.push(`❌ Attacker missing getTraitHandlers method`);
+            return { damage: 0, log, blocked: true, reason: 'INVALID_ATTACKER' };
+        }
         const attackerHandlers = attacker.getTraitHandlers();
         for (const handler of attackerHandlers) {
             const result = executeHandler(handler, {
@@ -73,7 +83,7 @@ export class CombatResolver {
             });
 
             if (result.disableAttack) {
-                log.push(`❌ ${attacker.name} has vowed not to attack.`);
+                log.push(`❌ ${attacker.name || 'Unknown'} has vowed not to attack.`);
                 return { damage: 0, log, blocked: true, reason: 'VOW_NO_COMBAT' };
             }
         }
@@ -81,15 +91,24 @@ export class CombatResolver {
         // ----------------------------------------------------------
         // STEP 1: INVULNERABILITY CHECK
         // ----------------------------------------------------------
+        // Validate defender has required methods
+        if (typeof defender.isInvulnerable !== 'function') {
+            log.push(`❌ Defender missing isInvulnerable method`);
+            return { damage: 0, log, blocked: true, reason: 'INVALID_DEFENDER' };
+        }
+        if (!Array.isArray(defender.resolvedTraits)) {
+            log.push(`❌ Defender missing or invalid resolvedTraits`);
+            return { damage: 0, log, blocked: true, reason: 'INVALID_DEFENDER' };
+        }
         if (defender.isInvulnerable()) {
-            log.push(`🛡️ ${defender.name} has invulnerability trait(s).`);
+            log.push(`🛡️ ${defender.name || 'Unknown'} has invulnerability trait(s).`);
 
             // Run each invulnerability handler to check for counters
             let stillInvulnerable = false;   // becomes true if ANY invulnerability trait still holds
             let narrativeLine = '';
 
             for (const trait of defender.resolvedTraits) {
-                if (trait.invulnerable_to_standard_damage) {
+                if (trait && trait.invulnerable_to_standard_damage) {
                     const result = executeHandler(trait.custom_script_handler, {
                         unit: defender,
                         attacker: attacker,
@@ -100,10 +119,10 @@ export class CombatResolver {
 
                     if (result.invulnerable === false) {
                         narrativeLine = result.narrative || '';
-                        log.push(`💥 ${trait.trait_name} BROKEN: ${narrativeLine}`);
+                        log.push(`💥 ${trait.trait_name || 'Unknown'} BROKEN: ${narrativeLine}`);
                     } else {
                         stillInvulnerable = true;
-                        log.push(`🛡️ ${trait.trait_name}: Still invulnerable.`);
+                        log.push(`🛡️ ${trait.trait_name || 'Unknown'}: Still invulnerable.`);
                     }
                 }
             }
@@ -114,7 +133,7 @@ export class CombatResolver {
             }
 
             if (stillInvulnerable && !astraId) {
-                log.push(`❌ Attack deals 0 damage. ${defender.name} is protected.`);
+                log.push(`❌ Attack deals 0 damage. ${defender.name || 'Unknown'} is protected.`);
                 return { damage: 0, log, blocked: true, reason: 'INVULNERABLE' };
             }
         }
@@ -169,6 +188,23 @@ export class CombatResolver {
         if (attacker.activeVows && attacker.activeVows.has('arjuna-vow')) {
             attackMultiplier *= 2.0;
             log.push(`📜 Vow of Arjuna: Damage ×2.0`);
+        }
+
+        // --- CHARIOTEER SYNERGY EFFECTS ---
+        // Check for charioteer synergies that affect attack
+        const synergies = attacker.getCharioteerSynergies();
+        for (const synergy of synergies) {
+            // Psychological Warfare from Shalya charioteer
+            if (synergy.type === 'psychological-warfare' && synergy.usesLeft > 0) {
+                const { chance, attackReduction } = synergy.data;
+                if (Math.random() < chance) {
+                    attackMultiplier *= (1.0 - attackReduction);
+                    log.push(`🌀 Psychological Warfare: Enemy hesitation! Damage ×${(1.0 - attackReduction).toFixed(2)}`);
+                    // Mark as used - this will be handled by the synergy manager
+                    // We'll use it after determining if the attack hits
+                    attacker._pendingSynergyUse = { type: 'psychological-warfare' };
+                }
+            }
         }
 
         for (const entry of this._traitEntries(attacker)) {
@@ -265,6 +301,15 @@ export class CombatResolver {
         if (stunTarget && defender.isAlive) {
             defender.isStunned = true;
             log.push(`⚡ ${defender.name} is STUNNED for 1 turn!`);
+        }
+
+        // Use charioteer synergy if one was triggered
+        if (attacker._pendingSynergyUse) {
+            const synergyType = attacker._pendingSynergyUse.type;
+            if (attacker.useCharioteerSynergy(synergyType)) {
+                log.push(`🌀 Charioteer Synergy: ${synergyType} activated!`);
+            }
+            delete attacker._pendingSynergyUse;
         }
 
         // ----------------------------------------------------------

@@ -26,6 +26,7 @@ import { BattleGrid } from '../core/BattleGrid.js';
 import { AIController } from '../ai/AIController.js';
 import { HudController } from '../ui/HudController.js';
 import { spriteTextureKey } from '../data/CharacterSprites.js';
+import { CharioteerSynergyManager } from '../systems/CharioteerSynergyManager.js';
 
 const PLAYER_FACTION = 'PANDAVA';
 const FACTION_COLOR = { PANDAVA: 0x35b6d6, KAURAVA: 0xe0483a, NEUTRAL: 0xb8b0a0 };
@@ -82,6 +83,7 @@ export class TacticalScene extends Phaser.Scene {
                 wait: () => this._onActionWait(),
                 astra: (id) => this._onActionAstra(id),
                 vow: (id) => this._onActionVow(id),
+                charioteerSynergy: (id) => this._onActionCharioteerSynergy(id),
                 cancel: () => this._deselectUnit(),
                 endPhase: () => this._endPlayerPhase()
             });
@@ -121,7 +123,7 @@ export class TacticalScene extends Phaser.Scene {
         const catalog = this.charactersData || this._getFallbackCharacterCatalog();
         this.unitManager = new UnitManager(this, catalog);
         this.battleGrid = new BattleGrid(this.unitManager, () => this.mapGrid);
-        this.combatResolver = new CombatResolver(this, this.battleGrid);
+        this.combatResolver = new CombatResolver(this, this.battleGrid, this.charioteerSynergyManager);
         this.triggerEvaluator = new TriggerEvaluator(this);
         this.triggerEvaluator.reset();
 
@@ -146,6 +148,9 @@ export class TacticalScene extends Phaser.Scene {
         this.turns.on('round:end', ({ round }) => this.directives.onTurnEnd(round));
         this.turns.on('phase:start', (p) => this._onPhaseStart(p));
         this.turns.on('phase:end', () => this._deselectUnit());
+
+        // Initialize charioteer synergy manager
+        this.charioteerSynergyManager = new CharioteerSynergyManager(this, this.unitManager);
 
         this.ai = new AIController(this._aiFacade(), { thinkDelayMs: 280 });
 
@@ -211,6 +216,9 @@ export class TacticalScene extends Phaser.Scene {
         } else {
             this._spawnBattlefieldUnits();
         }
+
+        // Initialize charioteer synergies after units are spawned
+        this.charioteerSynergyManager.initializeCharioteerSynergies();
 
         this._fit();
         this.hud.log(`${this.bundle?.node?.title || 'Demo board'} — select a Pandava unit. Move once, then Attack or Wait.`, 'system');
@@ -880,7 +888,7 @@ export class TacticalScene extends Phaser.Scene {
             return;
         }
         if (this.currentState === this.STATES.AWAITING_MOVE_TARGET) {
-            if (this.reachableTiles.some(t => t.x === x && t.y === y) && !(unit && unit !== this.selectedUnit)) this._executePlayerMove(this.selectedUnit, x, y);
+            if (this.selectedUnit && this.reachableTiles.some(t => t.x === x && t.y === y) && !(unit && unit !== this.selectedUnit)) this._executePlayerMove(this.selectedUnit, x, y);
             else if (unit) this._selectUnit(unit);
             else this._deselectUnit();
             return;
@@ -901,7 +909,7 @@ export class TacticalScene extends Phaser.Scene {
     }
 
     _menuFlags(unit) {
-        const flags = { canMove: !unit.hasMovedThisTurn, canAttack: true, astras: [], vows: [] };
+        const flags = { canMove: !unit.hasMovedThisTurn, canAttack: true, astras: [], vows: [], charioteerSynergies: [] };
 
         // Astras
         if (unit.resolvedAstras && unit.resolvedAstras.length > 0) {
@@ -929,6 +937,20 @@ export class TacticalScene extends Phaser.Scene {
                     name: v.name,
                     description: v.description,
                     active: active
+                };
+            });
+        }
+
+        // Charioteer Synergies
+        if (unit.getCharioteerSynergies && unit.getCharioteerSynergies().length > 0) {
+            flags.charioteerSynergies = unit.getCharioteerSynergies().map(synergy => {
+                // Check if synergy is available (has uses left and not on cooldown)
+                const available = this.charioteerSynergyManager.getAvailableSynergy(unit.unitId, synergy.type);
+                return {
+                    id: synergy.type,
+                    name: synergy.type.replace('-', ' ').replace(/\b\w/g, c => c.toUpperCase()),
+                    description: synergy.data.description || synergy.type,
+                    available: !!available
                 };
             });
         }
@@ -1033,6 +1055,33 @@ export class TacticalScene extends Phaser.Scene {
 
         // Refresh menu to show the updated active state
         this.hud.showMenu(this._unitScreenPos(u), u, this._menuFlags(u));
+    }
+
+    _onActionCharioteerSynergy(synergyId) {
+        const u = this.selectedUnit;
+        if (!u || !this._isPlayerInputOpen() || !this._isControllable(u)) return;
+
+        // Check if unit has the requested charioteer synergy available
+        if (!u.hasCharioteerSynergy(synergyId)) {
+            this.hud.log(`${u.name} does not have the ${synergyId} synergy available.`, 'bad');
+            return;
+        }
+
+        // Use the synergy through the charioteer synergy manager
+        const used = this.charioteerSynergyManager.useSynergy(u.unitId, synergyId);
+        if (!used) {
+            this.hud.log(`${u.name} cannot use ${synergyId} synergy right now.`, 'bad');
+            return;
+        }
+
+        // Provide feedback to the player
+        this.hud.log(`🌀 ${u.name} activates ${synergyId.replace('-', ' ')}!`, 'good');
+
+        // End the unit's action since using a synergy consumes their turn
+        u.endAction();
+        this.currentState = this.STATES.IDLE;
+        this._deselectUnit();
+        this._afterPlayerAction();
     }
 
     // =========================================================================

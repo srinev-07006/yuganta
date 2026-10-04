@@ -437,6 +437,27 @@ export class HudController {
             });
         }
 
+        if (flags.charioteerSynergies && flags.charioteerSynergies.length > 0) {
+            html += `<hr style="border: 0; border-top: 1px solid #555; margin: 6px 0;" />`;
+            flags.charioteerSynergies.forEach(synergy => {
+                const ready = synergy.available;
+                const usesText = synergy.available ? '(available)' : '(on cooldown)';
+                html += `<button data-action="charioteer-synergy" data-id="${synergy.id}" ${ready ? '' : 'disabled'} style="
+                    display: block;
+                    width: 100%;
+                    padding: 6px;
+                    margin: 4px 0;
+                    background: ${ready ? '#8b4513' : '#553c66'};
+                    color: ${ready ? '#fff' : '#aaa'};
+                    border: 1px solid ${ready ? '#d2b48c' : '#666'};
+                    border-radius: 2px;
+                    cursor: pointer;
+                    font-weight: bold;
+                    font-size: 11px;
+                ">⚔️ ${synergy.name} ${usesText}</button>`;
+            });
+        }
+
         html += `<button data-action="cancel" style="
             display: block;
             width: 100%;

@@ -62,6 +62,8 @@ export class Unit {
         this.resolvedVows = config.resolvedVows || [];
         this.activeVows = new Set();
         this.consumedAstras = new Set();
+        // Charioteer synergies
+        this.charioteerSynergies = []; // List of available synergy types
 
         // ----------------------------------------------------------
         // VISUAL REFERENCES
@@ -125,6 +127,58 @@ export class Unit {
         return this.resolvedTraits
             .map(t => t.custom_script_handler)
             .filter(Boolean);
+    }
+
+    // =============================================================
+    // CHARIOTEER SYNERGY SYSTEM
+    // =============================================================
+
+    /**
+     * Set available charioteer synergies for this unit
+     * Called by CharioteerSynergyManager during initialization
+     */
+    setCharioteerSynergies(synergies) {
+        this.charioteerSynergies = synergies || [];
+    }
+
+    /**
+     * Get available charioteer synergies for this unit
+     * @returns {Array} List of available synergy objects
+     */
+    getCharioteerSynergies() {
+        return this.charioteerSynergies;
+    }
+
+    /**
+     * Check if unit has a specific charioteer synergy available
+     * @param {string} synergyType - Type of synergy to check
+     * @returns {boolean} true if available
+     */
+    hasCharioteerSynergy(synergyType) {
+        return this.charioteerSynergies.some(s => s.type === synergyType);
+    }
+
+    /**
+     * Use a charioteer synergy
+     * @param {string} synergyType - Type of synergy to use
+     * @returns {boolean} true if synergy was used
+     */
+    useCharioteerSynergy(synergyType) {
+        const index = this.charioteerSynergies.findIndex(s => s.type === synergyType);
+        if (index === -1) return false;
+
+        const synergy = this.charioteerSynergies[index];
+        if (synergy.usesLeft <= 0) return false;
+
+        // Use the synergy
+        synergy.usesLeft--;
+
+        // Remove if no uses left
+        if (synergy.usesLeft <= 0) {
+            this.charioteerSynergies.splice(index, 1);
+        }
+
+        return true;
     }
 
     // =============================================================
