@@ -32,11 +32,17 @@ export function buildManifest(dataDir) {
     for (const slug of slugs) {
         const dir = path.join(parvasDir, slug);
         const meta = readJson(path.join(dir, '_meta.json'), problems);
-        const timeline = readJson(path.join(dir, 'timeline.json'), problems);
-        if (!meta || !timeline || !Array.isArray(timeline.nodes)) {
+        const timelineData = readJson(path.join(dir, 'timeline.json'), problems);
+        if (!meta || !timelineData) {
             problems.push(`${slug}: missing/invalid _meta.json or timeline.json — parva skipped`);
             continue;
         }
+        const timelineNodes = timelineData.nodes || timelineData.timeline || [];
+        if (!Array.isArray(timelineNodes)) {
+            problems.push(`${slug}: timeline (nodes) is not an array — parva skipped`);
+            continue;
+        }
+
         if (!fs.existsSync(path.join(dir, 'directives.json'))) {
             problems.push(`${slug}: directives.json missing — parva skipped`);
             continue;
@@ -45,18 +51,20 @@ export function buildManifest(dataDir) {
         const dialogues = fs.existsSync(dlgDir) ? fs.readdirSync(dlgDir).filter(f => f.endsWith('.json')).sort() : [];
 
         const nodes = [];
-        for (const n of timeline.nodes) {
-            if (!n.node_id) { problems.push(`${slug}: a timeline node has no node_id — skipped`); continue; }
-            if (seenNodes.has(n.node_id)) { problems.push(`node_id "${n.node_id}" appears in both ${seenNodes.get(n.node_id)} and ${slug}`); continue; }
-            seenNodes.set(n.node_id, slug);
-            if (n.map_id && !maps.includes(n.map_id)) problems.push(`${n.node_id}: map_id "${n.map_id}" has no file in public/data/maps (demo map will be used)`);
+        for (const n of timelineNodes) {
+            const node_id = n.node_id || n.id;
+            if (!node_id) { problems.push(`${slug}: a timeline node has no node_id/id — skipped`); continue; }
+            if (seenNodes.has(node_id)) { problems.push(`node_id "${node_id}" appears in both ${seenNodes.get(node_id)} and ${slug}`); continue; }
+            seenNodes.set(node_id, slug);
+
+            if (n.map_id && !maps.includes(n.map_id)) problems.push(`${node_id}: map_id "${n.map_id}" has no file in public/data/maps (demo map will be used)`);
             nodes.push({
-                node_id: n.node_id, war_day: n.war_day ?? 0, phase_name: n.phase_name ?? '',
-                title: n.title ?? n.node_id, initial_scene_type: n.initial_scene_type || 'TACTICAL', map_id: n.map_id ?? null
+                node_id: node_id, war_day: n.war_day ?? 0, phase_name: n.phase_name ?? '',
+                title: n.title ?? node_id, initial_scene_type: n.initial_scene_type || 'TACTICAL', map_id: n.map_id ?? null
             });
         }
         parvas.push({
-            parva_id: meta.parva_id ?? timeline.nodes[0]?.parva_id ?? null, slug, name: meta.name ?? slug,
+            parva_id: meta.parva_id ?? timelineNodes[0]?.parva_id ?? null, slug, name: meta.name ?? slug,
             order_index: meta.order_index ?? 999, is_unlocked: meta.is_unlocked !== false, nodes, dialogues
         });
     }
