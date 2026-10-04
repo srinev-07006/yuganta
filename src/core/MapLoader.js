@@ -7,11 +7,15 @@
 //                {"unit_class":"GAJA","faction":"KAURAVA","x":8,"y":5} ] }
 // terrain: plains|forest|mountain|desert|river|lake. Errors are readable; callers fall back to the demo map.
 import { TERRAIN_CONFIG } from '../data/TerrainConfig.js';
+import { isRegionMap, convertRegionMap } from './MapConverter.js';
 
 const FACTIONS = ['PANDAVA', 'KAURAVA'];
 const UNIT_CLASSES = ['RATHA', 'GAJA', 'ASHVA', 'PADATI_MELEE', 'PADATI_RANGED', 'MAHARATHI'];
 
 export function parseMap(json, terrainConfig = TERRAIN_CONFIG) {
+    // Region-style files (grid_width/tiles/spawn_zones) are converted to this shape first — see MapConverter.js.
+    const converted = isRegionMap(json) ? convertRegionMap(json) : null;
+    if (converted) json = converted;
     const where = json?.map_id || '(unnamed map)';
     const fail = (msg) => { throw new Error(`[MapLoader] ${where}: ${msg}`); };
     if (!json || typeof json !== 'object') fail('not an object');
@@ -39,5 +43,9 @@ export function parseMap(json, terrainConfig = TERRAIN_CONFIG) {
     });
     const seen = new Set();
     for (const s of spawns) { const k = `${s.x},${s.y}`; if (seen.has(k)) fail(`two spawns on tile (${k})`); seen.add(k); }
-    return { mapId: json.map_id, width, height, matrix, spawns };
+    return {
+        mapId: json.map_id, width, height, matrix, spawns,
+        spawn_zones: json.spawn_zones || null,          // region maps: where each side starts (scene derives the roster)
+        notes: json.notes || [], unsupported: json.unsupported || [], sourceFormat: json.source_format || 'grid'
+    };
 }

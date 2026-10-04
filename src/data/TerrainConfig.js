@@ -199,6 +199,36 @@ export const TERRAIN_CONFIG = {
         moveCost: 99, defenseModifier: 0, isPassable: false,
         color: 0x1b1022, elevation: -14,
         unitOverrides: {}, attritionPerTurn: 0, visibilityModifier: 1.0, specialFlag: 'VOID'
+    },
+
+    // ---- Added for the region-style battle maps (see src/core/MapConverter.js) ----
+    // Numbers are balance defaults, not canon — tune freely.
+    hill: {                       // ELEVATED tiles: high ground, slower to climb
+        name: 'Hill',
+        moveCost: 2, defenseModifier: 0.3, isPassable: true,
+        color: 0xa8b56a, elevation: 12,
+        unitOverrides: { GAJA: { moveCost: 3 } },
+        attritionPerTurn: 0, visibilityModifier: 1.0, specialFlag: 'NONE'
+    },
+    mud: {                        // MUD tiles: chariots bog down
+        name: 'Mud',
+        moveCost: 2, defenseModifier: -0.1, isPassable: true,
+        color: 0x6b5238, elevation: -2,
+        unitOverrides: { RATHA: { moveCost: 3 }, GAJA: { moveCost: 3 } },
+        attritionPerTurn: 0, visibilityModifier: 1.0, specialFlag: 'NONE'
+    },
+    fortified: {                  // FORTIFIED tiles: palisades, shield-lines, camp defenses
+        name: 'Fortified',
+        moveCost: 1, defenseModifier: 0.5, isPassable: true,
+        color: 0x8c7b64, elevation: 6,
+        unitOverrides: { GAJA: { moveCost: 99, isPassable: false } },
+        attritionPerTurn: 0, visibilityModifier: 1.0, specialFlag: 'COVER'
+    },
+    sanctuary: {                  // SANCTUARY tiles: sacred ground, plain rules
+        name: 'Sanctuary',
+        moveCost: 1, defenseModifier: 0, isPassable: true,
+        color: 0xe6c86e, elevation: 2,
+        unitOverrides: {}, attritionPerTurn: 0, visibilityModifier: 1.0, specialFlag: 'NONE'
     }
 };
 

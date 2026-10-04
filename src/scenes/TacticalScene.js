@@ -18,6 +18,7 @@ import { TriggerEvaluator } from '../systems/TriggerEvaluator.js';
 import { DirectiveManager, DIRECTIVE_EVENTS } from '../systems/DirectiveManager.js';
 import { spawnMapUnits } from '../systems/MapSpawner.js';
 import { spawnFormation, buildCharacterPool } from '../systems/FormationSpawner.js';
+import { deriveSpawns } from '../core/MapConverter.js';
 import { getTerrainForUnit } from '../data/TerrainConfig.js';
 import { getMapLayout } from '../data/MapLayouts.js';
 import { TurnManager } from '../core/TurnManager.js';
@@ -156,8 +157,17 @@ export class TacticalScene extends Phaser.Scene {
         };
         this.scale.on('resize', this._resizeHandler);
 
-        if (map && map.spawns.length) {
-            const { units, failures } = spawnMapUnits(this.unitManager, map.spawns);
+        // Region-style maps ship spawn ZONES, not units: pick a roster inside them (unless the node uses formations).
+        let mapSpawns = map?.spawns || [];
+        const usesFormations = !!(this.bundle?.pandava_formation && this.bundle?.kaurava_formation);
+        if (map && !mapSpawns.length && map.spawn_zones && !usesFormations) {
+            const derived = deriveSpawns(map, { directives: this.bundle?.directives, triggers: this.bundle?.triggers,
+                characterMap: this.characterMap, nodeId: this.nodeId });
+            derived.notes.forEach(n => this.hud.log(`Spawn: ${n}`, 'system'));
+            mapSpawns = derived.spawns;
+        }
+        if (map && mapSpawns.length) {
+            const { units, failures } = spawnMapUnits(this.unitManager, mapSpawns);
             units.forEach(u => this._syncUnitView(u));
             failures.forEach(f => this.hud.log(`Spawn failed: ${f.spawn.character_id || f.spawn.unit_class} at (${f.spawn.x},${f.spawn.y}) — ${f.error}`, 'bad'));
         } else if (this.bundle?.pandava_formation && this.bundle?.kaurava_formation) {

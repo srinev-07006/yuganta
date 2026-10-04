@@ -42,7 +42,7 @@ function makeScene(bundle) {
     s.events = new Emitter();
     s.registry = registry;
     s.scale = { width: 1280, height: 720, on() {}, off() {} };
-    s.cameras = { main: { width: 1280, height: 720 } };
+    s.cameras = { main: { width: 1280, height: 720, shake() {}, flash() {}, fadeIn() {}, fadeOut() {}, setZoom() {}, centerOn() {}, pan() {} } };
     s.input = { on() {}, off() {} };
     const any = (await_ => null);
     const { default: P } = { default: null };

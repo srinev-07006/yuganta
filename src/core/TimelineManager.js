@@ -58,8 +58,11 @@ export class TimelineManager {
 
         const data = await this._loadParva(parva.slug);
         warnings.push(...data.loadWarnings);
-        const node = data.timeline.nodes.find(n => n.node_id === nodeId) || hit.node;
-        const nodeIds = data.timeline.nodes.map(n => n.node_id);
+        // timeline.json ships in two shapes: { nodes:[{node_id}] } and { timeline:[{id}] } (matches tools/buildManifest.js)
+        const tlNodes = Array.isArray(data.timeline) ? data.timeline : (data.timeline.nodes || data.timeline.timeline || []);
+        const idOf = n => n.node_id || n.id;
+        const node = hit.node.initial_scene_type ? { ...(tlNodes.find(n => idOf(n) === nodeId) || {}), ...hit.node } : hit.node;
+        const nodeIds = tlNodes.map(idOf).filter(Boolean);
 
         const triggers = [];
         for (const raw of data.directivesFile.triggers || []) {
@@ -88,9 +91,13 @@ export class TimelineManager {
         const startSequences = Object.values(data.sequences).filter(s => s.node_id === nodeId && s.trigger_event === 'NODE_START');
 
         let map = null;
-        if (node.map_id && (this.manifest.maps || []).includes(node.map_id)) {
-            try { map = parseMap(await this.fetchJson(`${this.baseUrl}/maps/${node.map_id}.json`)); }
-            catch (err) { warnings.push(`${err.message} — using demo map`); }
+        // VN nodes never build a grid, so their (backdrop-only) map files are not loaded.
+        if ((node.initial_scene_type || 'TACTICAL') !== 'VN' && node.map_id && (this.manifest.maps || []).includes(node.map_id)) {
+            try {
+                map = parseMap(await this.fetchJson(`${this.baseUrl}/maps/${node.map_id}.json`));
+                map.notes.forEach(n => warnings.push(`${node.map_id}: ${n}`));
+                if (map.unsupported.length) warnings.push(`${node.map_id}: engine does not implement yet → ${map.unsupported.join(', ')}`);
+            } catch (err) { warnings.push(`${err.message} — using demo map`); }
         }
 
         if (this.gameState) {
