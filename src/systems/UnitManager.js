@@ -173,6 +173,7 @@ export class UnitManager {
             weaponType,
             resolvedTraits: [...(charData.resolvedTraits || [])],
             resolvedAstras: [...(charData.resolvedAstras || [])],
+            resolvedVows: [...(charData.resolvedVows || [])],
             gridX,
             gridY
         });
@@ -262,6 +263,7 @@ export class UnitManager {
             weaponType,
             resolvedTraits: [...(warriorData.resolvedTraits || [])],
             resolvedAstras: [...(warriorData.resolvedAstras || [])],
+            resolvedVows: [...(warriorData.resolvedVows || [])],
             gridX,
             gridY,
             sarathiBuffScale: isHeroSarathi ? 0.7 : 0.0,

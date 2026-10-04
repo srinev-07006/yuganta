@@ -59,13 +59,13 @@ export function buildManifest(dataDir) {
 
             if (n.map_id && !maps.includes(n.map_id)) problems.push(`${node_id}: map_id "${n.map_id}" has no file in public/data/maps (demo map will be used)`);
             nodes.push({
-                node_id: node_id, war_day: n.war_day ?? 0, phase_name: n.phase_name ?? '',
-                title: n.title ?? node_id, initial_scene_type: n.initial_scene_type || 'TACTICAL', map_id: n.map_id ?? null
+                node_id: node_id, war_day: n.war_day ?? n.day ?? 0, phase_name: n.phase_name ?? '',
+                title: n.title ?? node_id, initial_scene_type: n.initial_scene_type || (n.battle_start === false ? 'VN' : 'TACTICAL'), map_id: n.map_id ?? null
             });
         }
         parvas.push({
             parva_id: meta.parva_id ?? timelineNodes[0]?.parva_id ?? null, slug, name: meta.name ?? slug,
-            order_index: meta.order_index ?? 999, is_unlocked: meta.is_unlocked !== false, nodes, dialogues
+            order_index: meta.order_index ?? meta.order ?? 999, is_unlocked: (meta.locked === true ? false : (meta.is_unlocked !== false)), nodes, dialogues
         });
     }
     parvas.sort((a, b) => a.order_index - b.order_index);

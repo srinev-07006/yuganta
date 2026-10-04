@@ -399,6 +399,44 @@ export class HudController {
             cursor: pointer;
         ">Wait</button>`;
 
+        if (flags.astras && flags.astras.length > 0) {
+            html += `<hr style="border: 0; border-top: 1px solid #555; margin: 6px 0;" />`;
+            flags.astras.forEach(astra => {
+                const canUse = astra.allowed;
+                html += `<button data-action="astra" data-id="${astra.id}" ${canUse ? '' : 'disabled'} title="${astra.reason || astra.description}" style="
+                    display: block;
+                    width: 100%;
+                    padding: 6px;
+                    margin: 4px 0;
+                    background: ${canUse ? '#9b4dca' : '#553c66'};
+                    color: ${canUse ? '#fff' : '#aaa'};
+                    border: 1px solid ${canUse ? '#d0a2f5' : '#666'};
+                    border-radius: 2px;
+                    cursor: pointer;
+                    font-weight: bold;
+                ">🌟 ${astra.name}</button>`;
+            });
+        }
+
+        if (flags.vows && flags.vows.length > 0) {
+            html += `<hr style="border: 0; border-top: 1px solid #555; margin: 6px 0;" />`;
+            flags.vows.forEach(vow => {
+                const active = vow.active;
+                html += `<button data-action="vow" data-id="${vow.id}" style="
+                    display: block;
+                    width: 100%;
+                    padding: 6px;
+                    margin: 4px 0;
+                    background: ${active ? '#dca84d' : '#886d3b'};
+                    color: ${active ? '#000' : '#ddd'};
+                    border: 1px solid ${active ? '#f5d9a2' : '#666'};
+                    border-radius: 2px;
+                    cursor: pointer;
+                    font-weight: bold;
+                ">📜 ${vow.name}</button>`;
+            });
+        }
+
         html += `<button data-action="cancel" style="
             display: block;
             width: 100%;
@@ -421,7 +459,8 @@ export class HudController {
             this.menuEl.querySelectorAll('button').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const action = btn.getAttribute('data-action');
-                    if (this.callbacks[action]) this.callbacks[action]();
+                    const id = btn.getAttribute('data-id');
+                    if (this.callbacks[action]) this.callbacks[action](id);
                 });
             });
         }

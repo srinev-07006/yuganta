@@ -108,6 +108,11 @@ export class CombatResolver {
                 }
             }
 
+            if (defender.activeVows && defender.activeVows.has('bhishma-vow')) {
+                stillInvulnerable = true;
+                log.push(`📜 Bhishma's Vow active: Invulnerable!`);
+            }
+
             if (stillInvulnerable && !astraId) {
                 log.push(`❌ Attack deals 0 damage. ${defender.name} is protected.`);
                 return { damage: 0, log, blocked: true, reason: 'INVULNERABLE' };
@@ -159,6 +164,12 @@ export class CombatResolver {
         let extraAttack = false;
         let stunTarget = false;
         let astraExpertiseMultiplier = 1.0; // FIX: was computed by traits (e.g. Drona) but never read/applied
+
+        // --- VOW EFFECTS ---
+        if (attacker.activeVows && attacker.activeVows.has('arjuna-vow')) {
+            attackMultiplier *= 2.0;
+            log.push(`📜 Vow of Arjuna: Damage ×2.0`);
+        }
 
         for (const entry of this._traitEntries(attacker)) {
             const trait = entry.trait;

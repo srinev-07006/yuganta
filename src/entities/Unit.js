@@ -59,6 +59,8 @@ export class Unit {
         // ----------------------------------------------------------
         this.resolvedTraits = config.resolvedTraits || [];
         this.resolvedAstras = config.resolvedAstras || [];
+        this.resolvedVows = config.resolvedVows || [];
+        this.activeVows = new Set();
         this.consumedAstras = new Set();
 
         // ----------------------------------------------------------
@@ -110,7 +112,9 @@ export class Unit {
     }
 
     isInvulnerable() {
-        return this.resolvedTraits.some(t => t.invulnerable_to_standard_damage === true);
+        const fromTraits = this.resolvedTraits.some(t => t.invulnerable_to_standard_damage === true);
+        const fromBhishmaVow = this.activeVows && this.activeVows.has('bhishma-vow');
+        return fromTraits || fromBhishmaVow;
     }
 
     ignoresTerrainCost() {

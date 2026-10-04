@@ -80,6 +80,8 @@ export class TacticalScene extends Phaser.Scene {
                 move: () => this._onActionMove(),
                 attack: () => this._onActionAttack(),
                 wait: () => this._onActionWait(),
+                astra: (id) => this._onActionAstra(id),
+                vow: (id) => this._onActionVow(id),
                 cancel: () => this._deselectUnit(),
                 endPhase: () => this._endPlayerPhase()
             });
@@ -898,7 +900,41 @@ export class TacticalScene extends Phaser.Scene {
         return unit && unit.faction === PLAYER_FACTION && !unit.isProp && unit.canAct?.() !== false && this.turns?.isPlayerPhase;
     }
 
-    _menuFlags(unit) { return { canMove: !unit.hasMovedThisTurn, canAttack: true }; }
+    _menuFlags(unit) {
+        const flags = { canMove: !unit.hasMovedThisTurn, canAttack: true, astras: [], vows: [] };
+
+        // Astras
+        if (unit.resolvedAstras && unit.resolvedAstras.length > 0) {
+            const currentDharma = this._gameState?.dharmaMeter ?? 50;
+            flags.astras = unit.resolvedAstras.map(a => {
+                const check = unit.canUseAstra ? unit.canUseAstra(a.id || a.astra_id, currentDharma) : { allowed: false, reason: "Engine missing canUseAstra" };
+                return {
+                    id: a.id || a.astra_id,
+                    name: a.name,
+                    description: a.description || a.restrictions || "",
+                    allowed: check.allowed,
+                    reason: check.reason
+                };
+            });
+        }
+
+        // Vows
+        if (unit.resolvedVows && unit.resolvedVows.length > 0) {
+            flags.vows = unit.resolvedVows.map(v => {
+                const vId = v.id || v.vow_id;
+                // Just examples, active state could track if it's currently turned on!
+                const active = unit.activeVows ? unit.activeVows.has(vId) : false;
+                return {
+                    id: vId,
+                    name: v.name,
+                    description: v.description,
+                    active: active
+                };
+            });
+        }
+
+        return flags;
+    }
 
     _selectUnit(unit) {
         this.selectedUnit = unit;
@@ -940,6 +976,7 @@ export class TacticalScene extends Phaser.Scene {
         const u = this.selectedUnit;
         if (!u || !this._isPlayerInputOpen() || !this._isControllable(u)) return;
         this.currentState = this.STATES.AWAITING_ATTACK_TARGET;
+        this.pendingAstraId = null;
         this.hud.hideMenu();
         this.attackableTiles = this._computeAttackableTiles(u);
         this.gridSystem.clearHighlights();
@@ -955,6 +992,47 @@ export class TacticalScene extends Phaser.Scene {
         this.hud.log(`${u.name} holds position.`, 'info');
         this._deselectUnit();
         this._afterPlayerAction();
+    }
+
+    _onActionAstra(astraId) {
+        const u = this.selectedUnit;
+        if (!u || !this._isPlayerInputOpen() || !this._isControllable(u)) return;
+        const currentDharma = this._gameState?.dharmaMeter ?? 50;
+        const check = u.canUseAstra(astraId, currentDharma);
+        if (!check.allowed) {
+            this.hud.log(check.reason, 'bad');
+            return;
+        }
+
+        // Just like attack, but we remember the astraId!
+        this.currentState = this.STATES.AWAITING_ATTACK_TARGET;
+        this.pendingAstraId = astraId;
+        this.hud.hideMenu();
+
+        // Astras might have different range, but for now use base tracking.
+        this.attackableTiles = this._computeAttackableTiles(u);
+        this.gridSystem.clearHighlights();
+        this.gridSystem.highlightTiles(this.attackableTiles, 0x9b4dca, 0.42);
+
+        const astraName = (u.resolvedAstras.find(a => (a.id || a.astra_id) === astraId) || {}).name || 'Astra';
+        this.hud.log(`Invoking ${astraName}! Select a target.`, 'good');
+    }
+
+    _onActionVow(vowId) {
+        const u = this.selectedUnit;
+        if (!u || !this._isPlayerInputOpen() || !this._isControllable(u)) return;
+
+        // Toggle the vow state.
+        if (u.activeVows.has(vowId)) {
+            u.activeVows.delete(vowId);
+            this.hud.log(`${u.name} deactivated their vow.`, 'info');
+        } else {
+            u.activeVows.add(vowId);
+            this.hud.log(`📜 ${u.name} invokes their vow!`, 'good');
+        }
+
+        // Refresh menu to show the updated active state
+        this.hud.showMenu(this._unitScreenPos(u), u, this._menuFlags(u));
     }
 
     // =========================================================================
@@ -1057,7 +1135,8 @@ export class TacticalScene extends Phaser.Scene {
         this.gridSystem.clearHighlights();
         this._pointAt(null);
         this.hud.hideTip();
-        await this._doAttack(attacker, defender);
+        await this._doAttack(attacker, defender, this.pendingAstraId);
+        this.pendingAstraId = null;
         if (!this._alive) return;
         attacker.endAction();
         this.currentState = this.STATES.IDLE;

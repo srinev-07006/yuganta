@@ -61,7 +61,7 @@ export function mountSanjayaScrubber(game, timeline) {
         // Parva separator
         if (pIndex > 0) {
             const sep = document.createElement('div');
-            sep.style.cssText = 'width: 20px; height: 1px; background: rgba(255, 209, 102, 0.2); margin: 0 10px;';
+            sep.style.cssText = 'width: 20px; height: 1px; background: rgba(255, 209, 102, 0.2); margin: 0 10px; flex-shrink: 0;';
             track.appendChild(sep);
         }
 
@@ -74,8 +74,9 @@ export function mountSanjayaScrubber(game, timeline) {
             text-transform: uppercase;
             letter-spacing: 1px;
             white-space: nowrap;
+            flex-shrink: 0;
         `;
-        pLabel.textContent = p.name;
+        pLabel.textContent = p.name.replace('-parva', ' Parva');
         track.appendChild(pLabel);
 
         // Nodes
