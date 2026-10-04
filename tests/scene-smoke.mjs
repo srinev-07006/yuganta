@@ -53,7 +53,7 @@ function makeScene(bundle) {
     return s;
 }
 
-const nodeId = process.argv[2] || 'bp-day10-sunset';
+const nodeId = process.argv[2] || 'day-1-kuru-kshetra';
 const bundle = await timeline.loadNode(nodeId);
 console.log(`node ${nodeId}: scene=${bundle.sceneType} map=${bundle.mapId}/${!!bundle.map} directives=${bundle.directives.length} triggers=${bundle.triggers.length} startSeq=${bundle.startSequences.length}`);
 const scene = makeScene(bundle);

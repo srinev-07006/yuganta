@@ -4,18 +4,18 @@
   "height": 12,
   "description": "The royal court of King Drupada in Panchala. Site of Draupadi's Swayamvara. Arjuna (disguised as a Brahmin) must shoot the fish-eye target suspended above the court.",
   "terrain": [
-    ["water", "water", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "water", "water", "water", "water"],
-    ["water", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "water", "water", "water"],
-    ["plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "water", "water"],
-    ["plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "water"],
-    ["plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains"],
-    ["plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains"],
-    ["plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains"],
-    ["plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains"],
-    ["plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains"],
-    ["plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains"],
-    ["water", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "water", "water", "water"],
-    ["water", "water", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "water", "water", "water", "water"]
+    ["lake", "lake", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "lake", "lake", "lake", "lake"],
+    ["lake", "plains", "plains", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "plains", "plains", "lake", "lake", "lake"],
+    ["plains", "plains", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "plains", "plains", "lake", "lake"],
+    ["plains", "plains", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "plains", "plains", "plains", "lake"],
+    ["plains", "plains", "hall", "hall", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "hall", "hall", "plains", "plains", "plains", "plains"],
+    ["plains", "hall", "hall", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "hall", "hall", "plains", "plains", "plains"],
+    ["plains", "hall", "hall", "carpet", "carpet", "dais", "dais", "dais", "dais", "carpet", "carpet", "hall", "hall", "plains", "plains", "plains"],
+    ["plains", "hall", "hall", "carpet", "carpet", "dais", "dais", "dais", "dais", "carpet", "carpet", "hall", "hall", "plains", "plains", "plains"],
+    ["plains", "plains", "hall", "hall", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "hall", "hall", "plains", "plains", "plains", "plains"],
+    ["plains", "plains", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "plains", "plains", "plains", "plains"],
+    ["lake", "plains", "plains", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "hall", "plains", "plains", "lake", "lake", "lake"],
+    ["lake", "lake", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "plains", "lake", "lake", "lake", "lake"]
   ],
   "spawns": [
     {
@@ -27,7 +27,7 @@
     },
     {
       "unit_class": "RATHA",
-      "faction": "NEUTRAL",
+      "faction": "KAURAVA",
       "x": 7,
       "y": 7,
       "name": "Fish Target"

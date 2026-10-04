@@ -1,0 +1,22 @@
+{
+  "unit_classes": [
+    {
+      "id": "chariot",
+      "name": "Chariot",
+      "base_hp": 150,
+      "base_attack": 30,
+      "base_defense": 25,
+      "allowed_auras": ["bhishma-aura", "arjuna-aura"],
+      "restrictions": ["cannot_use_while_invalid"]
+    },
+    {
+      "id": "infantry",
+      "name": "Infantry",
+      "base_hp": 100,
+      "base_attack": 20,
+      "base_defense": 20,
+      "allowed_auras": ["iccha-mrityu"],
+      "restrictions": ["cannot_use_while_invalid"]
+    }
+  ]
+}

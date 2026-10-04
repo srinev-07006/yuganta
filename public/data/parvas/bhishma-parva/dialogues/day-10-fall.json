@@ -1,50 +1,35 @@
 {
-  "sequence_id": "seq_day10_fall",
-  "node_id": "bp-day10-sunset",
-  "trigger_event": "MID_BATTLE",
-  "background_asset_key": "bg_battlefield_arrows",
-  "bgm_asset_key": "bgm_somber_end",
-  "nodes": [
+  "dialogue_nodes": [
     {
-      "dialogue_id": "d10_bhishma_sees_shikhandi",
-      "speaker_id": "bhishma",
-      "dialogue_text": "I see him... Shikhandi stands before me. I will not strike one who was born a woman. The Vow holds.",
-      "speaker_emotion": "ENLIGHTENED",
+      "id": "day-10-fall",
+      "text": "Bhishma's life wanes; his death is imminent. The battlefield pauses as Arjuna faces a canonical choice.",
+      "speaker": "Krishna",
       "choices": [
         {
-          "choice_id": "fall_c1",
-          "choice_text": "[Arjuna hesitates, struggling to fire at the Grandsire.]",
-          "dharma_impact": -10,
-          "next_dialogue_id": "d10_krishna_urges"
-        },
-        {
-          "choice_id": "fall_c2",
-          "choice_text": "[Fire from behind Shikhandi's cover.]",
-          "dharma_impact": 10,
-          "next_dialogue_id": "d10_arrows_strike"
+          "id": "canonical-progression",
+          "description": "Accept the canonical path",
+          "impacts": {
+            "dharma_impact": 0,
+            "artha_impact": 0,
+            "kama_impact": 0,
+            "moksha_impact": 0
+          },
+          "next_node_id": "end"
         }
       ]
-    },
+    }
+  ],
+  "narrative_choices": [
     {
-      "dialogue_id": "d10_krishna_urges",
-      "speaker_id": "krishna",
-      "dialogue_text": "Partha! Do not hesitate. This is the only way to topple the immovable mountain of the Kauravas. Strike now!",
-      "speaker_emotion": "ANGRY",
-      "choices": [
-        {
-          "choice_id": "fall_c3",
-          "choice_text": "[Loose the arrows.]",
-          "dharma_impact": 5,
-          "next_dialogue_id": "d10_arrows_strike"
-        }
-      ]
-    },
-    {
-      "dialogue_id": "d10_arrows_strike",
-      "speaker_id": "bhishma",
-      "dialogue_text": "These are not Shikhandi's arrows... These are Arjuna's. Only he strikes with such ferocity.",
-      "speaker_emotion": "NEUTRAL",
-      "is_endpoint": true
+      "id": "canonical-progression",
+      "description": "Accept the canonical path",
+      "impacts": {
+        "dharma_impact": 0,
+        "artha_impact": 0,
+        "kama_impact": 0,
+        "moksha_impact": 0
+      },
+      "next_node_id": "end"
     }
   ]
 }

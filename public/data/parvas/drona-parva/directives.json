@@ -3,9 +3,17 @@
     {
       "directive_id": "abhimanyu-survive",
       "directive_type": "SURVIVE_TURNS",
-      "target_turns": 15,
+      "target_turns": 8,
       "target_unit_id": "abhimanyu",
       "fail_on_deviation": false
+    },
+    {
+      "directive_id": "defeat-jayadratha",
+      "directive_type": "DEFEAT_UNIT",
+      "target_turns": 20,
+      "target_unit_id": "jayadratha",
+      "fail_on_deviation": true,
+      "deviation_dialogue_id": "dev-jayadratha-survives"
     }
   ],
   "triggers": [

@@ -16,9 +16,11 @@
       "war_day": 0,
       "phase_name": "MIDDLE",
       "title": "Draupadi's Swayamvara",
-      "historical_context": "Disguised as Brahmins, the Pandavas attend the Swayamvara of Princess Draupadi.",
-      "initial_scene_type": "VN",
-      "map_id": "map_panchala_court"
+      "historical_context": "Disguised as Brahmins, the Pandavas attend the Swayamvara of Princess Draupadi. Arjuna must shoot the fish's eye while looking only at its reflection in the pool below.",
+      "initial_scene_type": "TACTICAL",
+      "map_id": "map_panchala_court",
+      "pandava_formation": "CHAKRAVYUHA",
+      "kaurava_formation": null
     }
   ]
 }

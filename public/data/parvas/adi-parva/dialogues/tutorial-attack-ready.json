@@ -1,0 +1,30 @@
+{
+  "sequence_id": "tutorial-attack-ready",
+  "node_id": "ap-swayamvara",
+  "trigger_event": "TRIGGER",
+  "background_asset_key": "bg_panchala_court",
+  "bgm_asset_key": "bgm_royal_court",
+  "nodes": [
+    {
+      "dialogue_id": "tut_attack_1",
+      "speaker_id": "krishna",
+      "dialogue_text": "Good! You are positioned well. Now comes the true test — shoot the fish's eye with your arrow. Click 'Attack', then select the fish target.",
+      "speaker_emotion": "ENCOURAGING",
+      "choices": [
+        {
+          "choice_id": "tut_attack_c1",
+          "choice_text": "[Draw the bow]",
+          "dharma_impact": 0,
+          "next_dialogue_id": "tut_attack_2"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "tut_attack_2",
+      "speaker_id": "narrator",
+      "dialogue_text": "Tutorial: Select Arjuna, click 'Attack', and select the fish target to defeat it. Remember: you can only move once and attack once per turn.",
+      "speaker_emotion": "NEUTRAL",
+      "is_endpoint": true
+    }
+  ]
+}

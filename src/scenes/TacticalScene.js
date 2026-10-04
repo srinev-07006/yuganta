@@ -606,7 +606,7 @@ export class TacticalScene extends Phaser.Scene {
     }
 
     _floatText(unit, text, color = '#ffd166') {
-        if (!this._alive || !unit) return;
+        if (!this._alive || !unit || !this.gridSystem || typeof this.gridSystem.unitAnchor !== "function") return;
         const a = this.gridSystem.unitAnchor(unit.gridX, unit.gridY);
         const t = this.add.text(a.x, a.y - 62, text, {
             fontFamily: 'Cinzel, Georgia, serif', fontSize: '22px', fontStyle: 'bold', color,
@@ -945,6 +945,7 @@ export class TacticalScene extends Phaser.Scene {
 
         if (!this._alive) return;
         this.unitManager.updateUnitPosition(unit.unitId, targetX, targetY);
+        if(typeof this.unitManager._spatialSet === "function") this.unitManager._spatialSet(unit);
         this._syncUnitView(unit);
         if (typeof unit.endMove === 'function') unit.endMove();
         this.triggerEvaluator.evaluateCombatTriggers?.(unit, null, this.triggers);

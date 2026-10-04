@@ -1,88 +1,120 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Lore & Character Schema",
-  "description": "Schema for character rosters, divine astras, vows (Pratijnas), and boons.",
   "type": "object",
-  "definitions": {
-    "astra": {
-      "type": "object",
-      "properties": {
-        "astra_id": { "type": "string" },
-        "name": { "type": "string" },
-        "dharma_cost": { "type": "integer" },
-        "restrictions": { "type": "string" },
-        "damage_multiplier": { "type": "number" }
-      },
-      "required": ["astra_id", "name", "dharma_cost"]
-    },
-    "vow_boon": {
-      "type": "object",
-      "properties": {
-        "id": { "type": "string" },
-        "name": { "type": "string" },
-        "type": {
-          "type": "string",
-          "enum": ["VOW", "BOON", "CURSE"]
-        },
-        "description": { "type": "string" },
-        "fulfillment_condition": { "type": "string" }
-      },
-      "required": ["id", "name", "type"]
-    },
-    "maharathi_trait": {
-      "type": "object",
-      "properties": {
-        "trait_id": { "type": "string" },
-        "trait_name": { "type": "string" },
-        "invulnerable_to_standard_damage": { "type": "boolean", "default": false },
-        "ignores_terrain_cost": { "type": "boolean", "default": false },
-        "custom_script_handler": { "type": "string" }
-      },
-      "required": ["trait_id", "trait_name"]
-    },
-    "character": {
-      "type": "object",
-      "properties": {
-        "character_id": { "type": "string" },
-        "canonical_name": { "type": "string" },
-        "default_faction": {
-          "type": "string",
-          "enum": ["PANDAVA", "KAURAVA", "NEUTRAL"]
-        },
-        "base_sprite_key": { "type": "string" },
-        "portrait_atlas_key": { "type": "string" },
-        "traits": {
-          "type": "array",
-          "items": { "type": "string" }
-        },
-        "astras": {
-          "type": "array",
-          "items": { "type": "string" }
-        },
-        "vows": {
-          "type": "array",
-          "items": { "type": "string" }
-        }
-      },
-      "required": ["character_id", "canonical_name", "default_faction"]
-    }
-  },
   "properties": {
-    "characters": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/character" }
-    },
-    "astras": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/astra" }
-    },
-    "vows_boons": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/vow_boon" }
-    },
     "traits": {
       "type": "array",
-      "items": { "$ref": "#/definitions/maharathi_trait" }
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the trait"
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name of the trait"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of what the trait does"
+          },
+          "applies_to": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of character IDs that this trait applies to"
+          }
+        },
+        "required": ["id", "name", "description", "applies_to"]
+      }
+    },
+    "auras": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the aura"
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name of the aura"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the aura's effect"
+          },
+          "dharma_cost": {
+            "type": "integer",
+            "description": "Dharma cost to activate or maintain the aura"
+          },
+          "restrictions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of restrictions on when the aura can be used"
+          }
+        },
+        "required": ["id", "name", "description", "dharma_cost", "restrictions"]
+      }
+    },
+    "vows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the vow"
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name of the vow"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the vow"
+          },
+          "condition": {
+            "type": "string",
+            "description": "Condition that must be met for the vow to be active"
+          },
+          "effect": {
+            "type": "string",
+            "description": "Effect granted when the vow is active"
+          }
+        },
+        "required": ["id", "name", "description", "condition", "effect"]
+      }
+    },
+    "boons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the boon"
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name of the boon"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the boon"
+          },
+          "effect": {
+            "type": "string",
+            "description": "Effect granted by the boon"
+          }
+        },
+        "required": ["id", "name", "description", "effect"]
+      }
     }
-  }
+  },
+  "required": ["traits", "auras", "vows", "boons"]
 }

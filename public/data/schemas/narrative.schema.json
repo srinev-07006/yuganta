@@ -1,64 +1,113 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Narrative Schema",
-  "description": "Schema for Visual Novel dialogue sequences, nodes, and moral branching choices.",
   "type": "object",
-  "definitions": {
-    "narrative_choice": {
-      "type": "object",
-      "properties": {
-        "choice_id": { "type": "string" },
-        "choice_text": { "type": "string" },
-        "dharma_impact": { "type": "integer", "default": 0 },
-        "artha_impact": { "type": "integer", "default": 0 },
-        "kama_impact": { "type": "integer", "default": 0 },
-        "moksha_impact": { "type": "integer", "default": 0 },
-        "next_dialogue_id": { "type": "string" },
-        "tactical_override_event": {
-          "type": "string",
-          "enum": ["ROUT_CHANGE", "MORALE_BOOST", "NONE"],
-          "default": "NONE"
-        }
-      },
-      "required": ["choice_id", "choice_text", "next_dialogue_id"]
-    },
-    "dialogue_node": {
-      "type": "object",
-      "properties": {
-        "dialogue_id": { "type": "string" },
-        "speaker_id": { "type": "string" },
-        "dialogue_text": { "type": "string" },
-        "speaker_emotion": {
-          "type": "string",
-          "enum": ["NEUTRAL", "ANGRY", "GRIEF", "ENLIGHTENED", "CONFUSED", "SMUG"]
-        },
-        "camera_focus_target": {
-          "type": "string",
-          "default": "PORTRAIT_ONLY"
-        },
-        "choices": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/narrative_choice" }
-        },
-        "next_dialogue_id": { "type": "string" },
-        "is_endpoint": { "type": "boolean", "default": false }
-      },
-      "required": ["dialogue_id", "speaker_id", "dialogue_text"]
-    }
-  },
   "properties": {
-    "sequence_id": { "type": "string" },
-    "node_id": { "type": "string" },
-    "trigger_event": {
-      "type": "string",
-      "enum": ["NODE_START", "TURN_START", "MID_BATTLE", "TIMELINE_FAIL"]
-    },
-    "background_asset_key": { "type": "string" },
-    "bgm_asset_key": { "type": "string" },
-    "nodes": {
+    "dialogue_nodes": {
       "type": "array",
-      "items": { "$ref": "#/definitions/dialogue_node" }
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the dialogue node"
+          },
+          "text": {
+            "type": "string",
+            "description": "The text content of the dialogue node"
+          },
+          "speaker": {
+            "type": "string",
+            "description": "The speaker of the dialogue (must match a character ID from global/characters.json)"
+          },
+          "choices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Unique identifier for the choice"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Description of the choice"
+                },
+                "impacts": {
+                  "type": "object",
+                  "properties": {
+                    "dharma_impact": {
+                      "type": "integer",
+                      "description": "Impact on Dharma (moral duty/righteousness)"
+                    },
+                    "artha_impact": {
+                      "type": "integer",
+                      "description": "Impact on material prosperity/wealth"
+                    },
+                    "kama_impact": {
+                      "type": "integer",
+                      "description": "Impact on desire/pleasure"
+                    },
+                    "moksha_impact": {
+                      "type": "integer",
+                      "description": "Impact on spiritual liberation"
+                    }
+                  },
+                  "required": ["dharma_impact", "artha_impact", "kama_impact", "moksha_impact"]
+                },
+                "next_node_id": {
+                  "type": "string",
+                  "description": "ID of the next dialogue node after this choice"
+                }
+              },
+              "required": ["id", "description", "impacts", "next_node_id"]
+            }
+          }
+        },
+        "required": ["id", "text", "speaker", "choices"]
+      }
+    },
+    "narrative_choices": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the narrative choice"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the narrative choice"
+          },
+          "impacts": {
+            "type": "object",
+            "properties": {
+              "dharma_impact": {
+                "type": "integer",
+                "description": "Impact on Dharma (moral duty/righteousness)"
+              },
+              "artha_impact": {
+                "type": "integer",
+                "description": "Impact on material prosperity/wealth"
+              },
+              "kama_impact": {
+                "type": "integer",
+                "description": "Impact on desire/pleasure"
+              },
+              "moksha_impact": {
+                "type": "integer",
+                "description": "Impact on spiritual liberation"
+              }
+            },
+            "required": ["dharma_impact", "artha_impact", "kama_impact", "moksha_impact"]
+          },
+          "next_node_id": {
+            "type": "string",
+            "description": "ID of the next narrative node after this choice"
+          }
+        },
+        "required": ["id", "description", "impacts", "next_node_id"]
+      }
     }
   },
-  "required": ["sequence_id", "nodes"]
+  "required": ["dialogue_nodes", "narrative_choices"]
 }

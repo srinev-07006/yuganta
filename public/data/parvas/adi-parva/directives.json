@@ -1,4 +1,45 @@
 {
-  "directives": [],
-  "triggers": []
+  "directives": [
+    {
+      "directive_id": "tutorial-move-arjuna",
+      "node_id": "ap-swayamvara",
+      "directive_type": "REACH_TILE",
+      "target_unit_id": "arjuna",
+      "target_tile": { "x": 7, "y": 7 },
+      "target_turns": 2,
+      "fail_on_deviation": false,
+      "description": "Move Arjuna to the archery post (marked with a gold circle). You have 2 turns."
+    },
+    {
+      "directive_id": "tutorial-defeat-fish",
+      "node_id": "ap-swayamvara",
+      "directive_type": "DEFEAT_UNIT",
+      "target_unit_id": "fish-target",
+      "target_turns": 3,
+      "fail_on_deviation": false,
+      "description": "Defeat the fish target by shooting it. This demonstrates ranged combat."
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "tutorial-welcome",
+      "node_id": "ap-swayamvara",
+      "condition": "TURN_COUNT_EQUAL",
+      "value": 1,
+      "target_unit_id": "arjuna",
+      "sequence_id": "tutorial-welcome",
+      "pauses_tactical": true,
+      "repeatable": false
+    },
+    {
+      "trigger_id": "tutorial-attack-ready",
+      "node_id": "ap-swayamvara",
+      "condition": "UNIT_HP_BELOW_PERCENT",
+      "value": 75,
+      "target_unit_id": "fish-target",
+      "sequence_id": "tutorial-attack-ready",
+      "pauses_tactical": true,
+      "repeatable": false
+    }
+  ]
 }

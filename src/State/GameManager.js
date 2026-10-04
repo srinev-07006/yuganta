@@ -1,4 +1,4 @@
-class GameManager {
+export class GameManager {
   constructor(directivesData = null) {
     this.directivesData = directivesData || { directives: [], triggers: [] };
     this.unitRegistry = new Map();
@@ -33,7 +33,7 @@ class GameManager {
     this.eventBus.on('PAUSE_TACTICAL_SCENE', () => {
       this.isPaused = true;
       console.log('[GameManager] Tactical scene paused');
-    }
+    });
 
     this.eventBus.on('RESUME_TACTICAL_SCENE', () => {
       this.isPaused = false;
@@ -190,5 +190,3 @@ class GameManager {
     }
   }
 }
-
-module.exports = GameManager;

@@ -1,41 +1,32 @@
 import Phaser from 'phaser';
-import GameManager from './State/GameManager.js';
-import BootScene from './Scenes/BootScene.js';
-import MainScene from './Scenes/MainScene.js';
-import TacticalScene from './Scenes/TacticalScene.js';
-import fs from 'fs';
+import { BootScene } from './scenes/BootScene.js';
+import { TacticalScene } from './scenes/TacticalScene.js';
 
-// Load directives data from file
-const directivesData = JSON.parse(fs.readFileSync('data/parvas/directives.json', 'utf8'));
-
+/**
+ * Yuganta Engine - Main Entry Point
+ * Configures Phaser 3 WebGL/Canvas renderer with responsive viewport scaling.
+ */
 const config = {
-  type: Phaser.AUTO,
-  width: 1920,
-  height: 720,
-  parent: 'game-container',
-  backgroundColor: '#111111',
-  scale: {
-    mode: Phaser.Scale.FIT,
-    autoCenter: Phaser.Scale.CENTER_BOTH
-  },
-  physics: {
-    default: 'arcade',
-    arcade: {
-      gravity: { y: 0 }
-    }
-  }
+    type: Phaser.AUTO,
+    parent: 'game-container',
+    width: window.innerWidth,
+    height: window.innerHeight,
+    scale: {
+        mode: Phaser.Scale.RESIZE,
+        autoCenter: Phaser.Scale.CENTER_BOTH
+    },
+    backgroundColor: '#0d0d11',
+    pixelArt: false,
+    scene: [BootScene, TacticalScene]
 };
 
 const game = new Phaser.Game(config);
 
-// Initialize GameManager with directives data
-const gameManager = new GameManager(directivesData);
-game.registry.set('gameManager', gameManager);
+// Dynamic viewport resize handler
+window.addEventListener('resize', () => {
+    if (game && game.scale) {
+        game.scale.resize(window.innerWidth, window.innerHeight);
+    }
+});
 
-// Add scenes to the game instance
-game.scene.add('BootScene', BootScene);
-game.scene.add('MainScene', MainScene);
-game.scene.add('TacticalScene', TacticalScene);
-
-// Start the Boot lifecycle
-game.scene.start('BootScene');
+export default game;

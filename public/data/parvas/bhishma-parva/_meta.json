@@ -1,7 +1,13 @@
 {
-  "parva_id": 6,
-  "name": "Bhishma Parva",
-  "order_index": 6,
-  "description": "The first 10 days of the Kurukshetra War, where Bhishma leads the Kaurava army causing devastating losses to the Pandavas. Contains the Bhagavad Gita.",
-  "is_unlocked": true
+  "parva_id": "bhishma-parva",
+  "description": "The sixth book of the Mahābhārata, detailing the final days of Bhishma's life and the climactic battle of Kurukshetra.",
+  "locked": true,
+  "unlock_condition": "Complete the Gita-visada sequence (Day 1) and survive Bhishma's fall (Day 10)",
+  "order": 6,
+  "total_days": 10,
+  "key_events": [
+    "Bhagavad Gita discourse (Day 1)",
+    "Battle progression through Days 2-9",
+    "Bhishma's fall (Day 10)"
+  ]
 }
