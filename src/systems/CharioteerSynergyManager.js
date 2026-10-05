@@ -5,7 +5,7 @@
 // =============================================================
 
 import { Emitter } from '../core/Emitter.js';
-
+import { Maharathi } from '../entities/Unit.js';
 export const CHARIOTEER_SYNERGY_EVENTS = Object.freeze({
     SYNERGY_READY:      'charioteer:synergy-ready',     // Synergy is available to use
     SYNERGY_USED:       'charioteer:synergy-used',      // Synergy has been activated
@@ -103,18 +103,20 @@ export class CharioteerSynergyManager {
      * Update synergy cooldowns at the end of each turn
      */
     updateTurn() {
-        for (const [unitId, synergyData] of this.activeSynergies.entries()) {
-            if (synergyData.cooldownTurns > 0) {
-                synergyData.cooldownTurns--;
+        for (const [unitId, unitSynergies] of this.activeSynergies.entries()) {
+            for (const synergyData of unitSynergies.values()) {
+                if (synergyData.cooldownTurns > 0) {
+                    synergyData.cooldownTurns--;
 
-                if (synergyData.cooldownTurns === 0) {
-                    // Synergy is now ready again
-                    const unit = this.unitManager.getUnitById(unitId);
-                    this.emitter.emit(CHARIOTEER_SYNERGY_EVENTS.SYNERGY_READY, {
-                        unitId,
-                        synergyType: synergyData.type,
-                        unit: unit || null
-                    });
+                    if (synergyData.cooldownTurns === 0) {
+                        // Synergy is now ready again
+                        const unit = this.unitManager.getUnitById(unitId);
+                        this.emitter.emit(CHARIOTEER_SYNERGY_EVENTS.SYNERGY_READY, {
+                            unitId,
+                            synergyType: synergyData.type,
+                            unit: unit || null
+                        });
+                    }
                 }
             }
         }
@@ -229,7 +231,7 @@ export class CharioteerSynergyManager {
         const synergies = [];
 
         // Check if this is a Maharathi with a hero charioteer
-        if (!unit || !(unit instanceof this.scene.Maharathi)) return synergies;
+        if (!unit || !(unit instanceof Maharathi)) return synergies;
         if (!unit.crew || unit.crew.charioteerTier !== 'HERO') return synergies;
 
         const charioteerName = (unit.crew && unit.crew.charioteerName) ? unit.crew.charioteerName?.toLowerCase() || '' : '';
@@ -300,9 +302,10 @@ export class CharioteerSynergyManager {
      */
     getSummary() {
         const summary = [];
-        for (const [unitId, synergyData] of this.activeSynergies.entries()) {
+        for (const [unitId, unitSynergies] of this.activeSynergies.entries()) {
             const unit = this.unitManager.getUnitById(unitId);
-            if (unit) {
+            if (!unit) continue;
+            for (const synergyData of unitSynergies.values()) {
                 summary.push({
                     unitId,
                     unitName: unit.name,

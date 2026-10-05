@@ -1,67 +1,40 @@
 {
-  "timeline": [
+  "nodes": [
     {
-      "day": 1,
-      "id": "day-1-kuru-kshetra",
-      "description": "Arjuna stands on the Kurukshetra battlefield, overwhelmed by the sight of his relatives and teachers",
-      "battle_start": true,
-      "narrative_trigger": "gita-visada"
+      "node_id": "day-1-kuru-kshetra",
+      "parva_id": 6,
+      "war_day": 1,
+      "phase_name": "BEGINNING",
+      "title": "The Field of Kurukshetra",
+      "historical_context": "Arjuna stands on the Kurukshetra battlefield, overwhelmed by the sight of his relatives and teachers. Bhishma commands the Kaurava host.",
+      "initial_scene_type": "TACTICAL"
     },
     {
-      "day": 2,
-      "id": "day-2-kurukshetra-battle",
-      "description": "Initial battle formations and movements",
-      "battle_start": true
+      "node_id": "day-2-kurukshetra-battle",
+      "parva_id": 6,
+      "war_day": 2,
+      "phase_name": "MIDDLE",
+      "title": "Days 2-8: The Grinding Days",
+      "historical_context": "For seven days the two armies grind against each other under Bhishma's command. Neither side breaks; the toll of attrition is what matters. Hold the line and keep your forces alive.",
+      "initial_scene_type": "TACTICAL"
     },
     {
-      "day": 3,
-      "id": "day-3-kurukshetra-battle",
-      "description": "Intensification of battle with key warrior engagements",
-      "battle_start": true
+      "node_id": "day-9-krishna-rage",
+      "parva_id": 6,
+      "war_day": 9,
+      "phase_name": "MIDDLE",
+      "title": "Krishna's Rage",
+      "historical_context": "Krishna's anger flares as Bhishma's forces falter. He demands that Arjuna act decisively, threatening to abandon the field if his orders are ignored.",
+      "initial_scene_type": "TACTICAL"
     },
     {
-      "day": 4,
-      "id": "day-4-kurukshetra-battle",
-      "description": "Mid-battle strategic developments",
-      "battle_start": true
-    },
-    {
-      "day": 5,
-      "id": "day-5-kurukshetra-battle",
-      "description": "Continued battle with tactical shifts",
-      "battle_start": true
-    },
-    {
-      "day": 6,
-      "id": "day-6-kurukshetra-battle",
-      "description": "Critical battle phase with major engagements",
-      "battle_start": true
-    },
-    {
-      "day": 7,
-      "id": "day-7-kurukshetra-battle",
-      "description": "Battle progression with notable individual duels",
-      "battle_start": true
-    },
-    {
-      "day": 8,
-      "id": "day-8-kurukshetra-battle",
-      "description": "Battle intensifies with key tactical decisions",
-      "battle_start": true
-    },
-    {
-      "day": 9,
-      "id": "day-9-krishna-rage",
-      "description": "Krishna's anger flares as Bhishma's forces falter. He demands Arjuna to act decisively",
-      "battle_start": true,
-      "narrative_trigger": "krishna-rage"
-    },
-    {
-      "day": 10,
-      "id": "day-10-fall",
-      "description": "Bhishma's life wanes; his death is imminent. The battlefield pauses as Arjuna faces a canonical choice",
-      "battle_start": false,
-      "narrative_trigger": "day-10-fall"
+      "node_id": "day-10-fall",
+      "parva_id": 6,
+      "war_day": 10,
+      "phase_name": "END",
+      "title": "The Fall of Bhishma",
+      "historical_context": "Bhishma's life wanes; his death is imminent. The battlefield pauses as Arjuna faces a canonical choice.",
+      "initial_scene_type": "VN"
     }
   ]
 }

@@ -11,7 +11,8 @@
     "test:scene": "node --import ./tests/register.mjs tests/scene-smoke.mjs",
     "test:maps": "node --import ./tests/register.mjs tests/map-converter.mjs",
     "test:logic": "node --import ./tests/register.mjs tests/battle-logic.mjs",
-    "test:vn": "node tests/vn-provider.mjs"
+    "test:vn": "node tests/vn-provider.mjs",
+    "test:input": "node --import ./tests/register.mjs tests/player-input.mjs"
   },
   "dependencies": {
     "ajv": "^8.20.0",
