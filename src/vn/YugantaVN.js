@@ -20,6 +20,7 @@ export class YugantaVN {
   #mount() {
     if (this.root) return;
     const st = document.createElement('style'); st.textContent = VN_CSS; document.head.appendChild(st);
+    this.art.preloadPortraits?.();   // decode every portrait up front so none pops in
     this.root = Object.assign(document.createElement('div'), { id: 'yvn-layer' }); this.root.hidden = true;
     this.pm = Object.assign(document.createElement('div'), { className: 'yvn-pm' }); this.pm.hidden = true;
     this.mute = Object.assign(document.createElement('button'), { id: 'yvn-mute', textContent: '🔊' });
@@ -68,9 +69,9 @@ export class YugantaVN {
         const ch = this.getCharacters().get(node.speaker_id);
         const frame = this.#el('div', 'vn-frame'); frame.style.setProperty('--accent', ACCENT[ch?.default_faction] ?? '#c9a24b');
         frame.dataset.emotion = node.speaker_emotion ?? 'NEUTRAL';
-        const portrait = this.#el('div', 'vn-portrait'); portrait.innerHTML = this.art.portrait(node.speaker_id, ch?.default_faction, node.speaker_emotion);  // our generated SVG only
+        const portrait = this.#el('div', 'vn-portrait');   // starts EMPTY: the real portrait is placed in as soon as it is decoded
         const young = node.speaker_id === 'kunti' && (this.getGameState()?.currentParva ?? 99) <= 1;   // Kunti: young portrait only in the Adi Parva
-        this.art.upgradePortrait(portrait, node.speaker_id, node.speaker_emotion, young ? ['kunti_young'] : []);
+        this.art.showPortrait(portrait, node.speaker_id, ch?.default_faction, node.speaker_emotion || 'NEUTRAL', young ? ['kunti_young'] : []);
         const box = this.#el('div', 'vn-box'), text = this.#el('p', 'vn-text');
         box.append(this.#el('h3', 'vn-name', ch?.canonical_name ?? pretty(node.speaker_id)), text);
         frame.append(portrait, box); this.root.replaceChildren(frame);
