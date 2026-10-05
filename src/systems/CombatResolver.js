@@ -207,6 +207,16 @@ export class CombatResolver {
             }
         }
 
+        // Safely get gameState to prevent errors
+        let gameState = null;
+        if (this.scene && this.scene.registry && typeof this.scene.registry.get === 'function') {
+            try {
+                gameState = this.scene.registry.get('gameState');
+            } catch (e) {
+                console.warn('Failed to get gameState from registry:', e);
+            }
+        }
+
         for (const entry of this._traitEntries(attacker)) {
             const trait = entry.trait;
             const tag = this._tag(entry);
@@ -215,7 +225,7 @@ export class CombatResolver {
                 attacker: attacker,
                 defender: defender,
                 grid: this.grid,
-                gameState: this.scene.registry.get('gameState'),
+                gameState: gameState,
                 astraId: astraId
             });
 
@@ -304,9 +314,9 @@ export class CombatResolver {
         }
 
         // Use charioteer synergy if one was triggered
-        if (attacker._pendingSynergyUse) {
+        if (attacker._pendingSynergyUse && this.charioteerSynergyManager) {
             const synergyType = attacker._pendingSynergyUse.type;
-            if (attacker.useCharioteerSynergy(synergyType)) {
+            if (this.charioteerSynergyManager.useSynergy(attacker.unitId, synergyType)) {
                 log.push(`🌀 Charioteer Synergy: ${synergyType} activated!`);
             }
             delete attacker._pendingSynergyUse;

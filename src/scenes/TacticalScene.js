@@ -317,12 +317,16 @@ for (const seq of seqs) {
     _onPhaseStart({ round, faction, isPlayer }) {
         this.hud.setTurn({ round, faction, isPlayer, running: true });
         this.hud.log(`— Round ${round}: ${faction} phase —`, 'system');
+        // Reset player unit states at start of turn BEFORE refreshing
+        if (isPlayer) {
+            this._resetFactionUnitStates(PLAYER_FACTION);
+        }
         this._refreshUnitStates();
         if (this._ended) return;
         if (isPlayer) {
             this.hud.banner(`Round ${round}`, 'Your phase', 1200);
-            // stunned / empty player side must not hang the game
-            this._whenIdle().then(() => { if (this._alive && !this._ended) this.turns.checkAutoEnd(); });
+            // Removed premature checkAutoEnd() call - phase ending is handled properly elsewhere
+            // Player actions will trigger checkAutoEnd() via _afterPlayerAction()
         } else {
             this._runAIPhase(faction);
         }
@@ -331,9 +335,18 @@ for (const seq of seqs) {
     async _runAIPhase(faction) {
         await this._whenIdle();                       // let start-of-round narrative finish first
         if (!this._alive || this._ended) return;
-        await this.ai.takeTurn(faction);
-        await this._whenIdle();
-        if (this._alive && !this._ended && this.turns.running && this.turns.activeFaction === faction) this.turns.endPhase();
+        try {
+            await this.ai.takeTurn(faction);
+        } catch (error) {
+            console.error('Error in AI takeTurn:', error);
+            this.hud?.log('AI encountered an error and skipped their turn.', 'bad');
+        } finally {
+            // Ensure AI phase ends properly even if there were errors
+            await this._whenIdle();
+            if (this._alive && !this._ended && this.turns.running && this.turns.activeFaction === faction) {
+                this.turns.endPhase();
+            }
+        }
     }
 
     _isPlayerInputOpen() {
@@ -661,12 +674,28 @@ for (const seq of seqs) {
         if (!this.unitManager) return;
         const active = this.turns?.activeFaction;
         for (const u of this.unitManager.getAllUnits()) {
-            if (!u.sprite) continue;
+            if (!u || !u.sprite) continue;
             const spent = u.faction === active && u.canAct?.() === false;
             u.sprite.setAlpha(spent ? 0.55 : 1);
             this._redrawUnitFace(u);
         }
         if (this.selectedUnit) this.hud.showCard(this.selectedUnit, this._cardExtra(this.selectedUnit));
+    }
+
+    _resetFactionUnitStates(faction) {
+        if (!this.unitManager) return;
+        for (const unit of this.unitManager.getAllUnits()) {
+            if (unit && unit.faction === faction && !unit.isProp) {
+                // Reset movement and action flags to allow unit to act again
+                unit.hasMovedThisTurn = false;  // Allow movement in this phase
+                unit.hasActedThisTurn = false;  // Allow actions (move/attack) in this phase
+
+                // Reset other relevant state flags
+                unit.isStunned = false;  // Clear any stun state
+
+                this._syncUnitView(unit);
+            }
+        }
     }
 
     _floatText(unit, text, color = '#ffd166') {
@@ -1135,6 +1164,12 @@ for (const seq of seqs) {
 
     /** Resolve one attack through the full CombatResolver pipeline. Damage is applied BY the resolver. */
     async _doAttack(attacker, defender, astraId = null) {
+        // Validate attacker and defender before accessing their properties
+        if (!attacker || !defender) {
+            this.hud.log('Invalid attacker or defender!', 'combat');
+            return;
+        }
+
         this.hud.log(`${attacker.name} attacks ${defender.name}!`, 'combat');
         const result = this.combatResolver.resolveAttack(attacker, defender, astraId);
 
@@ -1170,17 +1205,27 @@ for (const seq of seqs) {
     }
 
     async _executePlayerMove(unit, x, y) {
-        this.currentState = this.STATES.EXECUTING_ACTION;
-        this.gridSystem.clearHighlights();
-        this.hud.hideTip();
-        const target = this.reachableTiles.find(t => t.x === x && t.y === y);
-        if (unit.gridX === x && unit.gridY === y) { this.currentState = this.STATES.IDLE; this._selectUnit(unit); return; }
-        await this._moveUnit(unit, x, y, target?.path);
-        if (!this._alive) return;
-        this.currentState = this.STATES.IDLE;
-        if (!this._ended && unit.canAct?.()) this._selectUnit(unit);     // still may attack / wait
-        else this._deselectUnit();
-        this._afterPlayerAction();
+        try {
+            this.currentState = this.STATES.EXECUTING_ACTION;
+            this.gridSystem.clearHighlights();
+            this.hud.hideTip();
+            const target = this.reachableTiles.find(t => t.x === x && t.y === y);
+            if (unit.gridX === x && unit.gridY === y) { this.currentState = this.STATES.IDLE; this._selectUnit(unit); return; }
+            await this._moveUnit(unit, x, y, target?.path);
+            if (!this._alive) return;
+            this.currentState = this.STATES.IDLE;
+            if (!this._ended && unit.canAct?.()) this._selectUnit(unit);     // still may attack / wait
+            else this._deselectUnit();
+            this._afterPlayerAction();
+        } catch (error) {
+            console.error('Error in player move:', error);
+            this.hud?.log('Move action failed due to an error.', 'bad');
+        } finally {
+            // Ensure we reset the state even if there was an error
+            if (this._alive && this.currentState === this.STATES.EXECUTING_ACTION) {
+                this.currentState = this.STATES.IDLE;
+            }
+        }
     }
 
     async _executePlayerAttack(attacker, defender) {
@@ -1190,7 +1235,7 @@ for (const seq of seqs) {
         this.hud.hideTip();
         await this._doAttack(attacker, defender, this.pendingAstraId);
         this.pendingAstraId = null;
-        if (!this._alive) return;
+        if (!attacker.isAlive) return;
         attacker.endAction();
         this.currentState = this.STATES.IDLE;
         this._deselectUnit();
