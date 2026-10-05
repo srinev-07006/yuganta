@@ -103,6 +103,7 @@ export class GridSystem {
     createGrid(terrainMatrix) {
         this._lastTerrainMatrix = terrainMatrix;
         this.terrainGraphics.clear();
+        (this._groundArt || []).forEach(i => i.destroy?.()); this._groundArt = [];
         this._clearProps();
         // offsets are fixed at construction; the camera (fitCamera) handles centering and resize
 
@@ -133,6 +134,19 @@ export class GridSystem {
                 const topColor = (terrain.color != null) ? terrain.color : fallback.color;
                 const sideColor = dimColor(topColor, 0.60);
                 const topY = center.y - elevation;
+
+                // --- Painted ground: flat plains tiles use the real tile art (drawn beneath every Graphics), just a thin outline on top ---
+                if (elevation === 0 && /^plains$/i.test(name) && this._addGroundArt(x, y, center.x, center.y)) {
+                    this.terrainGraphics.lineStyle(1, 0xffffff, 0.12);
+                    this.terrainGraphics.beginPath();
+                    this.terrainGraphics.moveTo(center.x, center.y - hh);
+                    this.terrainGraphics.lineTo(center.x + hw, center.y);
+                    this.terrainGraphics.lineTo(center.x, center.y + hh);
+                    this.terrainGraphics.lineTo(center.x - hw, center.y);
+                    this.terrainGraphics.closePath();
+                    this.terrainGraphics.strokePath();
+                    continue;
+                }
 
                 // --- Tall props (pillar / wall): flat floor now, extruded block as its own depth-sorted object ---
                 if (elevation >= TALL_PROP_MIN) {
@@ -210,6 +224,16 @@ export class GridSystem {
                 this.terrainGraphics.strokePath();
             }
         }
+    }
+
+    /** Paint a plains tile texture (public/tiles/plains{1,2}.webp, pre-cut to the 128x64 diamond). Skipped headless / if not loaded. */
+    _addGroundArt(gx, gy, cx, cy) {
+        const sc = this.scene;
+        const key = ((gx * 3 + gy * 5) % 2 === 0) ? 'tile_plains1' : 'tile_plains2';
+        if (!sc?.textures?.exists?.(key) || typeof sc.add?.image !== 'function') return false;
+        const img = sc.add.image(cx, cy, key).setDisplaySize(this.tileWidth, this.tileHeight).setDepth(-1);
+        (this._groundArt ||= []).push(img);
+        return true;
     }
 
     /** Extruded block (pillar / wall) as its own Graphics so units sort against it by tile depth. */

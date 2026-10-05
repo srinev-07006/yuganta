@@ -6,6 +6,8 @@
 // Never touches the Phaser canvas directly. TacticalScene feeds all UI state.
 // =============================================================
 
+const esc = (v) => String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
 export class HudController {
     constructor() {
         this.callbacks = {};
@@ -403,7 +405,7 @@ export class HudController {
             html += `<hr style="border: 0; border-top: 1px solid #555; margin: 6px 0;" />`;
             flags.astras.forEach(astra => {
                 const canUse = astra.allowed;
-                html += `<button data-action="astra" data-id="${astra.id}" ${canUse ? '' : 'disabled'} title="${astra.reason || astra.description}" style="
+                html += `<button data-action="astra" data-id="${astra.id}" ${canUse ? '' : 'disabled'} title="${esc(astra.reason || astra.description)}" style="
                     display: block;
                     width: 100%;
                     padding: 6px;
@@ -414,7 +416,7 @@ export class HudController {
                     border-radius: 2px;
                     cursor: pointer;
                     font-weight: bold;
-                ">🌟 ${astra.name}</button>`;
+                ">🌟 ${esc(astra.name)}${astra.cost != null ? ` <span style="float:right;font-weight:normal;opacity:.85">×${astra.multiplier} · -${astra.cost}☸</span>` : ''}</button>`;
             });
         }
 
@@ -422,7 +424,7 @@ export class HudController {
             html += `<hr style="border: 0; border-top: 1px solid #555; margin: 6px 0;" />`;
             flags.vows.forEach(vow => {
                 const active = vow.active;
-                html += `<button data-action="vow" data-id="${vow.id}" style="
+                html += `<button data-action="vow" data-id="${esc(vow.id)}" title="${esc(vow.description)}" style="
                     display: block;
                     width: 100%;
                     padding: 6px;
@@ -433,7 +435,7 @@ export class HudController {
                     border-radius: 2px;
                     cursor: pointer;
                     font-weight: bold;
-                ">📜 ${vow.name}</button>`;
+                ">📜 ${esc(vow.name)}${active ? ' ✓ SWORN' : ''}<br><span style="font-size:10px;font-weight:normal;opacity:.85">${esc(vow.description)}</span></button>`;
             });
         }
 
@@ -441,8 +443,8 @@ export class HudController {
             html += `<hr style="border: 0; border-top: 1px solid #555; margin: 6px 0;" />`;
             flags.charioteerSynergies.forEach(synergy => {
                 const ready = synergy.available;
-                const usesText = synergy.available ? '(available)' : '(on cooldown)';
-                html += `<button data-action="charioteer-synergy" data-id="${synergy.id}" ${ready ? '' : 'disabled'} style="
+                const note = synergy.available ? synergy.description : synergy.reason;
+                html += `<button data-action="charioteer-synergy" data-id="${esc(synergy.id)}" title="${esc(synergy.available ? synergy.description : synergy.reason)}" ${ready ? '' : 'disabled'} style="
                     display: block;
                     width: 100%;
                     padding: 6px;
@@ -454,7 +456,7 @@ export class HudController {
                     cursor: pointer;
                     font-weight: bold;
                     font-size: 11px;
-                ">⚔️ ${synergy.name} ${usesText}</button>`;
+                ">⚔️ ${esc(synergy.name)}<br><span style="font-size:10px;font-weight:normal;opacity:.85">${esc(note)}</span></button>`;
             });
         }
 
@@ -479,7 +481,8 @@ export class HudController {
         if (typeof this.menuEl.querySelectorAll === 'function') {
             this.menuEl.querySelectorAll('button').forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    const action = btn.getAttribute('data-action');
+                    const raw = btn.getAttribute('data-action');
+                    const action = raw === 'charioteer-synergy' ? 'charioteerSynergy' : raw;   // data-action is kebab-case, callbacks are camelCase
                     const id = btn.getAttribute('data-id');
                     if (this.callbacks[action]) this.callbacks[action](id);
                 });

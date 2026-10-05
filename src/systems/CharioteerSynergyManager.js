@@ -1,11 +1,20 @@
 // =============================================================
 // CharioteerSynergyManager.js — Manages charioteer-warrior pairs and their synergistic effects
 // =============================================================
-// Tracks active charioteer-warrior pairs and applies synergistic effects during combat
+// Tracks active charioteer-warrior pairs and applies synergistic effects during combat.
+//
+// ONE source of truth: every synergy is a single entry object that is shared by this manager's
+// map AND the unit's own list (unit.getCharioteerSynergies()), so a use recorded here or by the
+// CombatResolver is seen everywhere.
+//
+//   active  synergies (menu buttons): krishna-guidance, moral-counsel
+//   passive synergies (no button):    psychological-warfare (rolled by the CombatResolver on attack)
 // =============================================================
 
 import { Emitter } from '../core/Emitter.js';
 import { Maharathi } from '../entities/Unit.js';
+import { DHARMA_MAX } from '../core/GameState.js';
+
 export const CHARIOTEER_SYNERGY_EVENTS = Object.freeze({
     SYNERGY_READY:      'charioteer:synergy-ready',     // Synergy is available to use
     SYNERGY_USED:       'charioteer:synergy-used',      // Synergy has been activated
@@ -13,7 +22,7 @@ export const CHARIOTEER_SYNERGY_EVENTS = Object.freeze({
 });
 
 export const CHARIOTEER_SYNERGY_TYPES = Object.freeze({
-    KRISHNA_GUIDANCE:   'krishna-guidance',     // Ignore Zone of Control once
+    KRISHNA_GUIDANCE:   'krishna-guidance',     // Next move ignores terrain costs and barriers
     MORAL_COUNSEL:      'moral-counsel',        // Restore Dharma when low
     PSYCHOLOGICAL_WARFARE: 'psychological-warfare' // Enemy hesitation chance
 });
@@ -27,13 +36,11 @@ export class CharioteerSynergyManager {
         this.scene = scene;
         this.unitManager = unitManager;
 
-        // Track active synergies by unitId, then by synergyType
-        this.activeSynergies = new Map(); // unitId => Map<synergyType, {type, usesLeft, cooldownTurns, data}>
+        // unitId => Map<synergyType, {type, usesLeft, cooldownTurns, passive, endsAction, data}>
+        this.activeSynergies = new Map();
 
         // Event emitter for synergy events
         this.emitter = new Emitter();
-
-        console.log('[CharioteerSynergyManager] Initialized');
     }
 
     // =============================================================
@@ -53,169 +60,146 @@ export class CharioteerSynergyManager {
     // =============================================================
 
     /**
-     * Scan all units for charioteer pairs and register their synergies
-     * Call this after units are spawned
+     * Scan all units for charioteer pairs and register their synergies.
+     * Call this after units are spawned.
      */
     initializeCharioteerSynergies() {
         this.activeSynergies.clear();
 
         for (const unit of this.unitManager.getAllUnits()) {
-            // Skip invalid units
             if (!unit || unit.unitClass !== 'MAHARATHI') continue;
 
             const synergies = this._getCharioteerSynergies(unit);
-            if (synergies.length > 0) {
-                // Create or get the inner map for this unit
-                if (!this.activeSynergies.has(unit.unitId)) {
-                    this.activeSynergies.set(unit.unitId, new Map());
-                }
-                const unitSynergies = this.activeSynergies.get(unit.unitId);
+            if (synergies.length === 0) continue;
 
-                // Create synergy objects with usesLeft for the unit
-                const unitSynergiesWithUses = synergies.map(synergy => ({
-                    ...synergy,
-                    usesLeft: synergy.maxUses || 1
-                }));
-
-                synergies.forEach(synergy => {
-                    unitSynergies.set(synergy.type, {
-                        type: synergy.type,
-                        usesLeft: synergy.maxUses || 1,
-                        cooldownTurns: 0,
-                        data: synergy.data || {}
-                    });
-
-                    // Notify that synergy is ready (with null check for unit)
-                    this.emitter.emit(CHARIOTEER_SYNERGY_EVENTS.SYNERGY_READY, {
-                        unitId: (unit && unit.unitId) || null,
-                        synergyType: synergy.type,
-                        unit: unit || null
-                    });
+            const perUnit = new Map();
+            for (const s of synergies) {
+                perUnit.set(s.type, {
+                    type: s.type,
+                    usesLeft: s.maxUses || 1,
+                    cooldownTurns: 0,
+                    passive: s.passive === true,
+                    endsAction: s.endsAction !== false,
+                    data: s.data || {}
                 });
+            }
+            this.activeSynergies.set(unit.unitId, perUnit);
+            unit.setCharioteerSynergies([...perUnit.values()]);      // same objects: one source of truth
 
-                // Set the unit's charioteer synergies so it knows what's available
-                unit.setCharioteerSynergies(unitSynergiesWithUses);
+            for (const entry of perUnit.values()) {
+                this.emitter.emit(CHARIOTEER_SYNERGY_EVENTS.SYNERGY_READY, {
+                    unitId: unit.unitId, synergyType: entry.type, unit
+                });
             }
         }
     }
 
-    /**
-     * Update synergy cooldowns at the end of each turn
-     */
+    /** Tick cooldowns. Call once per round. */
     updateTurn() {
-        for (const [unitId, unitSynergies] of this.activeSynergies.entries()) {
-            for (const synergyData of unitSynergies.values()) {
-                if (synergyData.cooldownTurns > 0) {
-                    synergyData.cooldownTurns--;
-
-                    if (synergyData.cooldownTurns === 0) {
-                        // Synergy is now ready again
-                        const unit = this.unitManager.getUnitById(unitId);
-                        this.emitter.emit(CHARIOTEER_SYNERGY_EVENTS.SYNERGY_READY, {
-                            unitId,
-                            synergyType: synergyData.type,
-                            unit: unit || null
-                        });
-                    }
+        for (const [unitId, perUnit] of this.activeSynergies.entries()) {
+            for (const entry of perUnit.values()) {
+                if (entry.cooldownTurns <= 0) continue;
+                entry.cooldownTurns--;
+                if (entry.cooldownTurns === 0) {
+                    this.emitter.emit(CHARIOTEER_SYNERGY_EVENTS.SYNERGY_READY, {
+                        unitId, synergyType: entry.type, unit: this.unitManager.getUnitById(unitId) || null
+                    });
                 }
             }
         }
     }
 
     /**
-     * Check if a synergy is available for a unit
-     * @param {string} unitId - The unit ID
-     * @param {string} synergyType - The type of synergy to check
+     * Is the synergy available (uses left, off cooldown) for this unit?
      * @returns {Object|null} {type, data} if available, null otherwise
      */
     getAvailableSynergy(unitId, synergyType) {
-        const unitSynergies = this.activeSynergies.get(unitId);
-        if (!unitSynergies) return null;
+        const entry = this.activeSynergies.get(unitId)?.get(synergyType);
+        if (!entry || entry.usesLeft <= 0 || entry.cooldownTurns > 0) return null;
+        return { type: entry.type, data: entry.data };
+    }
 
-        const synergyData = unitSynergies.get(synergyType);
-        if (!synergyData) return null;
-
-        if (synergyData.usesLeft > 0 && synergyData.cooldownTurns === 0) {
-            return {
-                type: synergyData.type,
-                data: synergyData.data
-            };
+    /** First available synergy of a unit, or null. */
+    getAnyAvailableSynergy(unitId) {
+        const perUnit = this.activeSynergies.get(unitId);
+        if (!perUnit) return null;
+        for (const entry of perUnit.values()) {
+            if (entry.usesLeft > 0 && entry.cooldownTurns === 0) return { type: entry.type, data: entry.data };
         }
         return null;
     }
 
     /**
-     * Check if any synergy is available for a unit
-     * @param {string} unitId - The unit ID
-     * @returns {Object|null} {type, data} of first available synergy, null otherwise
+     * Can the player trigger this synergy RIGHT NOW? Available, not passive, and its condition holds
+     * (moral-counsel only helps when Dharma has fallen to its threshold, so it is never wasted).
+     * @returns {{ok:boolean, reason:string}}
      */
-    getAnyAvailableSynergy(unitId) {
-        const unitSynergies = this.activeSynergies.get(unitId);
-        if (!unitSynergies) return null;
-
-        for (const [synergyType, synergyData] of unitSynergies.entries()) {
-            if (synergyData.usesLeft > 0 && synergyData.cooldownTurns === 0) {
-                return {
-                    type: synergyData.type,
-                    data: synergyData.data
-                };
+    canActivate(unit, synergyType) {
+        const entry = this.activeSynergies.get(unit?.unitId)?.get(synergyType);
+        if (!entry) return { ok: false, reason: 'Not available.' };
+        if (entry.passive) return { ok: false, reason: 'Passive: it triggers by itself in combat.' };
+        if (entry.usesLeft <= 0) return { ok: false, reason: 'Already used.' };
+        if (entry.cooldownTurns > 0) return { ok: false, reason: `On cooldown (${entry.cooldownTurns} turn(s)).` };
+        if (synergyType === CHARIOTEER_SYNERGY_TYPES.MORAL_COUNSEL) {
+            const threshold = entry.data.threshold ?? 0.3;
+            const dharma = this.scene.gameState?.dharmaMeter ?? DHARMA_MAX;
+            if (dharma / DHARMA_MAX > threshold) {
+                return { ok: false, reason: `Only when Dharma is at or below ${Math.round(threshold * 100)}%.` };
             }
         }
-        return null;
+        return { ok: true, reason: '' };
     }
 
     /**
-     * Use a synergy for a unit
-     * @param {string} unitId - The unit ID
-     * @param {string} synergyType - The type of synergy to use
-     * @returns {boolean} true if synergy was used, false otherwise
+     * Use a synergy: spend one use and apply its effect.
+     * @returns {{used:boolean, message:string, endsAction:boolean}}
+     */
+    activate(unit, synergyType) {
+        const can = this.canActivate(unit, synergyType);
+        if (!can.ok) return { used: false, message: can.reason, endsAction: false };
+        const entry = this.activeSynergies.get(unit.unitId).get(synergyType);
+        let message = '';
+
+        if (synergyType === CHARIOTEER_SYNERGY_TYPES.KRISHNA_GUIDANCE) {
+            unit.guidedMove = true;                                   // read by the scene's pathfinding; cleared by endMove()/startTurn()
+            message = `${unit.name}'s ratha is guided — the next move ignores terrain.`;
+        } else if (synergyType === CHARIOTEER_SYNERGY_TYPES.MORAL_COUNSEL) {
+            const gs = this.scene.gameState;
+            const amount = Math.round((entry.data.restoreAmount ?? 0.25) * DHARMA_MAX);
+            if (gs && typeof gs.change === 'function') gs.change(amount, `synergy:${synergyType}`);
+            message = `Moral counsel steadies the army — Dharma +${amount}.`;
+        }
+
+        this.useSynergy(unit.unitId, synergyType);
+        return { used: true, message, endsAction: entry.endsAction };
+    }
+
+    /**
+     * Spend one use of a synergy (no effect applied — see activate()).
+     * @returns {boolean} true if a use was spent
      */
     useSynergy(unitId, synergyType) {
-        const unitSynergies = this.activeSynergies.get(unitId);
-        if (!unitSynergies) return false;
+        const perUnit = this.activeSynergies.get(unitId);
+        const entry = perUnit?.get(synergyType);
+        if (!entry || entry.usesLeft <= 0 || entry.cooldownTurns > 0) return false;
 
-        const synergyData = unitSynergies.get(synergyType);
-        if (!synergyData) return false;
+        entry.usesLeft--;
+        if (entry.usesLeft > 0) entry.cooldownTurns = this._getSynergyCooldown(entry.type);
 
-        if (synergyData.usesLeft <= 0 || synergyData.cooldownTurns > 0) {
-            return false;
-        }
-
-        // Use the synergy
-        synergyData.usesLeft--;
-
-        // Set cooldown (if applicable)
-        if (synergyData.usesLeft > 0) {
-            // Has more uses left, set cooldown
-            synergyData.cooldownTurns = this._getSynergyCooldown(synergyData.type);
-        }
-
-        // Get unit for events (with null check)
         const unit = this.unitManager.getUnitById(unitId);
-
-        // Emit used event
         this.emitter.emit(CHARIOTEER_SYNERGY_EVENTS.SYNERGY_USED, {
-            unitId,
-            synergyType: synergyData.type,
-            unit: unit || null,
-            usesLeft: synergyData.usesLeft
+            unitId, synergyType: entry.type, unit: unit || null, usesLeft: entry.usesLeft
         });
 
-        // If no uses left, remove from tracking
-        if (synergyData.usesLeft <= 0) {
-            unitSynergies.delete(synergyType);
-            // Remove unit entry if no synergies left
-            if (unitSynergies.size === 0) {
-                this.activeSynergies.delete(unitId);
-            }
-        } else if (synergyData.cooldownTurns > 0) {
+        if (entry.usesLeft <= 0) {
+            perUnit.delete(synergyType);
+            if (perUnit.size === 0) this.activeSynergies.delete(unitId);
+            if (unit) unit.setCharioteerSynergies(unit.getCharioteerSynergies().filter(s => s !== entry));
+        } else if (entry.cooldownTurns > 0) {
             this.emitter.emit(CHARIOTEER_SYNERGY_EVENTS.SYNERGY_COOLDOWN, {
-                unitId,
-                synergyType: synergyData.type,
-                cooldownTurns: synergyData.cooldownTurns
+                unitId, synergyType: entry.type, cooldownTurns: entry.cooldownTurns
             });
         }
-
         return true;
     }
 
@@ -230,31 +214,29 @@ export class CharioteerSynergyManager {
     _getCharioteerSynergies(unit) {
         const synergies = [];
 
-        // Check if this is a Maharathi with a hero charioteer
+        // Only a Maharathi token can carry a hero charioteer
         if (!unit || !(unit instanceof Maharathi)) return synergies;
         if (!unit.crew || unit.crew.charioteerTier !== 'HERO') return synergies;
 
-        const charioteerName = (unit.crew && unit.crew.charioteerName) ? unit.crew.charioteerName?.toLowerCase() || '' : '';
-        const warriorName = (unit && unit.name) ? unit.name.toLowerCase() : '';
+        const charioteerName = (unit.crew.charioteerName || '').toLowerCase();
 
         // Krishna as charioteer (typically with Arjuna)
         if (charioteerName.includes('krishna')) {
-            // Krishna's Guidance: Ignore Zone of Control once per battle
             synergies.push({
                 type: CHARIOTEER_SYNERGY_TYPES.KRISHNA_GUIDANCE,
                 maxUses: 1,
+                endsAction: false,           // it is a buff for the move that follows
                 data: {
-                    description: 'Ignore Zone of Control for this movement',
-                    effect: 'ignore_zoc'
+                    description: 'Next move ignores terrain costs and barriers',
+                    effect: 'ignore_terrain'
                 }
             });
 
-            // Moral Counsel: Restore Dharma when below 30%
             synergies.push({
                 type: CHARIOTEER_SYNERGY_TYPES.MORAL_COUNSEL,
                 maxUses: 1,
                 data: {
-                    description: 'Restore 25% Dharma when below 30%',
+                    description: 'Restore 25% Dharma when it is at or below 30%',
                     effect: 'restore_dharma',
                     threshold: 0.3,
                     restoreAmount: 0.25
@@ -264,32 +246,25 @@ export class CharioteerSynergyManager {
 
         // Shalya as charioteer (typically with Karna)
         if (charioteerName.includes('shalya')) {
-            // Psychological Warfare: Chance to cause enemy hesitation
             synergies.push({
                 type: CHARIOTEER_SYNERGY_TYPES.PSYCHOLOGICAL_WARFARE,
-                maxUses: 3, // Can use multiple times
+                maxUses: 3,
+                passive: true,
                 data: {
-                    description: '20% chance to cause enemy hesitation',
+                    description: '20% chance on attack to make the enemy hesitate',
                     effect: 'enemy_hesitation',
                     chance: 0.2,
-                    hesitationDuration: 1, // turns
-                    attackReduction: 0.5 // 50% reduction
+                    hesitationDuration: 1, // enemy phases
+                    attackReduction: 0.5   // the hesitating enemy deals 50% damage
                 }
             });
         }
 
-        // Add other historical charioteer synergies here as needed
-
         return synergies;
     }
 
-    /**
-     * Get cooldown turns for a synergy type
-     * @returns {number} cooldown in turns
-     */
-    _getSynergyCooldown(synergyType) {
-        // Most synergies in this implementation are limited-use without cooldown
-        // If we had reusable synergies, we'd define cooldowns here
+    /** Cooldown turns for a synergy type (all current synergies are limited-use, no cooldown). */
+    _getSynergyCooldown(_synergyType) {
         return 0;
     }
 
@@ -297,22 +272,21 @@ export class CharioteerSynergyManager {
     // GETTERS
     // =============================================================
 
-    /**
-     * Get summary of all active synergies for UI/HUD
-     */
+    /** Summary of all tracked synergies for UI/HUD. */
     getSummary() {
         const summary = [];
-        for (const [unitId, unitSynergies] of this.activeSynergies.entries()) {
+        for (const [unitId, perUnit] of this.activeSynergies.entries()) {
             const unit = this.unitManager.getUnitById(unitId);
             if (!unit) continue;
-            for (const synergyData of unitSynergies.values()) {
+            for (const entry of perUnit.values()) {
                 summary.push({
                     unitId,
                     unitName: unit.name,
-                    synergyType: synergyData.type,
-                    usesLeft: synergyData.usesLeft,
-                    cooldownTurns: synergyData.cooldownTurns,
-                    ready: synergyData.usesLeft > 0 && synergyData.cooldownTurns === 0
+                    synergyType: entry.type,
+                    usesLeft: entry.usesLeft,
+                    cooldownTurns: entry.cooldownTurns,
+                    passive: entry.passive,
+                    ready: entry.usesLeft > 0 && entry.cooldownTurns === 0
                 });
             }
         }

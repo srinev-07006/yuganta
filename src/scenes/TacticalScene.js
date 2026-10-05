@@ -25,9 +25,11 @@ import { TurnManager } from '../core/TurnManager.js';
 import { BattleGrid } from '../core/BattleGrid.js';
 import { AIController } from '../ai/AIController.js';
 import { HudController } from '../ui/HudController.js';
-import { spriteTextureKey } from '../data/CharacterSprites.js';
+import { spriteTextureKey, poseTextureKey } from '../data/CharacterSprites.js';
+import { pickUnitSlug, unitTextureKey, unitArtBox } from '../data/UnitSprites.js';
 import { CharioteerSynergyManager } from '../systems/CharioteerSynergyManager.js';
 import { narrationFor } from '../vn/narration.js';
+import { VOW_EFFECTS } from '../data/VowEffects.js';
 
 const PLAYER_FACTION = 'PANDAVA';
 const FACTION_COLOR = { PANDAVA: 0x35b6d6, KAURAVA: 0xe0483a, NEUTRAL: 0xb8b0a0 };
@@ -66,6 +68,7 @@ export class TacticalScene extends Phaser.Scene {
         this._drag = null;
         this._hoverKey = '';
         this.zoomMul = 1;
+        this.pendingAstraId = null;   // astra chosen from the menu, delivered with the next attack
     }
 
     create() {
@@ -150,7 +153,7 @@ export class TacticalScene extends Phaser.Scene {
 
         this.turns = new TurnManager(this.unitManager, { playerFaction: PLAYER_FACTION });
         this.turns.on('round:start', ({ round }) => this.triggerEvaluator.evaluateTurnTriggers(round, this.triggers));
-        this.turns.on('round:end', ({ round }) => this.directives.onTurnEnd(round));
+        this.turns.on('round:end', ({ round }) => { this.charioteerSynergyManager?.updateTurn(); this.directives.onTurnEnd(round); });
         this.turns.on('phase:start', (p) => this._onPhaseStart(p));
         this.turns.on('phase:end', () => this._deselectUnit());
 
@@ -243,9 +246,9 @@ export class TacticalScene extends Phaser.Scene {
     async _runVNNode() {
         this.hud.log(this.bundle.node.title, 'story');
         this.hud.setTurn({ round: 0, faction: '', isPlayer: false, running: false });
-        
+
         const seqs = this.bundle.startSequences?.length ? this.bundle.startSequences : [narrationFor(this.bundle.node, this.bundle.parva?.name)];
-for (const seq of seqs) {
+        for (const seq of seqs) {
             await this._enqueueNarrative(() => this._playSequence(seq));
             if (!this._alive) return;
         }
@@ -409,7 +412,7 @@ for (const seq of seqs) {
     _computeReachableTiles(unit) {
         if (!unit || !this.mapGrid) return [];
         const range = unit.moveRange || unit.movement || 3;
-        const flying = typeof unit.ignoresTerrainCost === 'function' && unit.ignoresTerrainCost();
+        const flying = unit.guidedMove === true || (typeof unit.ignoresTerrainCost === 'function' && unit.ignoresTerrainCost());
         const H = this.mapGrid.length, W = this.mapGrid[0]?.length || 0;
         const best = new Map([[`${unit.gridX},${unit.gridY}`, 0]]);
         const open = [{ x: unit.gridX, y: unit.gridY, cost: 0, path: [{ x: unit.gridX, y: unit.gridY }] }];
@@ -600,8 +603,12 @@ for (const seq of seqs) {
         if (unit.sprite && unit.sprite.scene) return unit.sprite;
         const col = this._unitColor(unit);
         const c = this.add.container(0, 0);
-        const texKey = unit.characterId ? spriteTextureKey(unit.characterId) : null;
+        // Named hero -> own standing sprite; chariot pair / generic troop -> unit art by class + faction.
+        const slug = pickUnitSlug(unit);
+        let texKey = slug ? unitTextureKey(slug) : (unit.characterId ? spriteTextureKey(unit.characterId) : null);
+        if (slug && !this.textures?.exists?.(texKey) && unit.characterId) texKey = spriteTextureKey(unit.characterId);
         const hasArt = !!(texKey && !unit.isProp && this.textures?.exists?.(texKey));
+        const box = slug ? unitArtBox(slug) : null;
         const shadow = this.add.ellipse(0, 4, 56, 20, 0x000000, 0.4);
         let ring, disc, initial, art = null;
         if (hasArt) {
@@ -609,10 +616,12 @@ for (const seq of seqs) {
             ring = this.add.ellipse(0, 3, 64, 24, 0x14101c, 0).setStrokeStyle(3, col);
             disc = this.add.ellipse(0, 3, 58, 21, col, 0.35);
             art = this.add.image(0, 4, texKey).setOrigin(0.5, 1);
-            art.setScale(SPRITE_HEIGHT / art.height);
+            const artH = box ? Math.min(box.h, box.w * art.height / art.width) : SPRITE_HEIGHT;
+            art.setScale(artH / art.height);
+            art._baseKey = texKey; art._baseScale = art.scaleX;
             initial = this.add.text(0, 0, '', { fontSize: '1px' }).setVisible(false);
             c._discAlpha = 0.35;
-            c._top = SPRITE_HEIGHT + 15;
+            c._top = (box ? Math.min(box.h, box.w * art.height / art.width) : SPRITE_HEIGHT) + 15;
         } else {
             ring = this.add.circle(0, -20, 21, 0x14101c).setStrokeStyle(3, col);
             disc = this.add.circle(0, -20, 15, col);
@@ -944,48 +953,53 @@ for (const seq of seqs) {
     _menuFlags(unit) {
         const flags = { canMove: !unit.hasMovedThisTurn, canAttack: true, astras: [], vows: [], charioteerSynergies: [] };
 
-        // Astras
-        if (unit.resolvedAstras && unit.resolvedAstras.length > 0) {
-            const currentDharma = this._gameState?.dharmaMeter ?? 50;
+        // Astras (only heroes carry them). Affordability uses the REAL dharma meter.
+        if (typeof unit.canUseAstra === 'function' && unit.resolvedAstras && unit.resolvedAstras.length > 0) {
+            const currentDharma = this.gameState?.dharmaMeter ?? 100;
             flags.astras = unit.resolvedAstras.map(a => {
-                const check = unit.canUseAstra ? unit.canUseAstra(a.id || a.astra_id, currentDharma) : { allowed: false, reason: "Engine missing canUseAstra" };
+                const id = a.id || a.astra_id;
+                const check = unit.canUseAstra(id, currentDharma);
                 return {
-                    id: a.id || a.astra_id,
+                    id,
                     name: a.name,
-                    description: a.description || a.restrictions || "",
+                    description: a.description || a.restrictions || '',
+                    multiplier: a.damage_multiplier,
+                    cost: a.dharma_cost,
                     allowed: check.allowed,
                     reason: check.reason
                 };
             });
         }
 
-        // Vows
+        // Vows: only those with a real battle effect get a button (see VOW_EFFECTS)
         if (unit.resolvedVows && unit.resolvedVows.length > 0) {
-            flags.vows = unit.resolvedVows.map(v => {
-                const vId = v.id || v.vow_id;
-                // Just examples, active state could track if it's currently turned on!
-                const active = unit.activeVows ? unit.activeVows.has(vId) : false;
-                return {
-                    id: vId,
-                    name: v.name,
-                    description: v.description,
-                    active: active
-                };
-            });
+            flags.vows = unit.resolvedVows
+                .filter(v => VOW_EFFECTS[v.id || v.vow_id])
+                .map(v => {
+                    const vId = v.id || v.vow_id;
+                    return {
+                        id: vId,
+                        name: v.name,
+                        description: VOW_EFFECTS[vId].description,
+                        active: unit.activeVows ? unit.activeVows.has(vId) : false
+                    };
+                });
         }
 
-        // Charioteer Synergies
+        // Charioteer synergies: active ones only (passive ones fire by themselves in combat)
         if (unit.getCharioteerSynergies && unit.getCharioteerSynergies().length > 0) {
-            flags.charioteerSynergies = unit.getCharioteerSynergies().map(synergy => {
-                // Check if synergy is available (has uses left and not on cooldown)
-                const available = this.charioteerSynergyManager.getAvailableSynergy(unit.unitId, synergy.type);
-                return {
-                    id: synergy.type,
-                    name: synergy.type.replace('-', ' ').replace(/\b\w/g, c => c.toUpperCase()),
-                    description: synergy.data.description || synergy.type,
-                    available: !!available
-                };
-            });
+            flags.charioteerSynergies = unit.getCharioteerSynergies()
+                .filter(synergy => !synergy.passive)
+                .map(synergy => {
+                    const can = this.charioteerSynergyManager.canActivate(unit, synergy.type);
+                    return {
+                        id: synergy.type,
+                        name: synergy.type.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+                        description: synergy.data.description || synergy.type,
+                        available: can.ok,
+                        reason: can.reason
+                    };
+                });
         }
 
         return flags;
@@ -1007,6 +1021,7 @@ for (const seq of seqs) {
 
     _deselectUnit() {
         this.selectedUnit = null;
+        this.pendingAstraId = null;
         this.currentState = this.STATES.IDLE;
         this.reachableTiles = [];
         this.attackableTiles = [];
@@ -1052,7 +1067,8 @@ for (const seq of seqs) {
     _onActionAstra(astraId) {
         const u = this.selectedUnit;
         if (!u || !this._isPlayerInputOpen() || !this._isControllable(u)) return;
-        const currentDharma = this._gameState?.dharmaMeter ?? 50;
+        if (typeof u.canUseAstra !== 'function') return;
+        const currentDharma = this.gameState?.dharmaMeter ?? 100;
         const check = u.canUseAstra(astraId, currentDharma);
         if (!check.allowed) {
             this.hud.log(check.reason, 'bad');
@@ -1077,13 +1093,16 @@ for (const seq of seqs) {
         const u = this.selectedUnit;
         if (!u || !this._isPlayerInputOpen() || !this._isControllable(u)) return;
 
+        const effect = VOW_EFFECTS[vowId];
+        if (!effect) return;                                   // a vow with no battle effect is never offered, but never trust the id
+
         // Toggle the vow state.
         if (u.activeVows.has(vowId)) {
             u.activeVows.delete(vowId);
-            this.hud.log(`${u.name} deactivated their vow.`, 'info');
+            this.hud.log(`${u.name} sets aside the vow.`, 'info');
         } else {
             u.activeVows.add(vowId);
-            this.hud.log(`📜 ${u.name} invokes their vow!`, 'good');
+            this.hud.log(`📜 ${u.name} invokes the vow — ${effect.description}`, 'good');
         }
 
         // Refresh menu to show the updated active state
@@ -1094,27 +1113,29 @@ for (const seq of seqs) {
         const u = this.selectedUnit;
         if (!u || !this._isPlayerInputOpen() || !this._isControllable(u)) return;
 
-        // Check if unit has the requested charioteer synergy available
         if (!u.hasCharioteerSynergy(synergyId)) {
             this.hud.log(`${u.name} does not have the ${synergyId} synergy available.`, 'bad');
             return;
         }
 
-        // Use the synergy through the charioteer synergy manager
-        const used = this.charioteerSynergyManager.useSynergy(u.unitId, synergyId);
-        if (!used) {
-            this.hud.log(`${u.name} cannot use ${synergyId} synergy right now.`, 'bad');
+        // The manager checks the condition, spends the use and applies the effect
+        const res = this.charioteerSynergyManager.activate(u, synergyId);
+        if (!res.used) {
+            this.hud.log(res.message || `${u.name} cannot use ${synergyId} synergy right now.`, 'bad');
             return;
         }
+        this.hud.log(`🌀 ${res.message}`, 'good');
 
-        // Provide feedback to the player
-        this.hud.log(`🌀 ${u.name} activates ${synergyId.replace('-', ' ')}!`, 'good');
-
-        // End the unit's action since using a synergy consumes their turn
-        u.endAction();
-        this.currentState = this.STATES.IDLE;
-        this._deselectUnit();
-        this._afterPlayerAction();
+        if (res.endsAction) {
+            // synergies that spend the unit's turn
+            u.endAction();
+            this.currentState = this.STATES.IDLE;
+            this._deselectUnit();
+            this._afterPlayerAction();
+        } else {
+            // a buff (e.g. guided move): the unit keeps its action, so refresh the menu
+            this.hud.showMenu(this._unitScreenPos(u), u, this._menuFlags(u), true);
+        }
     }
 
     // =========================================================================
@@ -1163,6 +1184,15 @@ for (const seq of seqs) {
     }
 
     /** Resolve one attack through the full CombatResolver pipeline. Damage is applied BY the resolver. */
+    /** Briefly swap a hero's standing art for an action pose (if that pose art exists). */
+    _pose(unit, pose, ms) {
+        const art = unit?.sprite?._parts?.art; if (!art || !art._baseKey || !unit.characterId) return;
+        const key = poseTextureKey(unit.characterId, pose);
+        if (art._baseKey !== spriteTextureKey(unit.characterId) || !this.textures?.exists?.(key)) return;
+        art.setTexture(key); art.setScale(art._baseScale);
+        this.time?.delayedCall?.(ms, () => { if (art.scene) { art.setTexture(art._baseKey); art.setScale(art._baseScale); } });
+    }
+
     async _doAttack(attacker, defender, astraId = null) {
         // Validate attacker and defender before accessing their properties
         if (!attacker || !defender) {
@@ -1171,6 +1201,7 @@ for (const seq of seqs) {
         }
 
         this.hud.log(`${attacker.name} attacks ${defender.name}!`, 'combat');
+        this._pose(attacker, 'shooting', 650);
         const result = this.combatResolver.resolveAttack(attacker, defender, astraId);
 
         for (const line of result.log || []) this.hud.log(line, 'detail');
@@ -1292,6 +1323,7 @@ for (const seq of seqs) {
         if (this._resizeTimer) clearTimeout(this._resizeTimer);
         this.turns?.stop('shutdown');
         this.directives?.destroy();
+        this.charioteerSynergyManager?.destroy();
         this.events.off('trigger:fire-system', this._handleSystemTrigger, this);
         this.events.off('trigger:fire-vn', this._handleVNTrigger, this);
         if (this.input) {

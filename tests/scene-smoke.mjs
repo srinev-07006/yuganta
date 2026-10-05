@@ -18,13 +18,14 @@ const fetchJson = async (url) => rj(path.resolve('public', url));
 // same registry build as BootScene
 const lore = rj(`${dataDir}/global/lore.json`), chars = rj(`${dataDir}/global/characters.json`);
 const idx = (arr, k) => new Map(arr.map(x => [x[k], x]));
-const traits = idx(lore.traits, 'trait_id'), astras = idx(lore.astras, 'astra_id');
+const traits = idx(lore.traits, 'trait_id'), astras = idx(lore.astras, 'astra_id'), vows = idx(lore.vows_boons || [], 'id');
 const characterMap = new Map();
 for (const c of chars.characters) {
     const rt = (c.traits || []).map(t => traits.get(t)).filter(Boolean);
     const ra = (c.astras || []).map(a => astras.get(a)).filter(Boolean);
+    const rv = (c.vows || []).map(v => vows.get(v)).filter(Boolean);
     const nc = rt.some(t => ['NonCombatant()', 'NarratorVision()', 'WisdomCounsel()'].includes(t.custom_script_handler));
-    characterMap.set(c.character_id, { ...c, resolvedTraits: rt, resolvedAstras: ra, isCombatant: !nc });
+    characterMap.set(c.character_id, { ...c, resolvedTraits: rt, resolvedAstras: ra, resolvedVows: rv, isCombatant: !nc });
 }
 
 const els = {};

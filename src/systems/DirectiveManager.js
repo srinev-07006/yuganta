@@ -139,8 +139,11 @@ export class DirectiveManager {
         for (const st of this.states) {
             if (st.status !== DIRECTIVE_STATUS.ACTIVE) continue;
             if (st.def.directive_type === 'SURVIVE_TURNS') this._complete(st, 'No enemy remains on the field.');
-            // Auto-complete DEFEAT_UNIT directives if the enemy army is wiped.
-            if (st.def.directive_type === 'DEFEAT_UNIT') this._complete(st, 'Enemy forces destroyed.');
+            // "Defeat X": satisfied once X is gone. With no named target (data gap, e.g. Virata war) the whole host must fall.
+            if (st.def.directive_type === 'DEFEAT_UNIT') {
+                const target = st.def.target_unit_id ? this.grid.findUnit(st.def.target_unit_id) : null;
+                if (!st.def.target_unit_id || !target || target.isAlive === false) this._complete(st, 'Enemy forces destroyed.');
+            }
         }
         if (this.states.length === 0) {
             this._resolve(DIRECTIVE_EVENTS.ALL_COMPLETE, { nodeId: this.nodeId, reason: 'The enemy host is destroyed.' });

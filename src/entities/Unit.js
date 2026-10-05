@@ -60,7 +60,9 @@ export class Unit {
         this.resolvedTraits = config.resolvedTraits || [];
         this.resolvedAstras = config.resolvedAstras || [];
         this.resolvedVows = config.resolvedVows || [];
-        this.activeVows = new Set();
+        this.activeVows = new Set();           // vow ids switched on from the menu (only ids in data/VowEffects.js do anything)
+        this.hesitationTurns = 0;              // >0: this unit's next attack deals reduced damage (Shalya's psychological warfare)
+        this.guidedMove = false;               // Krishna's guidance: the next move ignores terrain
         this.consumedAstras = new Set();
         // Charioteer synergies
         this.charioteerSynergies = []; // List of available synergy types
@@ -114,9 +116,7 @@ export class Unit {
     }
 
     isInvulnerable() {
-        const fromTraits = this.resolvedTraits.some(t => t.invulnerable_to_standard_damage === true);
-        const fromBhishmaVow = this.activeVows && this.activeVows.has('bhishma-vow');
-        return fromTraits || fromBhishmaVow;
+        return this.resolvedTraits.some(t => t.invulnerable_to_standard_damage === true);
     }
 
     ignoresTerrainCost() {
@@ -247,6 +247,7 @@ export class Unit {
     startTurn() {
         this.hasActedThisTurn = false;
         this.hasMovedThisTurn = false;
+        this.guidedMove = false;
 
         if (this.isStunned) {
             this.isStunned = false;
@@ -257,10 +258,12 @@ export class Unit {
     /** Commit a move: the unit may still attack or wait, but not move again this phase. */
     endMove() {
         this.hasMovedThisTurn = true;
+        this.guidedMove = false;
     }
 
     endAction() {
         this.hasActedThisTurn = true;
+        if (this.hesitationTurns > 0) this.hesitationTurns--;   // the hesitating phase is over
     }
 
     canAct() {

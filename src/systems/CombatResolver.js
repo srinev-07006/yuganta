@@ -20,6 +20,7 @@
 
 import { executeHandler } from '../handlers/TraitHandlers.js';
 import { TERRAIN_CONFIG } from '../data/TerrainConfig.js';
+import { VOW_EFFECTS } from '../data/VowEffects.js';
 
 export class CombatResolver {
 
@@ -127,12 +128,11 @@ export class CombatResolver {
                 }
             }
 
-            if (defender.activeVows && defender.activeVows.has('bhishma-vow')) {
-                stillInvulnerable = true;
-                log.push(`📜 Bhishma's Vow active: Invulnerable!`);
-            }
-
-            if (stillInvulnerable && !astraId) {
+            // An astra only pierces invulnerability if it can actually be invoked (affordable, known, not spent).
+            const gsNow = this.scene.registry.get('gameState');
+            const astraWorks = !!(astraId && typeof attacker.canUseAstra === 'function' &&
+                attacker.canUseAstra(astraId, gsNow ? gsNow.dharmaMeter : 0).allowed);
+            if (stillInvulnerable && !astraWorks) {
                 log.push(`❌ Attack deals 0 damage. ${defender.name || 'Unknown'} is protected.`);
                 return { damage: 0, log, blocked: true, reason: 'INVULNERABLE' };
             }
@@ -184,27 +184,20 @@ export class CombatResolver {
         let stunTarget = false;
         let astraExpertiseMultiplier = 1.0; // FIX: was computed by traits (e.g. Drona) but never read/applied
 
-        // --- VOW EFFECTS ---
-        if (attacker.activeVows && attacker.activeVows.has('arjuna-vow')) {
-            attackMultiplier *= 2.0;
-            log.push(`📜 Vow of Arjuna: Damage ×2.0`);
+        // --- VOW EFFECTS (only vows listed in data/VowEffects.js do anything) ---
+        for (const vowId of attacker.activeVows || []) {
+            const eff = VOW_EFFECTS[vowId];
+            if (eff && eff.versus === defender.characterId) {
+                attackMultiplier *= eff.damageMultiplier;
+                log.push(`📜 Vow (${vowId}): Damage ×${eff.damageMultiplier.toFixed(1)}`);
+            }
         }
 
-        // --- CHARIOTEER SYNERGY EFFECTS ---
-        // Check for charioteer synergies that affect attack
-        const synergies = attacker.getCharioteerSynergies();
-        for (const synergy of synergies) {
-            // Psychological Warfare from Shalya charioteer
-            if (synergy.type === 'psychological-warfare' && synergy.usesLeft > 0) {
-                const { chance, attackReduction } = synergy.data;
-                if (Math.random() < chance) {
-                    attackMultiplier *= (1.0 - attackReduction);
-                    log.push(`🌀 Psychological Warfare: Enemy hesitation! Damage ×${(1.0 - attackReduction).toFixed(2)}`);
-                    // Mark as used - this will be handled by the synergy manager
-                    // We'll use it after determining if the attack hits
-                    attacker._pendingSynergyUse = { type: 'psychological-warfare' };
-                }
-            }
+        // --- HESITATION: shaken by an enemy charioteer's psychological warfare on an earlier strike ---
+        if (attacker.hesitationTurns > 0) {
+            const cut = attacker.hesitationReduction ?? 0.5;
+            attackMultiplier *= (1.0 - cut);
+            log.push(`🌀 ${attacker.name} hesitates: Damage ×${(1.0 - cut).toFixed(2)}`);
         }
 
         // Safely get gameState to prevent errors
@@ -259,6 +252,7 @@ export class CombatResolver {
         // ----------------------------------------------------------
         let astraMultiplier = 1.0;
         let dharmaCost = 0;
+        let nonLethal = false;            // Sammohanastra: unconsciousness, no damage
 
         if (astraId && attacker.canUseAstra) {
             // Read gameState fresh so affordability check and deduction see the same value
@@ -269,6 +263,7 @@ export class CombatResolver {
                 // FIX: fold in AstraExpertise here, now that we know an astra is actually being used
                 astraMultiplier = astraResult.multiplier * astraExpertiseMultiplier;
                 dharmaCost = astraResult.dharmaCost;
+                if (astraId === 'sammohanastra') { nonLethal = true; stunTarget = true; }
                 log.push(`🌟 ASTRA: ${astraResult.name} (×${astraResult.multiplier}${astraExpertiseMultiplier !== 1.0 ? ` × ${astraExpertiseMultiplier.toFixed(2)} expertise` : ''} = ×${astraMultiplier.toFixed(2)}, Dharma cost: ${dharmaCost})`);
 
                 // Pay the dharma cost BEFORE any damage is resolved
@@ -289,7 +284,7 @@ export class CombatResolver {
         const effectiveDefense = defender.defense * defenseMultiplier * (1 + terrainDefenseBonus);
         const rawDamage = attacker.attackPower * attackMultiplier * astraMultiplier;
         const reducedDamage = rawDamage * (1 - damageReduction);
-        let finalDamage = Math.max(1, Math.floor(reducedDamage - effectiveDefense));
+        let finalDamage = nonLethal ? 0 : Math.max(1, Math.floor(reducedDamage - effectiveDefense));
 
         log.push(`📊 Calculation:`);
         log.push(`   Attack: ${attacker.attackPower} × ${attackMultiplier.toFixed(1)} × ${astraMultiplier.toFixed(1)} = ${rawDamage.toFixed(0)}`);
@@ -313,13 +308,15 @@ export class CombatResolver {
             log.push(`⚡ ${defender.name} is STUNNED for 1 turn!`);
         }
 
-        // Use charioteer synergy if one was triggered
-        if (attacker._pendingSynergyUse && this.charioteerSynergyManager) {
-            const synergyType = attacker._pendingSynergyUse.type;
-            if (this.charioteerSynergyManager.useSynergy(attacker.unitId, synergyType)) {
-                log.push(`🌀 Charioteer Synergy: ${synergyType} activated!`);
-            }
-            delete attacker._pendingSynergyUse;
+        // Psychological warfare (Shalya driving): a chance to make the struck enemy hesitate on its next attack
+        const warfare = (attacker.getCharioteerSynergies?.() || [])
+            .find(sy => sy.type === 'psychological-warfare' && sy.usesLeft > 0);
+        if (warfare && defender.isAlive && !opts.isFollowUp && Math.random() < (warfare.data.chance ?? 0.2)) {
+            defender.hesitationTurns = warfare.data.hesitationDuration ?? 1;
+            defender.hesitationReduction = warfare.data.attackReduction ?? 0.5;
+            if (this.charioteerSynergyManager) this.charioteerSynergyManager.useSynergy(attacker.unitId, 'psychological-warfare');
+            else attacker.useCharioteerSynergy('psychological-warfare');
+            log.push(`🌀 Psychological Warfare: ${defender.name} hesitates — its next attack deals ×${(1 - defender.hesitationReduction).toFixed(2)} damage.`);
         }
 
         // ----------------------------------------------------------

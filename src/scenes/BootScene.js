@@ -20,7 +20,8 @@ import { VNBridge } from '../core/VNBridge.js';
 import { DebugVNOverlay } from '../ui/DebugVNOverlay.js';
 import { installYugantaVN } from '../vn/install.js';   // Role 2: VN provider + music
 import { mountSanjayaScrubber } from '../ui/SanjayaScrubber.js';
-import { CHARACTER_SPRITE_IDS, spriteTextureKey } from '../data/CharacterSprites.js';
+import { CHARACTER_SPRITE_IDS, CHARACTER_POSES, poseTextureKey, spriteTextureKey } from '../data/CharacterSprites.js';
+import { UNIT_SPRITE_SLUGS, unitTextureKey, PLAINS_TILE_KEYS } from '../data/UnitSprites.js';
 
 // Node loaded at start-up when the URL has no ?node=<node_id>
 const DEFAULT_DEV_NODE = 'day-1-kuru-kshetra';
@@ -72,6 +73,10 @@ export class BootScene extends Phaser.Scene {
 
         // Battle sprites (public/sprites/characters/<character_id>.webp). A missing file just falls back to the coloured token.
         for (const id of CHARACTER_SPRITE_IDS) this.load.image(spriteTextureKey(id), `sprites/characters/${id}.webp`);
+        for (const [id, pose] of CHARACTER_POSES) this.load.image(poseTextureKey(id, pose), `sprites/characters/${id}_${pose}.webp`);
+        // Troop / chariot-pair art and plains ground tiles (built by tools/buildArt.py)
+        for (const s of UNIT_SPRITE_SLUGS) this.load.image(unitTextureKey(s), `sprites/units/${s}.webp`);
+        PLAINS_TILE_KEYS.forEach((k, i) => this.load.image(k, `tiles/plains${i + 1}.webp`));
     }
 
     // =============================================================
@@ -259,15 +264,6 @@ export class BootScene extends Phaser.Scene {
     }
 
     async _launchFirstNode(timeline) {
-        if (!new URLSearchParams(window.location.search).get('node') && this._vn?.showTitle) {
-    const first = timeline.listParvas()[0]?.nodes?.[0]?.node_id;
-    const battle = timeline.findNode('day-1-kuru-kshetra') ? 'day-1-kuru-kshetra' : null;
-    this._vn.showTitle({ startId: first, battleId: battle, onStart: async (id) => {
-        const bundle = await timeline.loadNode(id);
-        this.scene.start('TacticalScene', { bundle });
-    } });
-    return;
-}
         const wanted = new URLSearchParams(window.location.search).get('node');
         // No ?node= -> title screen first (dev shortcut: add ?node=<node_id> to jump straight in).
         if (!wanted && this._vn?.showTitle) {
