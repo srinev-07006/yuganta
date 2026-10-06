@@ -13,4 +13,6 @@ map ghatotkacha ghatotkacha; map jayadratha jayadratha; map karna karna; map kri
 map krishna_standing krishna; map krishna_angry krishna_ANGRY; map kuntiold kunti; map kuntiyoung kunti_young
 map nakula nakula; map sahadeva1 sahadeva; map sanjaya sanjaya; map satyaki satyaki; map shakuni shakuni; map shalya shalya
 map sikhandi shikhandi; map uttara uttara; map vidura vidura; map virata virata; map vyasa vyasa; map yudhisthira yudhishthira
+# list of available portraits, so the game never requests a file that does not exist
+(cd public/portraits && ls *.webp | sed 's/\.webp$//' | sort | awk 'BEGIN{printf "["} {printf "%s\"%s\"", (NR>1?",":""), $0} END{print "]"}' > index.json)
 echo "portraits: $(ls public/portraits | wc -l) files, $(du -sh public/portraits | cut -f1)"
