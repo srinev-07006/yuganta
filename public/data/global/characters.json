@@ -12,6 +12,7 @@
     },
     {
       "character_id": "arjuna",
+      "stat_mods": { "hp": 1.2, "attack": 1.15 },
       "canonical_name": "Arjuna",
       "default_faction": "PANDAVA",
       "base_sprite_key": "spr_arjuna_chariot",
@@ -82,6 +83,7 @@
     },
     {
       "character_id": "karna",
+      "stat_mods": { "hp": 1.15, "attack": 1.1 },
       "canonical_name": "Karna",
       "default_faction": "KAURAVA",
       "base_sprite_key": "spr_karna_chariot",

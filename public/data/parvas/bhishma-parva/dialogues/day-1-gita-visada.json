@@ -1,57 +1,63 @@
 {
-  "dialogue_nodes": [
+  "sequence_id": "seq_gita_visada",
+  "node_id": "day-1-kuru-kshetra",
+  "trigger_event": "NODE_START",
+  "background_asset_key": "bg_kuru_court",
+  "bgm_asset_key": "bgm_bhishma_discourse",
+  "nodes": [
     {
-      "id": "gita-visada",
-      "text": "Arjuna stands on the Kurukshetra battlefield, overwhelmed by the sight of his relatives and teachers.",
-      "speaker": "Arjuna",
-      "choices": [
-        {
-          "id": "choose-dharma",
-          "description": "Accept Krishna's guidance",
-          "impacts": {
-            "dharma_impact": 5,
-            "artha_impact": 0,
-            "kama_impact": 0,
-            "moksha_impact": 0
-          },
-          "next_node_id": "gita-accept"
-        },
-        {
-          "id": "choose-artha",
-          "description": "Pursue personal gain",
-          "impacts": {
-            "dharma_impact": -3,
-            "artha_impact": 5,
-            "kama_impact": 0,
-            "moksha_impact": 0
-          },
-          "next_node_id": "gita-refuse"
-        }
-      ]
-    }
-  ],
-  "narrative_choices": [
-    {
-      "id": "gita-accept",
-      "description": "Arjuna decides to follow Krishna's path.",
-      "impacts": {
-        "dharma_impact": 5,
-        "artha_impact": 0,
-        "kama_impact": 0,
-        "moksha_impact": 0
-      },
-      "next_node_id": "battle-preparation"
+      "dialogue_id": "gv_sanjaya",
+      "speaker_id": "sanjaya",
+      "dialogue_text": "The Kurukshetra battlefield stretches before the two armies, filled with warriors and the roar of conches. Bhishma commands the Kaurava host. Arjuna asks Krishna to draw his chariot out between the lines.",
+      "speaker_emotion": "NEUTRAL",
+      "next_dialogue_id": "gv_arjuna"
     },
     {
-      "id": "gita-refuse",
-      "description": "Arjuna resists and seeks personal advantage.",
-      "impacts": {
-        "dharma_impact": -3,
-        "artha_impact": 5,
-        "kama_impact": 0,
-        "moksha_impact": 0
-      },
-      "next_node_id": "battle-preparation"
+      "dialogue_id": "gv_arjuna",
+      "speaker_id": "arjuna",
+      "dialogue_text": "Krishna, I see teachers, uncles, cousins, friends. My limbs fail and my mouth is dry. I will not fight them. What kingdom is worth this?",
+      "speaker_emotion": "GRIEF",
+      "choices": [
+        {
+          "choice_id": "choose-dharma",
+          "choice_text": "[Listen to Krishna. Do your duty without clinging to the fruit.]",
+          "dharma_impact": 5,
+          "artha_impact": 0,
+          "kama_impact": 0,
+          "moksha_impact": 0,
+          "next_dialogue_id": "gv_accept"
+        },
+        {
+          "choice_id": "choose-artha",
+          "choice_text": "[Refuse. Seek your own advantage and put down the bow.]",
+          "dharma_impact": -3,
+          "artha_impact": 5,
+          "kama_impact": 0,
+          "moksha_impact": 0,
+          "next_dialogue_id": "gv_refuse"
+        }
+      ]
+    },
+    {
+      "dialogue_id": "gv_accept",
+      "speaker_id": "krishna",
+      "dialogue_text": "You grieve for those who should not be grieved for. The wise do not mourn the living or the dead. Do your duty, Arjuna, and give up the fruit of it. That is the yoga.",
+      "speaker_emotion": "ENLIGHTENED",
+      "next_dialogue_id": "gv_end"
+    },
+    {
+      "dialogue_id": "gv_refuse",
+      "speaker_id": "krishna",
+      "dialogue_text": "Your refusal is also a choice, and it is the choice of fear. I will not force the bow into your hand. But remember who asked for me as charioteer, and why.",
+      "speaker_emotion": "ENCOURAGING",
+      "next_dialogue_id": "gv_end"
+    },
+    {
+      "dialogue_id": "gv_end",
+      "speaker_id": "arjuna",
+      "dialogue_text": "My delusion is gone. I stand firm. Let the conches sound.",
+      "speaker_emotion": "ENLIGHTENED",
+      "is_endpoint": true
     }
   ]
 }

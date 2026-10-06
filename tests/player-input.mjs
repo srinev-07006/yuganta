@@ -84,7 +84,7 @@ if (me.gridX === from[0] && me.gridY === from[1]) fail('unit did not move'); ok(
 const foes = scene.unitManager.getAllUnits().filter(u => u.faction === 'KAURAVA' && !u.isProp);
 if (!foes.length) { console.log('SKIP attack: this node has no enemy units (move worked)'); scene._shutdown(); process.exit(0); }
 // prefer a non-hero target: some heroes are invulnerable to standard damage BY DESIGN (e.g. Bhishma)
-const foe = foes.find(u => u.unitClass !== 'MAHARATHI') ?? foes[0];
+const foe = foes.find(u => u.unitClass !== 'MAHARATHI') ?? foes.find(u => u.characterId !== 'bhishma') ?? foes[0];   // Bhishma only yields to Shikhandi's chariot (canon)
 const spot = [[1,0],[-1,0],[0,1],[0,-1]].map(([dx,dy]) => [me.gridX+dx, me.gridY+dy]).find(([x,y]) => !scene.unitManager.getUnitAt(x,y) && scene.mapGrid?.isWalkable?.(x,y) !== false);
 scene.unitManager.updateUnitPosition(foe.unitId, spot[0], spot[1]);
 if (scene.currentState !== scene.STATES.IDLE && scene.currentState !== scene.STATES.UNIT_SELECTED) scene._selectUnit(me);

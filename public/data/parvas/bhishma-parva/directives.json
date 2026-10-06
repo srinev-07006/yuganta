@@ -1,19 +1,70 @@
 {
   "directives": [
     {
-      "id": "directive-escort-shikhandi",
-      "description": "Ensure Shikhandi reaches safety before Bhishma's death",
-      "fail_on_deviation": true
+      "directive_id": "d1-hold-the-line",
+      "node_id": "day-1-kuru-kshetra",
+      "directive_type": "SURVIVE_TURNS",
+      "target_unit_id": "arjuna",
+      "target_turns": 6,
+      "fail_on_deviation": true,
+      "description": "Keep Arjuna alive for 6 rounds."
     },
     {
-      "id": "directive-protect-arjuna",
-      "description": "Protect Arjuna during critical battle phases",
-      "fail_on_deviation": false
+      "directive_id": "d1-between-the-armies",
+      "node_id": "day-1-kuru-kshetra",
+      "directive_type": "REACH_TILE",
+      "target_unit_id": "arjuna",
+      "target_tile": {
+        "x": 6,
+        "y": 5
+      },
+      "target_turns": 4,
+      "fail_on_deviation": false,
+      "description": "Drive Arjuna's chariot out between the armies, where the Gita is spoken."
     },
     {
-      "id": "directive-maintain-battle-order",
-      "description": "Maintain proper battle formation throughout the engagement",
-      "fail_on_deviation": false
+      "directive_id": "d2-attrition",
+      "node_id": "day-2-kurukshetra-battle",
+      "directive_type": "SURVIVE_TURNS",
+      "target_unit_id": "arjuna",
+      "target_turns": 8,
+      "fail_on_deviation": true,
+      "description": "Hold the line for 8 rounds. Arjuna must not fall."
+    },
+    {
+      "directive_id": "d2-take-the-ridge",
+      "node_id": "day-2-kurukshetra-battle",
+      "directive_type": "REACH_TILE",
+      "target_unit_id": "arjuna",
+      "target_tile": {
+        "x": 7,
+        "y": 2
+      },
+      "target_turns": 7,
+      "fail_on_deviation": false,
+      "description": "Seize the ridge before the Kauravas dig in."
+    },
+    {
+      "directive_id": "d9-reach-bhishma",
+      "node_id": "day-9-krishna-rage",
+      "directive_type": "ESCORT",
+      "target_unit_id": "arjuna",
+      "escort_to_unit_id": "bhishma",
+      "escort_radius": 1,
+      "target_turns": 8,
+      "fail_on_deviation": false,
+      "description": "Bring Arjuna to Bhishma before Krishna breaks his word."
+    },
+    {
+      "directive_id": "d9-bhishma-not-yet",
+      "node_id": "day-9-krishna-rage",
+      "directive_type": "SURVIVE_TURNS",
+      "target_unit_id": "bhishma",
+      "target_turns": 8,
+      "fail_on_deviation": true,
+      "deviation_dialogue_id": "dev-bhishma-falls-early",
+      "description": "Bhishma must not fall today. His hour is the tenth day."
     }
-  ]
+  ],
+  "triggers": []
 }

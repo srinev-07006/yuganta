@@ -1,35 +1,40 @@
 {
-  "dialogue_nodes": [
+  "sequence_id": "seq_krishna_rage",
+  "node_id": "day-9-krishna-rage",
+  "trigger_event": "NODE_START",
+  "background_asset_key": "bg_cosmic_clash",
+  "bgm_asset_key": "bgm_divine_wrath",
+  "nodes": [
     {
-      "id": "krishna-rage",
-      "text": "Krishna's anger flares as Bhishma's forces falter. He demands Arjuna to act decisively, threatening to abandon the field if his orders are ignored.",
-      "speaker": "Krishna",
+      "dialogue_id": "kr_sanjaya",
+      "speaker_id": "sanjaya",
+      "dialogue_text": "On the ninth day Bhishma's host cannot be broken. The Pandava line bends, and Krishna's anger flares.",
+      "speaker_emotion": "NEUTRAL",
+      "next_dialogue_id": "kr_krishna"
+    },
+    {
+      "dialogue_id": "kr_krishna",
+      "speaker_id": "krishna",
+      "dialogue_text": "Arjuna, you fight like a man who loves his enemies! If you will not strike Bhishma, I will. I will take up a wheel of this chariot and end him myself.",
+      "speaker_emotion": "ANGRY",
       "choices": [
         {
-          "id": "proceed",
-          "description": "Follow Krishna's command",
-          "impacts": {
-            "dharma_impact": 5,
-            "artha_impact": -2,
-            "kama_impact": 0,
-            "moksha_impact": 0
-          },
-          "next_node_id": "day-10-fall"
+          "choice_id": "proceed",
+          "choice_text": "[Hold Krishna back. Obey his command and press the attack.]",
+          "dharma_impact": 5,
+          "artha_impact": -2,
+          "kama_impact": 0,
+          "moksha_impact": 0,
+          "next_dialogue_id": "kr_arjuna"
         }
       ]
-    }
-  ],
-  "narrative_choices": [
+    },
     {
-      "id": "proceed",
-      "description": "Obey Krishna's command",
-      "impacts": {
-        "dharma_impact": 5,
-        "artha_impact": -2,
-        "kama_impact": 0,
-        "moksha_impact": 0
-      },
-      "next_node_id": "day-10-fall"
+      "dialogue_id": "kr_arjuna",
+      "speaker_id": "arjuna",
+      "dialogue_text": "Stay your hand, Madhava! You gave your word not to take up arms. I will fight. Your anger is not needed.",
+      "speaker_emotion": "ENCOURAGING",
+      "is_endpoint": true
     }
   ]
 }

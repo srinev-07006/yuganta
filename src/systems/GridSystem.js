@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { TERRAIN_CONFIG } from '../data/TerrainConfig.js';
+import { TERRAIN_TILE_FILES, tileKey, propKey, terrainPropSpec, FIRE_SHEET } from '../data/TerrainArt.js';
 
 /**
  * Pure bitwise color dimmer for 3D wall faces.
@@ -134,9 +135,10 @@ export class GridSystem {
                 const topColor = (terrain.color != null) ? terrain.color : fallback.color;
                 const sideColor = dimColor(topColor, 0.60);
                 const topY = center.y - elevation;
+                const tKey = this._terrainKey(terrain);
 
                 // --- Painted ground: flat plains tiles use the real tile art (drawn beneath every Graphics), just a thin outline on top ---
-                if (elevation === 0 && /^plains$/i.test(name) && this._addGroundArt(x, y, center.x, center.y)) {
+                if (elevation === 0 && this._addGroundArt(x, y, center.x, center.y, tKey)) {
                     this.terrainGraphics.lineStyle(1, 0xffffff, 0.12);
                     this.terrainGraphics.beginPath();
                     this.terrainGraphics.moveTo(center.x, center.y - hh);
@@ -145,6 +147,20 @@ export class GridSystem {
                     this.terrainGraphics.lineTo(center.x - hw, center.y);
                     this.terrainGraphics.closePath();
                     this.terrainGraphics.strokePath();
+                    this._addTerrainProp(x, y, center, 0, tKey);
+                    continue;
+                }
+
+                // --- Tall impassables with a sprite (mountain / pillar / wall): painted floor + the sprite instead of a flat-shaded block ---
+                if (elevation >= TALL_PROP_MIN && this._hasPropArt(tKey)) {
+                    if (!this._addGroundArt(x, y, center.x, center.y, tKey) && !this._addGroundArt(x, y, center.x, center.y, 'plains')) {
+                        this.terrainGraphics.fillStyle(terrain.baseColor ?? fallback.color, 1);
+                        this.terrainGraphics.beginPath();
+                        this.terrainGraphics.moveTo(center.x, center.y - hh); this.terrainGraphics.lineTo(center.x + hw, center.y);
+                        this.terrainGraphics.lineTo(center.x, center.y + hh); this.terrainGraphics.lineTo(center.x - hw, center.y);
+                        this.terrainGraphics.closePath(); this.terrainGraphics.fillPath();
+                    }
+                    this._addTerrainProp(x, y, center, 0, tKey);
                     continue;
                 }
 
@@ -222,18 +238,65 @@ export class GridSystem {
                 this.terrainGraphics.closePath();
                 this.terrainGraphics.fillPath();
                 this.terrainGraphics.strokePath();
+                this._addGroundArt(x, y, center.x, topY, tKey, 0.5);     // painted top face over the flat-shaded block
+                this._addTerrainProp(x, y, center, elevation, tKey);
             }
         }
     }
 
-    /** Paint a plains tile texture (public/tiles/plains{1,2}.webp, pre-cut to the 128x64 diamond). Skipped headless / if not loaded. */
-    _addGroundArt(gx, gy, cx, cy) {
+    /** TERRAIN_CONFIG key of a matrix terrain object (identity first, then by name). */
+    _terrainKey(terrain) {
+        if (!this._keyByObj) this._keyByObj = new Map(Object.entries(TERRAIN_CONFIG).map(([k, v]) => [v, k]));
+        return this._keyByObj.get(terrain) || String(terrain?.name || 'plains').toLowerCase();
+    }
+
+    _canDrawArt() {
         const sc = this.scene;
-        const key = ((gx * 3 + gy * 5) % 2 === 0) ? 'tile_plains1' : 'tile_plains2';
-        if (!sc?.textures?.exists?.(key) || typeof sc.add?.image !== 'function') return false;
-        const img = sc.add.image(cx, cy, key).setDisplaySize(this.tileWidth, this.tileHeight).setDepth(-1);
+        return !!(sc?.textures?.exists && typeof sc.add?.image === 'function');
+    }
+
+    /** Paint a ground tile (public/tiles/<file>.webp, pre-cut to the 2:1 diamond) at (cx, cy). Returns false when there is no art for this terrain / headless. */
+    _addGroundArt(gx, gy, cx, cy, terrainKey = 'plains', depth = -1) {
+        if (!this._canDrawArt()) return false;
+        const sc = this.scene;
+        const have = (TERRAIN_TILE_FILES[terrainKey] || []).filter(f => sc.textures.exists(tileKey(f)));
+        if (!have.length) return false;
+        const key = tileKey(have[(gx * 3 + gy * 5) % have.length]);
+        const img = sc.add.image(cx, cy, key).setDisplaySize(this.tileWidth, this.tileHeight).setDepth(depth);
         (this._groundArt ||= []).push(img);
         return true;
+    }
+
+    /** True when at least one sprite for this terrain's prop is loaded (so the flat-shaded block can be skipped). */
+    _hasPropArt(terrainKey) {
+        const spec = terrainPropSpec(terrainKey);
+        return !!spec && this._canDrawArt() && spec.files.some(f => this.scene.textures.exists(propKey(f)));
+    }
+
+    /**
+     * Stand a prop sprite (tree, tent, mountain, pillar…) on a tile. Passable props sit BEHIND a unit on the same tile
+     * (depth +2 < unit +5); impassable ones (`tall`) sit in front of it (+6), like the extruded blocks they replace.
+     */
+    _addTerrainProp(gx, gy, center, elevation, terrainKey) {
+        const spec = terrainPropSpec(terrainKey);
+        if (!spec || !this._hasPropArt(terrainKey)) return;
+        if (spec.density < 1 && ((gx * 31 + gy * 17) % 100) / 100 >= spec.density) return;
+        const sc = this.scene;
+        const have = spec.files.filter(f => sc.textures.exists(propKey(f)));
+        const file = spec.side && have.length > 1
+            ? (gx * 2 < this.width ? have[0] : have[1])                       // Pandava (west) / Kaurava (east) tent
+            : have[(gx * 7 + gy * 13) % have.length];
+        const x = center.x, y = center.y - (elevation >= TALL_PROP_MIN ? 0 : elevation) + this.tileHeight * 0.12;
+        let obj;
+        if (spec.animated && sc.textures.exists(FIRE_SHEET.key) && sc.anims?.exists?.(FIRE_SHEET.anim) && typeof sc.add.sprite === 'function') {
+            obj = sc.add.sprite(x, y, FIRE_SHEET.key, 0).setScale(spec.width / FIRE_SHEET.frameWidth);
+            obj.play({ key: FIRE_SHEET.anim, startFrame: (gx * 5 + gy * 3) % FIRE_SHEET.frames });
+        } else {
+            obj = sc.add.image(x, y, propKey(file));
+            obj.setScale(spec.width / (obj.width || spec.width * 2));
+        }
+        obj.setOrigin(0.5, spec.originY ?? 0.82).setDepth(this.getTileDepth(gx, gy) + (spec.tall ? 6 : 2));
+        this._props.push(obj);
     }
 
     /** Extruded block (pillar / wall) as its own Graphics so units sort against it by tile depth. */
@@ -265,6 +328,8 @@ export class GridSystem {
     _clearProps() {
         for (const g of this._props) { if (g && typeof g.destroy === 'function') g.destroy(); }
         this._props = [];
+        for (const g of this._groundArt || []) { if (g && typeof g.destroy === 'function') g.destroy(); }
+        this._groundArt = [];
     }
 
     gridToWorldCenter(gridX, gridY) {

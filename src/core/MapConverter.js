@@ -95,7 +95,21 @@ export const NODE_ENEMY_HINTS = {
     'vp-arjuna-penance': { tag: 'kirata', name: 'The Kirata' },
     'avp-babruvahana-fight': { tag: 'babruvahana', name: 'Babruvahana' }
 };
-export const SUPPORT = { minZoneTiles: 30, PANDAVA: ['PADATI_MELEE'], KAURAVA: ['PADATI_MELEE', 'PADATI_MELEE', 'ASHVA'] };
+// Balance (tests/balance-sim.mjs): the first pass gave the Kauravas 3 support units against 1 and the Pandavas were wiped
+// in every Virata run. Support is now near parity; the heroes carry the canon asymmetry.
+export const SUPPORT = { minZoneTiles: 30, PANDAVA: ['PADATI_MELEE', 'PADATI_MELEE'], KAURAVA: ['PADATI_MELEE', 'ASHVA'] };
+// Battles whose canon names the fighters. Each id is the character; Arjuna always rides with Krishna.
+export const NODE_PLAYER_LEADS = {
+    'shp-mace-duel': ['bhima'],                              // Bhima vs Duryodhana (vayu-putra + mace-master vs vajra-thighs)
+    'dp-day13-chakravyuha': ['abhimanyu', 'arjuna']          // Jayadratha's boon blocks every Pandava except Arjuna
+};
+export const NODE_SUPPORT = {                              // per-node override of SUPPORT (a side left out keeps the default)
+    'vip-virata-war': { PANDAVA: ['PADATI_MELEE', 'PADATI_MELEE', 'PADATI_MELEE'], KAURAVA: ['PADATI_MELEE'] }   // Arjuna's one-man host vs Karna and Drona
+};
+export const NODE_ENEMY_LEADS = {
+    'dp-day13-chakravyuha': ['jayadratha', 'drona'],         // the gate-keeper and the general holding the formation
+    'vip-virata-war': ['karna', 'drona']                     // Bhishma (iccha-mrityu) cannot be hurt without Shikhandi, and this objective needs the whole host down
+};
 const HERO_BLOCKED = ['Mountain', 'River', 'Lake'];
 
 const walkable = (t) => !!t && t.isPassable !== false && (t.moveCost ?? 1) < 99;
@@ -130,13 +144,19 @@ export function deriveSpawns(map, { directives = [], triggers = [], characterMap
     const factionOf = (id) => String(characterMap?.get?.(id)?.default_faction || '').toUpperCase();
     const targets = [...new Set([...directives, ...triggers].map(d => d?.target_unit_id).filter(Boolean))];
     const known = (id) => !characterMap || characterMap.has(id);
-    const pandavaTargets = targets.filter(id => known(id) && factionOf(id) === 'PANDAVA');
+    const pandavaTargets = targets.filter(id => known(id) && factionOf(id) === 'PANDAVA' && id !== DEFAULT_PLAYER_LEAD.charioteer_id);
     const kauravaTargets = targets.filter(id => known(id) && factionOf(id) === 'KAURAVA');
 
     const used = new Set();
     const spawns = [];
     const place = (zone, faction, spec, blocked = []) => {
-        const tile = zoneTiles(map, zone, used, blocked)[0];
+        let tile = zoneTiles(map, zone, used, blocked)[0];
+        if (!tile) {   // zone is full (the Chakravyuha's Pandava zone is one tile): take the nearest free tile within 3 of it
+            const wide = { x_min: Math.max(0, zone.x_min - 3), x_max: Math.min(map.width - 1, zone.x_max + 3),
+                           y_min: Math.max(0, zone.y_min - 3), y_max: Math.min(map.height - 1, zone.y_max + 3) };
+            const cx = (zone.x_min + zone.x_max) / 2, cy = (zone.y_min + zone.y_max) / 2;
+            tile = zoneTiles(map, wide, used, blocked).sort((a, b) => Math.hypot(a.x - cx, a.y - cy) - Math.hypot(b.x - cx, b.y - cy))[0];
+        }
         if (!tile) { notes.push(`no free walkable tile in ${faction} zone for ${spec.character_id || spec.tag || spec.unit_class}`); return false; }
         used.add(`${tile.x},${tile.y}`);
         spawns.push({ ...spec, faction, x: tile.x, y: tile.y });
@@ -144,21 +164,29 @@ export function deriveSpawns(map, { directives = [], triggers = [], characterMap
     };
 
     // player side
-    if (pandavaTargets.length) pandavaTargets.slice(0, 2).forEach(id => place(pz, 'PANDAVA', { character_id: id }, HERO_BLOCKED));
+    const forcedP = NODE_PLAYER_LEADS[nodeId], forcedE = NODE_ENEMY_LEADS[nodeId];
+    const lead = (id) => id === DEFAULT_PLAYER_LEAD.character_id && known(DEFAULT_PLAYER_LEAD.charioteer_id)
+        ? { character_id: id, charioteer_id: DEFAULT_PLAYER_LEAD.charioteer_id } : { character_id: id };   // Arjuna always rides with Krishna
+    if (forcedP) forcedP.filter(known).forEach(id => place(pz, 'PANDAVA', lead(id), HERO_BLOCKED));
+    else if (pandavaTargets.length) pandavaTargets.slice(0, 2).forEach(id => place(pz, 'PANDAVA',
+        id === DEFAULT_PLAYER_LEAD.character_id && known(DEFAULT_PLAYER_LEAD.charioteer_id)
+            ? { character_id: id, charioteer_id: DEFAULT_PLAYER_LEAD.charioteer_id } : { character_id: id }, HERO_BLOCKED));
     else {
         const { character_id, charioteer_id } = DEFAULT_PLAYER_LEAD;
         place(pz, 'PANDAVA', known(charioteer_id) ? { character_id, charioteer_id } : { character_id }, HERO_BLOCKED);
     }
     // enemy side
     const hint = NODE_ENEMY_HINTS[nodeId];
-    if (kauravaTargets.length) kauravaTargets.slice(0, 3).forEach(id => place(ez, 'KAURAVA', { character_id: id }, HERO_BLOCKED));
+    if (forcedE) forcedE.filter(known).forEach(id => place(ez, 'KAURAVA', { character_id: id }, HERO_BLOCKED));
+    else if (kauravaTargets.length) kauravaTargets.slice(0, 3).forEach(id => place(ez, 'KAURAVA', { character_id: id }, HERO_BLOCKED));
     else if (hint) place(ez, 'KAURAVA', { unit_class: 'MAHARATHI', tag: hint.tag, name: hint.name }, HERO_BLOCKED);
     else DEFAULT_ENEMY_LEADS.filter(known).slice(0, 2).forEach(id => place(ez, 'KAURAVA', { character_id: id }, HERO_BLOCKED));
 
     // support troops only where the zones are army-sized
+    const sup = { ...SUPPORT, ...(NODE_SUPPORT[nodeId] || {}) };
     if (zoneArea(pz) >= SUPPORT.minZoneTiles && zoneArea(ez) >= SUPPORT.minZoneTiles) {
-        SUPPORT.PANDAVA.forEach(unit_class => place(pz, 'PANDAVA', { unit_class }));
-        SUPPORT.KAURAVA.forEach(unit_class => place(ez, 'KAURAVA', { unit_class }));
+        sup.PANDAVA.forEach(unit_class => place(pz, 'PANDAVA', { unit_class }));
+        sup.KAURAVA.forEach(unit_class => place(ez, 'KAURAVA', { unit_class }));
     }
     return { spawns, notes };
 }

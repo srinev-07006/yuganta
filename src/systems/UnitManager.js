@@ -125,6 +125,22 @@ export class UnitManager {
         return true;
     }
 
+    /**
+     * Optional per-character balance knobs in characters.json: "stat_mods": { "hp": 1.2, "attack": 1.1, "defense": 1.0 }.
+     * Multiplies the MAHARATHI class stats for that hero only; omitted fields (or no stat_mods) mean ×1.
+     * Exists because every hero shares one class block, so canon strength (Arjuna vs a host) cannot be expressed otherwise.
+     */
+    _statOverrides(charData) {
+        const m = charData?.stat_mods;
+        if (!m) return {};
+        const base = getClassStats('MAHARATHI');
+        const out = {};
+        if (m.hp) out.maxHp = Math.round(base.baseHp * m.hp);
+        if (m.attack) out.attackPower = Math.round(base.baseAttackPower * m.attack);
+        if (m.defense) out.defense = Math.round(base.baseDefense * m.defense);
+        return out;
+    }
+
     _isHeroSarathi(charData) {
         if (!charData) return false;
         const traits = charData.resolvedTraits || [];
@@ -174,6 +190,7 @@ export class UnitManager {
             resolvedTraits: [...(charData.resolvedTraits || [])],
             resolvedAstras: [...(charData.resolvedAstras || [])],
             resolvedVows: [...(charData.resolvedVows || [])],
+            ...this._statOverrides(charData),
             gridX,
             gridY
         });
@@ -264,6 +281,7 @@ export class UnitManager {
             resolvedTraits: [...(warriorData.resolvedTraits || [])],
             resolvedAstras: [...(warriorData.resolvedAstras || [])],
             resolvedVows: [...(warriorData.resolvedVows || [])],
+            ...this._statOverrides(warriorData),
             gridX,
             gridY,
             sarathiBuffScale: isHeroSarathi ? 0.7 : 0.0,

@@ -14,7 +14,7 @@
         },
         {
           "type": "trigger_dialogue",
-          "dialogue_id": "day-10-fall"
+          "dialogue_id": "seq_bhishma_fall"
         }
       ]
     },
@@ -28,7 +28,7 @@
       "effects": [
         {
           "type": "trigger_dialogue",
-          "dialogue_id": "gita-visada"
+          "dialogue_id": "seq_gita_visada"
         }
       ]
     }

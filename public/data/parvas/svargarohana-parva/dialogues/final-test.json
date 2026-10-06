@@ -27,6 +27,13 @@
       ]
     },
     {
+      "dialogue_id": "dev-chooses-heaven",
+      "speaker_id": "sanjaya",
+      "dialogue_text": "He left his brothers in the pit, and heaven was cold. This is not the road that was written.",
+      "speaker_emotion": "GRIEF",
+      "is_endpoint": true
+    },
+    {
       "dialogue_id": "svp_illusion_breaks",
       "speaker_id": "indra",
       "dialogue_text": "Well done, Yudhishthira! You have passed the final test. Kings must see hell if even for a moment. Plunge into the heavenly Ganga and cast off this mortal frame forever.",

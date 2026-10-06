@@ -22,6 +22,7 @@ import { installYugantaVN } from '../vn/install.js';   // Role 2: VN provider + 
 import { mountSanjayaScrubber } from '../ui/SanjayaScrubber.js';
 import { CHARACTER_SPRITE_IDS, CHARACTER_POSES, poseTextureKey, spriteTextureKey } from '../data/CharacterSprites.js';
 import { UNIT_SPRITE_SLUGS, unitTextureKey, PLAINS_TILE_KEYS } from '../data/UnitSprites.js';
+import { TILE_LOAD_LIST, PROP_LOAD_LIST, FIRE_SHEET } from '../data/TerrainArt.js';
 
 // Node loaded at start-up when the URL has no ?node=<node_id>
 const DEFAULT_DEV_NODE = 'day-1-kuru-kshetra';
@@ -77,6 +78,10 @@ export class BootScene extends Phaser.Scene {
         // Troop / chariot-pair art and plains ground tiles (built by tools/buildArt.py)
         for (const s of UNIT_SPRITE_SLUGS) this.load.image(unitTextureKey(s), `sprites/units/${s}.webp`);
         PLAINS_TILE_KEYS.forEach((k, i) => this.load.image(k, `tiles/plains${i + 1}.webp`));
+        // Terrain tiles, props and the fire animation (built by tools/buildTerrainArt.py)
+        TILE_LOAD_LIST.forEach(({ key, url }) => this.load.image(key, url));
+        PROP_LOAD_LIST.forEach(({ key, url }) => this.load.image(key, url));
+        this.load.spritesheet(FIRE_SHEET.key, FIRE_SHEET.url, { frameWidth: FIRE_SHEET.frameWidth, frameHeight: FIRE_SHEET.frameHeight });
     }
 
     // =============================================================
@@ -85,6 +90,12 @@ export class BootScene extends Phaser.Scene {
 
     create() {
         console.log('[BootScene] Processing game data...');
+
+        // Looping fire for fire tiles (global, so TacticalScene can play it). Static prop is used when the sheet is missing.
+        if (this.textures.exists(FIRE_SHEET.key) && !this.anims.exists(FIRE_SHEET.anim)) {
+            this.anims.create({ key: FIRE_SHEET.anim, frames: this.anims.generateFrameNumbers(FIRE_SHEET.key, { start: 0, end: FIRE_SHEET.frames - 1 }),
+                frameRate: FIRE_SHEET.frameRate, repeat: -1 });
+        }
 
         // ----------------------------------------------------------
         // STEP 1: Retrieve loaded JSON from Phaser's cache

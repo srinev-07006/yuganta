@@ -1,35 +1,40 @@
 {
-  "dialogue_nodes": [
+  "sequence_id": "seq_bhishma_fall",
+  "node_id": "day-10-fall",
+  "trigger_event": "NODE_START",
+  "background_asset_key": "bg_ganges_sunset",
+  "bgm_asset_key": "bgm_tragic_end",
+  "nodes": [
     {
-      "id": "day-10-fall",
-      "text": "Bhishma's life wanes; his death is imminent. The battlefield pauses as Arjuna faces a canonical choice.",
-      "speaker": "Krishna",
+      "dialogue_id": "bf_krishna",
+      "speaker_id": "krishna",
+      "dialogue_text": "Bhishma's life wanes and his death is near. The battlefield pauses as Arjuna faces the choice that was written.",
+      "speaker_emotion": "NEUTRAL",
+      "next_dialogue_id": "bf_bhishma"
+    },
+    {
+      "dialogue_id": "bf_bhishma",
+      "speaker_id": "bhishma",
+      "dialogue_text": "Shikhandi stands before me, and I will not raise my bow to him. Arjuna, strike. My body is a bed of your arrows, and my head hangs. Give it a pillow.",
+      "speaker_emotion": "ENLIGHTENED",
       "choices": [
         {
-          "id": "canonical-progression",
-          "description": "Accept the canonical path",
-          "impacts": {
-            "dharma_impact": 0,
-            "artha_impact": 0,
-            "kama_impact": 0,
-            "moksha_impact": 0
-          },
-          "next_node_id": "end"
+          "choice_id": "canonical-progression",
+          "choice_text": "[Accept the canonical path. Lay the arrows beneath his head.]",
+          "dharma_impact": 0,
+          "artha_impact": 0,
+          "kama_impact": 0,
+          "moksha_impact": 0,
+          "next_dialogue_id": "bf_end"
         }
       ]
-    }
-  ],
-  "narrative_choices": [
+    },
     {
-      "id": "canonical-progression",
-      "description": "Accept the canonical path",
-      "impacts": {
-        "dharma_impact": 0,
-        "artha_impact": 0,
-        "kama_impact": 0,
-        "moksha_impact": 0
-      },
-      "next_node_id": "end"
+      "dialogue_id": "bf_end",
+      "speaker_id": "sanjaya",
+      "dialogue_text": "So the grandsire fell, and chose to wait for the sun's northward turn before he left his body.",
+      "speaker_emotion": "GRIEF",
+      "is_endpoint": true
     }
   ]
 }

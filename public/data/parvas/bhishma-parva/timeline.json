@@ -7,7 +7,8 @@
       "phase_name": "BEGINNING",
       "title": "The Field of Kurukshetra",
       "historical_context": "Arjuna stands on the Kurukshetra battlefield, overwhelmed by the sight of his relatives and teachers. Bhishma commands the Kaurava host.",
-      "initial_scene_type": "TACTICAL"
+      "initial_scene_type": "TACTICAL",
+      "map_id": "map_kurukshetra_day1"
     },
     {
       "node_id": "day-2-kurukshetra-battle",
@@ -16,7 +17,8 @@
       "phase_name": "MIDDLE",
       "title": "Days 2-8: The Grinding Days",
       "historical_context": "For seven days the two armies grind against each other under Bhishma's command. Neither side breaks; the toll of attrition is what matters. Hold the line and keep your forces alive.",
-      "initial_scene_type": "TACTICAL"
+      "initial_scene_type": "TACTICAL",
+      "map_id": "map_kurukshetra_grinding"
     },
     {
       "node_id": "day-9-krishna-rage",
@@ -25,7 +27,8 @@
       "phase_name": "MIDDLE",
       "title": "Krishna's Rage",
       "historical_context": "Krishna's anger flares as Bhishma's forces falter. He demands that Arjuna act decisively, threatening to abandon the field if his orders are ignored.",
-      "initial_scene_type": "TACTICAL"
+      "initial_scene_type": "TACTICAL",
+      "map_id": "map_bhishma_stand"
     },
     {
       "node_id": "day-10-fall",
